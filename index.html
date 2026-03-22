@@ -57,13 +57,60 @@
     .p-btn { padding: 10px 18px; background: #34495e; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
     .p-btn:disabled { background: #bdc3c7; cursor: not-allowed; }
 
-    /* --- 📊 Analytics Section --- */
-    .chart-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-top: 20px; }
-    .chart-box { background: #fff; border: 1px solid #e0e0e0; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); width: 100%; overflow: hidden; }
+    /* ==================================================== */
+    /* --- 📊 Analytics Section (IMPROVED FOR MOBILE) --- */
+    /* ==================================================== */
+    .chart-container { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+      gap: 20px; 
+      margin-top: 20px; 
+    }
+    
+    .chart-box { 
+      background: #fff; 
+      border: 1px solid #e0e0e0; 
+      padding: 15px; 
+      border-radius: 10px; 
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+      width: 100%; 
+      /* Fix: Allow height to grow based on table content */
+      height: auto; 
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+    }
 
-    .perc-table { width: 100% !important; min-width: auto !important; margin-top: 15px; font-size: 0.85em; border-collapse: collapse; table-layout: fixed; }
-    .perc-table th { background: #f8f9fa; color: #2c3e50; padding: 10px 5px; border-bottom: 2px solid #ddd; text-align: left; }
-    .perc-table td { padding: 10px 5px; border-bottom: 1px solid #eee; text-align: left; word-wrap: break-word; overflow-wrap: break-word; white-space: normal; }
+    /* Fix: Wrapper to ensure table doesn't overflow horizontally */
+    .chart-table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      margin-top: auto; /* Pushes table to the bottom if chart takes less space */
+    }
+
+    .perc-table { 
+      width: 100% !important; 
+      min-width: 100% !important; 
+      margin-top: 15px; 
+      font-size: 0.85em; 
+      border-collapse: collapse; 
+      table-layout: fixed; 
+    }
+    .perc-table th { 
+      background: #f8f9fa; 
+      color: #2c3e50; 
+      padding: 10px 5px; 
+      border-bottom: 2px solid #ddd; 
+      text-align: left; 
+    }
+    .perc-table td { 
+      padding: 10px 5px; 
+      border-bottom: 1px solid #eee; 
+      text-align: left; 
+      word-wrap: break-word; 
+      overflow-wrap: break-word; 
+      white-space: normal; 
+    }
 
     .perc-table th:nth-child(1), .perc-table td:nth-child(1) { width: 45%; }
     .perc-table th:nth-child(2), .perc-table td:nth-child(2) { width: 35%; }
@@ -75,9 +122,13 @@
       .controls div { min-width: 100%; }
       button.fetch-btn { margin-top: 10px; width: 100%; }
       .tab-btn { padding: 10px 15px; font-size: 0.95em; }
+      
+      /* Chart specific mobile fixes */
       .chart-container { grid-template-columns: 1fr; }
-      .chart-box { padding: 10px; }
+      .chart-box { padding: 10px; min-height: 350px; }
       .perc-table { font-size: 0.8em; }
+      /* Ensure chart div itself doesn't overflow */
+      .chart-box > div[id$="Chart"] { width: 100% !important; overflow: hidden; }
     }
   </style>
 </head>
@@ -337,29 +388,29 @@
         </div>
       </div>
 
-      <div class="chart-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px;">
+      <div class="chart-container">
         <div class="chart-box" style="border-top: 5px solid #2ecc71;">
-          <h4 style="text-align:center;">📊 Net Income vs Expense</h4>
+          <h4 style="text-align:center; margin-top:0;">📊 Net Income vs Expense</h4>
           <div id="incomeExpChart" style="height: 250px;"></div>
           ${generateAnalyticsTable(data.incomeAnalysis, data.totalRevenue, 'Item')}
         </div>
         <div class="chart-box">
-          <h4 style="text-align:center;">🍽️ Revenue Source</h4>
+          <h4 style="text-align:center; margin-top:0;">🍽️ Revenue Source</h4>
           <div id="foodRoomChart" style="height: 250px;"></div>
           ${generateAnalyticsTable(data.revenueComparison, data.totalRevenue, 'Source')}
         </div>
         <div class="chart-box">
-          <h4 style="text-align:center;">💳 Revenue Mode</h4>
+          <h4 style="text-align:center; margin-top:0;">💳 Revenue Mode</h4>
           <div id="cashOnlineChart" style="height: 250px;"></div>
           ${generateAnalyticsTable(data.revenueMode, data.totalRevenue, 'Mode')}
         </div>
         <div class="chart-box">
-          <h4 style="text-align:center;">🛠️ Expense Categories</h4>
+          <h4 style="text-align:center; margin-top:0;">🛠️ Expense Categories</h4>
           <div id="expCatChart" style="height: 250px;"></div>
           ${generateAnalyticsTable(data.expenseCategoryWise, data.grandTotalExp, 'Category')}
         </div>
         <div class="chart-box">
-          <h4 style="text-align:center;">💰 Expense Mode</h4>
+          <h4 style="text-align:center; margin-top:0;">💰 Expense Mode</h4>
           <div id="expModeChart" style="height: 250px;"></div>
           ${generateAnalyticsTable(data.expenseMode, data.grandTotalExp, 'Mode')}
         </div>
@@ -383,10 +434,12 @@
     }
     let dataArr = [['Task', 'Value'], ...Object.entries(filteredObj)];
     let data = google.visualization.arrayToDataTable(dataArr);
+    
+    // Fix: Make chart responsive to container width
     let options = { 
       pieHole: 0.4, 
-      chartArea: {width:'90%', height:'75%'}, 
-      legend: { position: 'bottom', textStyle: {fontSize: 13, bold: true} },
+      chartArea: {width:'100%', height:'80%', top: 10}, 
+      legend: { position: 'bottom', textStyle: {fontSize: 12, bold: true} },
       pieSliceText: 'none',
       tooltip: { trigger: 'focus', showColorCode: true }
     };
@@ -397,7 +450,9 @@
   function generateAnalyticsTable(dataObj, total, label = "Item") {
     let filteredObj = filterZeros(dataObj);
     let sortedEntries = Object.entries(filteredObj).sort((a, b) => b[1] - a[1]);
-    let html = `<div style="overflow-x: auto;">
+    
+    // Fix: Added wrapper div for scrolling
+    let html = `<div class="chart-table-wrapper">
                   <table class="perc-table">
                     <tr style="background:#f8f9fa;">
                       <th>${label}</th><th>Amount</th><th>%</th>
