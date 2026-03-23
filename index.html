@@ -14,7 +14,7 @@
     .container { max-width: 1100px; margin: 0 auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); position: relative; }
     
     /* --- Tabs Styling --- */
-    .tabs { display: flex; border-bottom: 2px solid #ddd; margin-bottom: 20px; overflow-x: auto; gap: 5px; padding-bottom: 2px; }
+    .tabs { display: flex; border-bottom: 2px solid #ddd; margin-bottom: 20px; overflow-x: auto; gap: 5px; padding-bottom: 2px; position: sticky; top: 0; background: white; z-index: 200; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-left: -20px; margin-right: -20px; padding-left: 20px; padding-right: 20px; }
     .tab-btn { padding: 12px 20px; cursor: pointer; border: none; background: none; font-weight: bold; font-size: 1.05em; color: #7f8c8d; transition: 0.3s; white-space: nowrap; border-radius: 5px 5px 0 0; }
     .tab-btn:hover { color: #2c3e50; background: #f8f9fa; }
     
@@ -70,6 +70,12 @@
     .perc-table th:nth-child(1), .perc-table td:nth-child(1) { width: 45%; }
     .perc-table th:nth-child(2), .perc-table td:nth-child(2) { width: 35%; white-space: nowrap; } 
     .perc-table th:nth-child(3), .perc-table td:nth-child(3) { width: 20%; }
+
+    /* --- Guest Filter Chips --- */
+    .filter-chips { display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0 5px 0; }
+    .filter-chip { padding: 8px 18px; border-radius: 20px; border: 2px solid #27ae60; background: white; color: #27ae60; font-weight: bold; font-size: 0.9em; cursor: pointer; transition: 0.2s; }
+    .filter-chip:hover { background: #27ae60; color: white; }
+    .filter-chip.active { background: #1a7a44; border-color: #1a7a44; color: white; }
 
     /* --- Mobile Responsive Fixes --- */
     @media (max-width: 600px) {
@@ -185,7 +191,7 @@
     else if (val === 'Expense') hint.innerHTML = "📤 <span style='color:#c0392b;'><b>Only Expense</b> Shown</span>"; 
   }
 
-  let currentTab = 'guests'; let globalData =[]; let curPage = 1; let perPage = 10;
+  let currentTab = 'guests'; let globalData =[]; let curPage = 1; let perPage = 10; let activeGuestFilter = 'all';
   window.lastAnalyticsData = null; // ✅ FIX: Added to support chart redrawing on resize
   google.charts.load('current', {'packages':['corechart']});
 
@@ -235,7 +241,7 @@
   });
 
   function switchTab(tabName, btnElement) {
-    currentTab = tabName; 
+    currentTab = tabName; activeGuestFilter = 'all';
     document.getElementById('loader').style.display = 'none';
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); 
     btnElement.classList.add('active');
@@ -462,7 +468,14 @@
                   <div style="margin-top:auto; border-top:2px dashed #bdc3c7; padding-top:10px; font-size:1.2em; color:#d35400; text-align:right;"><b>Total: ₹${d.grandTotal}</b></div>
                 </div>
                </div>
-               <div class="grand-total" style="background:#2c3e50; color:#fff; padding:15px; border-radius:8px; margin-top:20px; font-size:1.5em; box-shadow:0 4px 6px rgba(0,0,0,0.1);">✅ Total Revenue: ₹${d.grandTotal}</div>`;
+               <div class="grand-total" style="background:#2c3e50; color:#fff; padding:15px; border-radius:8px; margin-top:20px; font-size:1.5em; box-shadow:0 4px 6px rgba(0,0,0,0.1);">✅ Total Revenue: ₹${d.grandTotal}</div>
+               <div class="filter-chips">
+                 <button class="filter-chip ${activeGuestFilter==='all'?'active':''}" onclick="applyGuestFilter('all')">🔁 All</button>
+                 <button class="filter-chip ${activeGuestFilter==='food'?'active':''}" onclick="applyGuestFilter('food')">🍴 Only Food</button>
+                 <button class="filter-chip ${activeGuestFilter==='room'?'active':''}" onclick="applyGuestFilter('room')">🛏️ Only Room</button>
+                 <button class="filter-chip ${activeGuestFilter==='both'?'active':''}" onclick="applyGuestFilter('both')">🍴🛏️ Both</button>
+                 <button class="filter-chip ${activeGuestFilter==='zero'?'active':''}" onclick="applyGuestFilter('zero')">🚫 Zero Payment</button>
+               </div>`;
                
     } else if (currentTab === 'expenses') {
       let methTotal = Object.values(d.byMethod).reduce((sum, val) => sum + val, 0);
@@ -523,19 +536,40 @@
     dash.innerHTML = html;
   }
 
+  function applyGuestFilter(filter) {
+    activeGuestFilter = filter;
+    // Re-render chips (update active state)
+    document.querySelectorAll('.filter-chip').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    curPage = 1;
+    renderUI();
+  }
+
+  function getFilteredData() {
+    if (currentTab !== 'guests' || activeGuestFilter === 'all') return globalData;
+    return globalData.filter(item => {
+      if (activeGuestFilter === 'food')  return item.totalFood > 0 && item.totalRoom === 0;
+      if (activeGuestFilter === 'room')  return item.totalRoom > 0 && item.totalFood === 0;
+      if (activeGuestFilter === 'both')  return item.totalFood > 0 && item.totalRoom > 0;
+      if (activeGuestFilter === 'zero')  return item.grandTotal === 0;
+      return true;
+    });
+  }
+
   function changePageSize() { let sizeVal = document.getElementById('pageSize').value; perPage = (sizeVal === 'all') ? (globalData.length || 1) : parseInt(sizeVal); curPage = 1; renderUI(); }
 
   function renderUI() {
     if (!globalData || globalData.length === 0) { document.getElementById('pagin').style.display = 'none'; return; }
+    let filteredData = getFilteredData();
     let mode = document.getElementById('vMode').value; 
     let pag = document.getElementById('pagin');
     pag.style.display = 'flex'; 
     let sizeVal = document.getElementById('pageSize').value; 
-    let totalPages = Math.ceil(globalData.length / perPage) || 1;
+    let totalPages = Math.ceil(filteredData.length / perPage) || 1;
     let prevBtn = document.getElementById('prevB'); let nextBtn = document.getElementById('nextB'); let pageText = document.getElementById('pageTxt');
 
     if (sizeVal === 'all') { 
-      pageText.innerText = `Showing All ${globalData.length} records`; 
+      pageText.innerText = `Showing All ${filteredData.length} records`; 
       prevBtn.style.display = 'none'; nextBtn.style.display = 'none'; 
     } else { 
       pageText.innerText = `Page ${curPage} of ${totalPages}`; 
@@ -544,7 +578,7 @@
     }
 
     let startIdx = (curPage - 1) * perPage; 
-    let pageData = globalData.slice(startIdx, startIdx + perPage);
+    let pageData = filteredData.slice(startIdx, startIdx + perPage);
     document.getElementById('content').innerHTML = (mode === 'table') ? generateTable(pageData) : generateCards(pageData);
   }
 
