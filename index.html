@@ -17,7 +17,9 @@
     .tabs { display: flex; border-bottom: 2px solid #ddd; margin-bottom: 20px; overflow-x: auto; gap: 5px; padding-bottom: 2px; }
     .tab-btn { padding: 12px 20px; cursor: pointer; border: none; background: none; font-weight: bold; font-size: 1.05em; color: #7f8c8d; transition: 0.3s; white-space: nowrap; border-radius: 5px 5px 0 0; }
     .tab-btn:hover { color: #2c3e50; background: #f8f9fa; }
-    .tab-btn.active { color: #3498db; border-bottom: 3px solid #3498db; background: #ebf5fb; }
+    
+    /* ✅ FIX: Added margin-bottom: -2px to seamlessly overlap the track line */
+    .tab-btn.active { color: #3498db; border-bottom: 3px solid #3498db; background: #ebf5fb; margin-bottom: -2px; }
 
     /* --- Alert and Loader --- */
     #alertBar { display: none; background: #e74c3c; color: white; padding: 15px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); opacity: 0; transition: opacity 0.4s ease-in-out; position: relative; z-index: 1000; }
@@ -65,9 +67,8 @@
     .perc-table th { background: #f8f9fa; color: #2c3e50; padding: 10px 5px; border-bottom: 2px solid #ddd; text-align: left; }
     .perc-table td { padding: 10px 5px; border-bottom: 1px solid #eee; text-align: left; word-wrap: break-word; overflow-wrap: break-word; white-space: normal; }
 
-    /* ✅ FIX: Column widths and Nowrap for amounts */
     .perc-table th:nth-child(1), .perc-table td:nth-child(1) { width: 45%; }
-    .perc-table th:nth-child(2), .perc-table td:nth-child(2) { width: 35%; white-space: nowrap; } /* <-- Number nahi tutega */
+    .perc-table th:nth-child(2), .perc-table td:nth-child(2) { width: 35%; white-space: nowrap; } 
     .perc-table th:nth-child(3), .perc-table td:nth-child(3) { width: 20%; }
 
     /* --- Mobile Responsive Fixes --- */
@@ -79,6 +80,9 @@
       .chart-container { grid-template-columns: 1fr; }
       .chart-box { padding: 10px; }
       .perc-table { font-size: 0.8em; }
+      
+      /* ✅ FIX: Force Cards Grid to stack 1fr instead of clipping out of viewport */
+      .card-grid { grid-template-columns: 1fr; } 
     }
   </style>
 </head>
@@ -136,7 +140,8 @@
     
     <div>
       <label style="visibility: hidden;">Fetch</label>
-      <button id="fetchBtn" class="fetch-btn" onclick="fetchData()" style="margin-top: 0; padding: 8.5px; width: 100%;">Fetch Data</button>
+      <!-- ✅ FIX: Removed inline specific styles to allow responsive classes to work -->
+      <button id="fetchBtn" class="fetch-btn" onclick="fetchData()">Fetch Data</button>
       <div style="font-size: 0.82em; margin-top: 3px; min-height: 1.2em;"></div>
     </div>
 
@@ -180,7 +185,8 @@
     else if (val === 'Expense') hint.innerHTML = "📤 <span style='color:#c0392b;'><b>Only Expense</b> Shown</span>"; 
   }
 
-  let currentTab = 'guests'; let globalData = []; let curPage = 1; let perPage = 10;
+  let currentTab = 'guests'; let globalData =[]; let curPage = 1; let perPage = 10;
+  window.lastAnalyticsData = null; // ✅ FIX: Added to support chart redrawing on resize
   google.charts.load('current', {'packages':['corechart']});
 
   window.addEventListener('load', function() {
@@ -217,6 +223,17 @@
       }).catch(err => console.error(err));
   });
 
+  // ✅ FIX: Event listener to redraw Google Charts automatically upon device rotation/resize
+  window.addEventListener('resize', function() {
+    if (currentTab === 'analytics' && window.lastAnalyticsData) {
+      drawDonut(window.lastAnalyticsData.revenueComparison, 'foodRoomChart');
+      drawDonut(window.lastAnalyticsData.revenueMode, 'cashOnlineChart');
+      drawDonut(window.lastAnalyticsData.incomeAnalysis, 'incomeExpChart',['#e74c3c', '#2ecc71']); 
+      drawDonut(window.lastAnalyticsData.expenseCategoryWise, 'expCatChart');
+      drawDonut(window.lastAnalyticsData.expenseMode, 'expModeChart');
+    }
+  });
+
   function switchTab(tabName, btnElement) {
     currentTab = tabName; 
     document.getElementById('loader').style.display = 'none';
@@ -231,7 +248,9 @@
     document.getElementById('dateStartBox').style.display = isAnalytics ? 'none' : 'flex';
     document.getElementById('dateEndBox').style.display = isAnalytics ? 'none' : 'flex';
     document.getElementById('fetchBtn').style.display = isAnalytics ? 'none' : '';
-    document.getElementById('viewModeBox').style.display = isAnalytics ? 'none' : 'block';
+    
+    // ✅ FIX: Applied 'flex' instead of 'block' to maintain stacking context
+    document.getElementById('viewModeBox').style.display = isAnalytics ? 'none' : 'flex';
 
     document.getElementById('methodContainer').style.display = (tabName === 'revenue') ? 'flex' : 'none';
     document.getElementById('transTypeContainer').style.display = (tabName === 'revenue') ? 'flex' : 'none';
@@ -322,6 +341,8 @@
     document.getElementById('loader').style.display = 'none';
     if (currentTab !== 'analytics') return;
     
+    window.lastAnalyticsData = data; // Cache for window resize
+
     let netBal = data.totalRevenue - data.grandTotalExp;
     let balColor = netBal >= 0 ? '#27ae60' : '#c0392b';
 
@@ -371,7 +392,7 @@
 
     drawDonut(data.revenueComparison, 'foodRoomChart');
     drawDonut(data.revenueMode, 'cashOnlineChart');
-    drawDonut(data.incomeAnalysis, 'incomeExpChart', ['#e74c3c', '#2ecc71']); 
+    drawDonut(data.incomeAnalysis, 'incomeExpChart',['#e74c3c', '#2ecc71']); 
     drawDonut(data.expenseCategoryWise, 'expCatChart');
     drawDonut(data.expenseMode, 'expModeChart');
   }
@@ -411,8 +432,8 @@
     });
     if(!hasData) html += `<tr><td colspan="3" style="text-align:center; color:#95a5a6;">No Data Yet</td></tr>`;
     
-    // ✅ FIX: Added white-space: nowrap to Grand Total cell
-    html += `<tr style="background:#f1f7ff; border-top:2px solid #ddd;"><td colspan="2"><b>Grand Total</b></td><td style="white-space: nowrap;"><b>₹${total.toLocaleString('en-IN')}</b></td></tr></table></div>`;
+    // ✅ FIX: Removed colspan="2" to properly align Grand Total into 3 columns
+    html += `<tr style="background:#f1f7ff; border-top:2px solid #ddd;"><td><b>Grand Total</b></td><td style="white-space: nowrap;"><b>₹${total.toLocaleString('en-IN')}</b></td><td></td></tr></table></div>`;
     return html;
   }
   
@@ -583,7 +604,8 @@
         } else { html += `<div class="empty-state">No records.</div>`; } 
       } else if (currentTab === 'revenue') {
         let tType = document.getElementById('transType').value;
-        html += `<h4 style="background:#2c3e50; color:white; padding:8px; margin:-15px -15px 15px -15px; border-radius:8px 8px 0 0;">🗓️ ${item.displayDate}</h4>`;
+        // ✅ FIX: Matched padding/margin offsets accurately to remove the 3px box-in-a-box gap
+        html += `<h4 style="background:#2c3e50; color:white; padding:12px 18px; margin:-18px -18px 15px -18px; border-radius:10px 10px 0 0;">🗓️ ${item.displayDate}</h4>`;
         if (tType === "All" || tType === "Revenue") {
           if (item.incomes && item.incomes.length > 0) {
             item.incomes.forEach(inc => { html += `<div style="margin-bottom:8px;"><b style="color:#2980b9;">👤 ${inc.name}</b><br><span style="font-size:0.9em; color:#555;">Food: ${inc.foodStr} | Room: ${inc.roomStr}</span><br><b style="color:#27ae60; font-size:1.1em;">₹${inc.total}</b></div><hr style="margin:8px 0; border:0; border-top:1px dashed #ccc;">`; });
