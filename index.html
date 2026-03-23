@@ -37,7 +37,7 @@
     .controls div { display: flex; flex-direction: column; min-width: 160px; }
     .controls label { font-weight: bold; margin-bottom: 5px; font-size: 0.9em; color: #2c3e50; }
     input[type="date"], select { padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: inherit; font-size: 1em; background: white; }
-    button.fetch-btn { background: #27ae60; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; font-size: 1em; align-self: flex-start; margin-top: 22px; }
+    button.fetch-btn { background: #27ae60; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; font-size: 1em; align-self: flex-start; margin-top: 0px; }
     button.fetch-btn:hover { background: #219150; transform: translateY(-1px); }
 
     /* --- Table & Card Styling (Main Data) --- */
@@ -145,13 +145,13 @@
       <div style="font-size: 0.82em; margin-top: 3px; min-height: 1.2em;"></div>
     </div>
 
-    <div id="viewModeBox" style="min-width: 160px;">
+    <div id="viewModeBox" style="min-width: 120px; max-width: 130px;">
       <label>View Mode:</label>
       <select id="vMode" style="width: 100%;" onchange="renderUI()">
         <option value="table">Table</option>
         <option value="card">Cards</option>
       </select>
-      <div class="hint" style="font-size: 0.82em; margin-top: 3px; font-weight: bold; min-height: 1.2em; line-height: 1.2; color: #7f8c8d;">💡 Cards For Mobile.</div>
+      <div class="hint" style="font-size: 0.85em; margin-top: 3px; font-weight: bold; min-height: 1.2em; line-height: 1.2; color: red;">📱 Cards For Mobile.</div>
     </div>
   </div>
 
