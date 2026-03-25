@@ -43,11 +43,11 @@
     button.fetch-btn:hover { background: #219150; transform: translateY(-1px); }
 
     /* --- Table & Card Styling --- */
-    .table-res { overflow-x: auto; margin-top: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); width: 100%; }
+    .table-res { overflow-x: auto; overflow-y: auto; max-height: 70vh; margin-top: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); width: 100%; }
     .table-res table { width: 100%; border-collapse: collapse; background: white; min-width: 600px; }
     .table-res th, .table-res td { border: 1px solid #eee; padding: 12px; text-align: left; }
     /* [Point 6 FIX] Removed dead position:sticky from th (doesn't work with overflow-x:auto parent) */
-    .table-res th { background: #34495e; color: white; z-index: 10; }
+    .table-res th { background: #34495e; color: white; position: sticky; top: 0; z-index: 10; }
     tr:nth-child(even) { background-color: #fcfcfc; }
     
     .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
