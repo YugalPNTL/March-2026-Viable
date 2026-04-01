@@ -498,14 +498,28 @@
             </div>
             <div id="categoryContainer" style="display: none; min-width: 160px; max-width: 190px;">
                 <label>Expense Category:</label>
-                <select id="expCategory" style="width: 100%;"></select>
+                <select id="expCategory" style="width: 100%;">
+                    <option value="All Categories">All Categories</option>
+                    <option value="Food">Food</option>
+                    <option value="Salary">Salary</option>
+                    <option value="Laundry">Laundry</option>
+                    <option value="Repair and Maintenance">Repair and Maintenance</option>
+                    <option value="Bill">Bill</option>
+                    <option value="Other">Other</option>
+                </select>
                 <div id="catHint"
                     style="font-size: 0.82em; margin-top: 3px; font-weight: bold; min-height: 1.2em; line-height: 1.2;">
                 </div>
             </div>
             <div id="methodContainer" style="display: none; min-width: 160px; max-width: 190px;">
                 <label>Payment Method:</label>
-                <select id="payMethod" style="width: 100%;"></select>
+                <select id="payMethod" style="width: 100%;">
+                    <option value="">-- Select Method --</option>
+                    <option value="All Payments">All Payments</option>
+                    <option value="Trishul">Trishul</option>
+                    <option value="ChetanS">ChetanS</option>
+                    <option value="Cash">Cash</option>
+                </select>
                 <div id="searchHint"
                     style="font-size: 0.82em; margin-top: 3px; font-weight: bold; min-height: 1.2em; line-height: 1.2;">
                 </div>
@@ -572,40 +586,17 @@
         google.charts.setOnLoadCallback(function () { chartsReady = true; });
 
         window.addEventListener('load', function () {
-            // [Point 7 FIX] Added user-facing error alerts for dropdown API failures
-            fetch(API_URL + "?action=getDropdownMethods")
-                .then(res => res.json())
-                .then(methods => {
-                    let select = document.getElementById('payMethod'); select.innerHTML = "";
-                    let placeholder = document.createElement('option'); placeholder.value = ""; placeholder.text = "-- Select Method --"; select.appendChild(placeholder);
-                    let allOpt = document.createElement('option'); allOpt.value = "All Payments"; allOpt.text = "All Payments"; select.appendChild(allOpt);
-                    methods.forEach(m => { let opt = document.createElement('option'); opt.value = m; opt.text = m; select.appendChild(opt); });
-                    select.addEventListener('change', function () {
-                        let hint = document.getElementById('searchHint');
-                        if (this.value === "") hint.innerText = "";
-                        else if (this.value === "All Payments") hint.innerHTML = "";
-                        else hint.innerHTML = "🎯 <span style='color:#27ae60;'>Only <b>" + this.value + "</b> Payments.</span>";
-                    });
-                }).catch(err => {
-                    console.error(err);
-                    showModernAlert("⚠️ Payment Methods load nahi ho paye. Page refresh karein.");
-                });
-
-            fetch(API_URL + "?action=getExpenseCategories")
-                .then(res => res.json())
-                .then(cats => {
-                    let select = document.getElementById('expCategory'); select.innerHTML = "";
-                    let allOpt = document.createElement('option'); allOpt.value = "All Categories"; allOpt.text = "All Categories"; select.appendChild(allOpt);
-                    cats.forEach(c => { let opt = document.createElement('option'); opt.value = c; opt.text = c; select.appendChild(opt); });
-                    select.addEventListener('change', function () {
-                        let hint = document.getElementById('catHint');
-                        if (this.value === "All Categories") hint.innerHTML = "📂 <span style='color:#2980b9;'>Showing results for <b>All Categories</b>.</span>";
-                        else hint.innerHTML = "🎯 <span style='color:#d35400;'>Showing results for <b>" + this.value + "</b> only.</span>";
-                    });
-                }).catch(err => {
-                    console.error(err);
-                    showModernAlert("⚠️ Expense Categories load nahi ho paye. Page refresh karein.");
-                });
+            document.getElementById('payMethod').addEventListener('change', function () {
+                let hint = document.getElementById('searchHint');
+                if (this.value === "") hint.innerText = "";
+                else if (this.value === "All Payments") hint.innerHTML = "";
+                else hint.innerHTML = "🎯 <span style='color:#27ae60;'>Only <b>" + this.value + "</b> Payments.</span>";
+            });
+            document.getElementById('expCategory').addEventListener('change', function () {
+                let hint = document.getElementById('catHint');
+                if (this.value === "All Categories") hint.innerHTML = "📂 <span style='color:#2980b9;'>Showing results for <b>All Categories</b>.</span>";
+                else hint.innerHTML = "🎯 <span style='color:#d35400;'>Showing results for <b>" + this.value + "</b> only.</span>";
+            });
         });
 
         window.addEventListener('resize', function () {
