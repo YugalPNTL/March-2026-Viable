@@ -526,7 +526,7 @@
                 <button id="fetchBtn" class="fetch-btn" onclick="fetchData()">Fetch Data</button>
                 <div style="font-size: 0.82em; margin-top: 3px; min-height: 1.2em;"></div>
             </div>
-            <div id="viewModeBox" style="min-width: 120px; max-width: 130px;">
+            <div id="viewModeBox" style="display: none;">
                 <label>View Mode:</label>
                 <select id="vMode" style="width: 100%;" onchange="renderUI()">
                     <option value="table">Table</option>
@@ -625,6 +625,9 @@
                 drawDonut(window.lastAnalyticsData.expenseCategoryWise, 'expCatChart');
                 drawDonut(window.lastAnalyticsData.expenseMode, 'expModeChart');
             }
+            if (currentTab !== 'analytics' && globalData && globalData.length > 0) {
+                renderUI();
+            }
         });
 
         function switchTab(tabName, btnElement) {
@@ -637,7 +640,6 @@
             document.getElementById('dateStartBox').style.display = isAnalytics ? 'none' : 'flex';
             document.getElementById('dateEndBox').style.display = isAnalytics ? 'none' : 'flex';
             document.getElementById('fetchBtn').style.display = '';
-            document.getElementById('viewModeBox').style.display = isAnalytics ? 'none' : 'flex';
 
             document.getElementById('methodContainer').style.display = (tabName === 'search') ? 'flex' : 'none';
             document.getElementById('transTypeContainer').style.display = (tabName === 'search') ? 'flex' : 'none';
@@ -1028,7 +1030,7 @@
         function renderUI() {
             if (!globalData || globalData.length === 0) { document.getElementById('pagin').style.display = 'none'; return; }
             let filteredData = getFilteredData();
-            let mode = document.getElementById('vMode').value;
+            let mode = window.innerWidth < 600 ? 'card' : 'table';
             let pag = document.getElementById('pagin');
             pag.style.display = 'flex';
             let sizeVal = document.getElementById('pageSize').value;
