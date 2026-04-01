@@ -1,1047 +1,1567 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mar 2026 Raikwal</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
- <style>
-  /* ============ RESET & BASE ============ */
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { font-size: 15px; }
-  body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: #f1f5f9; 
-    min-height: 100vh;
-    color: #1e293b;
-    padding: 0;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mar 2026 Raikwal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <style>
+        /* ============ RESET & BASE ============ */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-  /* ============ APP SHELL ============ */
-  .app-wrapper {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 24px 16px 40px 16px; 
-  }
+        html {
+            font-size: 15px;
+        }
 
-  /* ============ APP HEADER ============ */
-  .app-header {
-    text-align: center;
-    padding: 24px 0 16px 0;
-    background: #f1f5f9;
-    position: sticky;
-    top: 0;
-    z-index: 200;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-  }
-  .app-header h1 {
-    font-size: 1.6rem;
-    font-weight: 700;
-    background: linear-gradient(90deg, #6d28d9, #2563eb, #0ea5e9);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: -0.5px;
-  }
-  .app-header p {
-    color: #64748b;
-    font-size: 0.85rem;
-    margin-top: 4px;
-  }
-  
-  body.scrolled .app-header {
-    transform: translateY(-100%);
-    opacity: 0;
-    pointer-events: none;
-  }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f1f5f9;
+            min-height: 100vh;
+            color: #1e293b;
+            padding: 0;
+        }
 
-  /* ============ STICKY TAB WRAPPER ============ */
-  .sticky-tab-wrapper {
-    position: sticky;
-    top: 82px;
-    z-index: 100;
-    background: #f1f5f9; 
-    padding: 10px 16px 14px 16px; 
-    margin: 0 -16px 0 -16px; 
-    transition: top 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  body.scrolled .sticky-tab-wrapper {
-    top: 0;
-    padding-top: 12px;
-    box-shadow: 0 4px 10px -4px rgba(0,0,0,0.06);
-  }
+        /* ============ APP SHELL ============ */
+        .app-wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px 16px 40px 16px;
+        }
 
-  /* ============ TAB BAR ============ */
-  .tab-bar {
-    display: flex;
-    gap: 6px;
-    background: #ffffff;
-    border-radius: 14px;
-    padding: 5px;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  }
-  .tab-btn {
-    flex: 1;
-    padding: 11px 8px;
-    text-align: center;
-    cursor: pointer;
-    border: none;
-    background: transparent;
-    color: #64748b;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 500;
-    border-radius: 10px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-  }
-  .tab-btn:hover { color: #334155; background: #f8fafc; }
-  .tab-btn.active {
-    background: linear-gradient(135deg, #6d28d9, #3b82f6);
-    color: #ffffff;
-    font-weight: 600;
-    box-shadow: 0 4px 12px rgba(99,102,241,0.25);
-  }
-  .tab-btn .material-icons-round { font-size: 18px; }
+        /* ============ APP HEADER ============ */
+        .app-header {
+            text-align: center;
+            padding: 24px 0 16px 0;
+            background: #f1f5f9;
+            position: sticky;
+            top: 0;
+            z-index: 200;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
 
-  /* ============ GLASS CARD ============ */
-  .tab-content {
-    display: none;
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
-    border-radius: 16px;
-    padding: 24px;
-    animation: fadeSlideIn 0.35s ease;
-  }
-  .tab-content.active { display: block; }
+        .app-header h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #6d28d9, #2563eb, #0ea5e9);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
 
-  @keyframes fadeSlideIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+        .app-header p {
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-top: 4px;
+        }
 
-  /* ============ CONTROLS ============ */
-  .controls {
-    display: flex;
-    gap: 12px;
-    align-items: flex-end;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-  }
-  .input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-  .input-group label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #64748b;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .input-group input[type="text"] {
-    padding: 10px 14px;
-    border: 1px solid #cbd5e1;
-    border-radius: 10px;
-    width: 155px;
-    font-size: 0.9rem;
-    font-family: 'Inter', sans-serif;
-    background: #ffffff;
-    color: #1e293b;
-    transition: all 0.25s ease;
-    outline: none;
-  }
-  .input-group input[type="text"]:focus {
-    border-color: #6d28d9;
-    box-shadow: 0 0 0 3px rgba(109,40,217,0.15);
-    background: #ffffff;
-  }
-  .input-group input[type="text"]::placeholder { color: #94a3b8; }
+        body.scrolled .app-header {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
 
-  .fetch-btn {
-    padding: 10px 28px;
-    background: linear-gradient(135deg, #8b5cf6, #6366f1);
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 600;
-    font-family: 'Inter', sans-serif;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    box-shadow: 0 4px 15px rgba(139,92,246,0.3);
-  }
-  .fetch-btn:hover:not(:disabled) {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(139,92,246,0.4);
-  }
-  .fetch-btn:active:not(:disabled) { transform: translateY(0); }
-  
-  /* ISSUE #4 FIXED: Clearer disabled state */
-  .fetch-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
-  }
-  .fetch-btn .material-icons-round { font-size: 18px; }
+        /* ============ STICKY TAB WRAPPER ============ */
+        .sticky-tab-wrapper {
+            position: sticky;
+            top: 82px;
+            z-index: 100;
+            background: #f1f5f9;
+            padding: 10px 16px 14px 16px;
+            margin: 0 -16px 0 -16px;
+            transition: top 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease;
+        }
 
-  /* ============ MESSAGES ============ */
-  .msg-box {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 16px;
-    border-radius: 10px;
-    margin-bottom: 16px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    animation: fadeSlideIn 0.3s ease;
-  }
-  .msg-box .material-icons-round { font-size: 20px; }
-  .msg-warning { background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; }
-  .msg-info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8; }
-  .hidden { display: none !important; }
+        body.scrolled .sticky-tab-wrapper {
+            top: 0;
+            padding-top: 12px;
+            box-shadow: 0 4px 10px -4px rgba(0, 0, 0, 0.06);
+        }
 
-  /* Spinner */
-  .spinner {
-    width: 16px; height: 16px;
-    border: 2px solid #bfdbfe;
-    border-top-color: #2563eb;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    flex-shrink: 0;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
+        /* ============ TAB BAR ============ */
+        .tab-bar {
+            display: flex;
+            gap: 6px;
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 5px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
 
-  /* ============ RESULTS TABLE ============ */
-  .table-wrapper {
-    overflow-x: auto;
-    border-radius: 12px;
-    border: 1px solid #e2e8f0;
-    -webkit-overflow-scrolling: touch;
-    background: #ffffff;
-  }
-  .results-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
-  .results-table th {
-    background: #f8fafc; color: #475569; font-weight: 600; text-transform: uppercase;
-    font-size: 0.78rem; letter-spacing: 0.5px; padding: 14px 16px; text-align: left;
-    white-space: nowrap; border-bottom: 1px solid #e2e8f0;
-  }
-  .results-table td {
-    padding: 14px 16px; border-bottom: 1px solid #e2e8f0; vertical-align: top;
-    color: #1e293b; font-size: 0.95rem; line-height: 1.5;
-  }
-  .results-table tbody tr { transition: background 0.2s ease; }
-  .results-table tbody tr:hover { background: #f1f5f9; }
-  .results-table tbody tr:last-child td { border-bottom: none; }
+        .tab-btn {
+            flex: 1;
+            padding: 11px 8px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: #64748b;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
 
-  /* Guest name styling */
-  .guest-name { font-weight: 700; color: #0f172a; font-size: 1.05rem; }
-  .guest-date { color: #64748b; font-weight: 500; font-size: 0.9rem; }
+        .tab-btn:hover {
+            color: #334155;
+            background: #f8fafc;
+        }
 
-  /* Payment breakdown chips */
-  .payment-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-  .payment-chip {
-    display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px;
-    border-radius: 8px; font-size: 0.88rem; font-weight: 500;
-    background: #f1f5f9; border: 1px solid #e2e8f0; white-space: nowrap;
-  }
-  .payment-chip .method-name { color: #4f46e5; font-weight: 700; }
-  .payment-chip .method-amounts { color: #334155; }
+        .tab-btn.active {
+            background: linear-gradient(135deg, #6d28d9, #3b82f6);
+            color: #ffffff;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+        }
 
-  /* Total columns */
-  .amount-total { font-weight: 700; font-size: 1.15rem; font-variant-numeric: tabular-nums; }
-  .food-total { color: #059669; }
-  .room-total { color: #2563eb; }
-  .grand-total { color: #d97706; }
+        .tab-btn .material-icons-round {
+            font-size: 18px;
+        }
 
-  /* Summary row */
-  .total-row { background: #f8fafc !important; }
-  .total-row td {
-    border-top: 2px solid #cbd5e1 !important; font-weight: 700; color: #0f172a;
-    padding-top: 16px; padding-bottom: 16px;
-  }
-  .total-label { text-align: right; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; }
+        /* ============ GLASS CARD ============ */
+        .tab-content {
+            display: none;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border-radius: 16px;
+            padding: 24px;
+            animation: fadeSlideIn 0.35s ease;
+        }
 
-  /* ============ SUMMARY BOX ============ */
-  .summary-box {
-    background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px;
-    padding: 20px; margin-bottom: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-    animation: fadeSlideIn 0.3s ease;
-  }
-  .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 20px; }
-  .summary-section { background: #f8fafc; padding: 16px; border-radius: 10px; border: 1px solid #e2e8f0; }
-  .summary-title { font-size: 0.85rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; }
-  .summary-item { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.95rem; }
-  .summary-item-label { color: #475569; font-weight: 500; }
-  .summary-item-value { font-weight: 700; color: #0f172a; }
-  .summary-section-total { display: flex; justify-content: space-between; margin-top: 12px; padding-top: 12px; border-top: 1px dashed #cbd5e1; font-weight: 700; font-size: 1.05rem; color: #0f172a; }
-  
-  .summary-grand-total {
-    text-align: center; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px;
-  }
-  .summary-grand-total-label { font-size: 0.9rem; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; margin-bottom: 4px; }
-  .summary-grand-total-value { font-size: 2rem; font-weight: 800; font-variant-numeric: tabular-nums; }
-  
-  /* ISSUE #6 FIXED: Reusable utility classes for cards */
-  .card-profit { background: linear-gradient(135deg, #f0fdf4, #dcfce7); border-color: #bbf7d0; color: #166534; }
-  .card-loss { background: linear-gradient(135deg, #fef2f2, #fee2e2); border-color: #fecaca; color: #b91c1c; }
+        .tab-content.active {
+            display: block;
+        }
 
-  .rev-stats-row{
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
-    margin-top:14px;
-  }
-  .rev-stat-pill{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    flex:1;
-    min-width:78px;
-    padding:10px 12px;
-    border-radius:10px;
-    border:1.5px solid #e2e8f0;
-    background:#ffffff;
-    cursor:pointer;
-    transition:all .18s ease;
-    box-shadow:0 1px 2px rgba(0,0,0,0.03);
-    touch-action:manipulation;
-  }
-  .rev-stat-pill:hover{border-color:#16a34a;background:#f0fdf4;}
-  .rev-stat-pill.active{border-color:#16a34a;background:#dcfce7;box-shadow:0 0 0 1px rgba(22,163,74,0.12);}
-  .rev-stat-pill.zero{border-color:#fecaca;background:#fff1f2;}
-  .rev-stat-pill.zero:hover{border-color:#dc2626;background:#fee2e2;}
-  .rev-stat-pill.zero.active{border-color:#dc2626;background:#fee2e2;box-shadow:0 0 0 1px rgba(220,38,38,0.12);}
-  .rev-stat-pill.zero .rev-stat-num,
-  .rev-stat-pill.zero .rev-stat-lbl{color:#dc2626;}
-  .rev-stat-num{font-size:22px;font-weight:800;line-height:1;letter-spacing:-0.5px;color:#166534;}
-  .rev-stat-lbl{font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:#475569;font-weight:700;text-align:center;margin-top:4px;}
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
 
-  /* ============ PAGINATION ============ */
-  .pagination-bar {
-    display: flex; justify-content: space-between; align-items: center;
-    background: #ffffff; padding: 12px 16px; border-radius: 12px;
-    border: 1px solid #e2e8f0; margin-bottom: 16px; font-size: 0.9rem; color: #475569;
-  }
-  .page-controls { display: flex; align-items: center; gap: 12px; }
-  .page-btn { padding: 6px 12px; border: 1px solid #cbd5e1; background: #ffffff; border-radius: 6px; cursor: pointer; font-weight: 600; color: #334155; }
-  .page-btn:hover:not(:disabled) { background: #f1f5f9; border-color: #94a3b8; }
-  .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-  .page-select { padding: 6px 10px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; font-family: inherit; color: #334155; font-weight: 500; outline: none; }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-  /* ============ CHARTS (MOBILE FIXED) ============ */
-  .chart-card {
-    background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px;
-    padding: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-    height: auto; 
-    display: flex; flex-direction: column;
-  }
-  .chart-table {
-    width: 100%; margin-top: 15px; 
-  }
-  
-  /* ============ LISTS & TABLES UI ============ */
-  .expense-list { list-style: none; margin: 0; padding: 0; }
-  .exp-item { margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid #f1f5f9; font-size: 0.95rem; }
-  .exp-name { color: #0f172a; font-weight: 600; }
-  .exp-cat { color: #64748b; font-size: 0.9rem; }
-  .exp-meth { color: #4f46e5; font-weight: 600; }
-  .exp-amt { color: #059669; font-weight: 600; }
-  .exp-amt.red { color: #dc2626; font-weight: 700; }
-  .rev-item { margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9; }
-  .rev-name { color: #0f172a; font-size: 1.05rem; font-weight: 600; display: block; margin-bottom: 2px; }
-  .rev-details { color: #475569; font-size: 0.9rem; display: block; margin-bottom: 2px; }
-  .rev-amt { color: #16a34a; font-weight: 700; font-size: 1.1rem; }
+        /* ============ CONTROLS ============ */
+        .controls {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
 
-  /* ============ RESPONSIVE ============ */
-  @media (max-width: 768px) {
-    .app-wrapper { padding: 20px 10px 14px 10px; }
-    
-    .app-header { padding: 16px 0 12px 0; }
-    
-    .sticky-tab-wrapper {
-      padding: 8px 10px 12px 10px; 
-      margin: 0 -10px 0 -10px; 
-      top: 68px; 
-    }
-    
-    body.scrolled .sticky-tab-wrapper { 
-      top: 0; 
-      padding-top: 10px;
-    }
-    
-    .controls { flex-direction: column; align-items: stretch; gap: 10px; }
-    .input-group { flex-direction: row; align-items: center; gap: 10px; }
-    .input-group label { min-width: 75px; }
-    .input-group input[type="text"] { flex: 1; width: auto; }
-    .fetch-btn { width: 100%; justify-content: center; padding: 12px; font-size: 1rem; }
-    
-    /* MOBILE TAB LABELS FIX */
-    .tab-btn { 
-      flex-direction: column; 
-      gap: 4px; 
-      padding: 8px 2px; 
-    }
-    .tab-btn .material-icons-round { 
-      font-size: 20px; 
-    }
-    .tab-btn span.tab-label { 
-      display: block; 
-      font-size: 0.7rem; 
-    }
-    
-    .summary-grid { grid-template-columns: 1fr; gap: 16px; }
-    .pagination-bar { flex-direction: column; gap: 12px; align-items: stretch; }
-    .page-controls { justify-content: space-between; width: 100%; }
-    .page-select { flex: 1; }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
 
-    /* Mobile card layout for main table */
-    .table-wrapper { border: none; }
-    .results-table thead { display: none; }
-    .results-table, .results-table tbody, .results-table tr, .results-table td { display: block; width: 100%; }
-    .results-table tr { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 12px; padding: 14px; }
-    .results-table td { padding: 8px 0; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: flex-start; font-size: 1rem; }
-    .results-table td:last-child { border-bottom: none; }
-    .results-table td::before { content: attr(data-label); font-weight: 600; color: #64748b; font-size: 0.85rem; text-transform: uppercase; min-width: 100px; padding-right: 10px; padding-top: 2px; }
-    .results-table tr.total-row { background: #f8fafc; border: 2px solid #cbd5e1; }
-    
-    /* ISSUE #5 FIXED: Empty labels and total row alignments on mobile */
-    .results-table td[data-label=""]::before { display: none; }
-    .results-table tr.total-row td { justify-content: flex-end; text-align: right; border-top: none !important; border-bottom: 1px solid #e2e8f0; }
-    
-    /* Analytics Chart Table Fix */
-    .chart-table .results-table tr { padding: 10px; margin-bottom: 10px; }
-  }
-   .google-visualization-tooltip {
-  pointer-events: none;
-}
-</style>
+        .input-group label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-group input[type="text"] {
+            padding: 10px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            width: 155px;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            background: #ffffff;
+            color: #1e293b;
+            transition: all 0.25s ease;
+            outline: none;
+        }
+
+        .input-group input[type="text"]:focus {
+            border-color: #6d28d9;
+            box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.15);
+            background: #ffffff;
+        }
+
+        .input-group input[type="text"]::placeholder {
+            color: #94a3b8;
+        }
+
+        .fetch-btn {
+            padding: 10px 28px;
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .fetch-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .fetch-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        /* ISSUE #4 FIXED: Clearer disabled state */
+        .fetch-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .fetch-btn .material-icons-round {
+            font-size: 18px;
+        }
+
+        /* ============ MESSAGES ============ */
+        .msg-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            animation: fadeSlideIn 0.3s ease;
+        }
+
+        .msg-box .material-icons-round {
+            font-size: 20px;
+        }
+
+        .msg-warning {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+        }
+
+        .msg-info {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1d4ed8;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Spinner */
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #bfdbfe;
+            border-top-color: #2563eb;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ============ RESULTS TABLE ============ */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            -webkit-overflow-scrolling: touch;
+            background: #ffffff;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .results-table th {
+            background: #f8fafc;
+            color: #475569;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.78rem;
+            letter-spacing: 0.5px;
+            padding: 14px 16px;
+            text-align: left;
+            white-space: nowrap;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .results-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: top;
+            color: #1e293b;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .results-table tbody tr {
+            transition: background 0.2s ease;
+        }
+
+        .results-table tbody tr:hover {
+            background: #f1f5f9;
+        }
+
+        .results-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Guest name styling */
+        .guest-name {
+            font-weight: 700;
+            color: #0f172a;
+            font-size: 1.05rem;
+        }
+
+        .guest-date {
+            color: #64748b;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        /* Payment breakdown chips */
+        .payment-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .payment-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            font-weight: 500;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            white-space: nowrap;
+        }
+
+        .payment-chip .method-name {
+            color: #4f46e5;
+            font-weight: 700;
+        }
+
+        .payment-chip .method-amounts {
+            color: #334155;
+        }
+
+        /* Total columns */
+        .amount-total {
+            font-weight: 700;
+            font-size: 1.15rem;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .food-total {
+            color: #059669;
+        }
+
+        .room-total {
+            color: #2563eb;
+        }
+
+        .grand-total {
+            color: #d97706;
+        }
+
+        /* Summary row */
+        .total-row {
+            background: #f8fafc !important;
+        }
+
+        .total-row td {
+            border-top: 2px solid #cbd5e1 !important;
+            font-weight: 700;
+            color: #0f172a;
+            padding-top: 16px;
+            padding-bottom: 16px;
+        }
+
+        .total-label {
+            text-align: right;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #64748b;
+        }
+
+        /* ============ SUMMARY BOX ============ */
+        .summary-box {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            animation: fadeSlideIn 0.3s ease;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 20px;
+        }
+
+        .summary-section {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .summary-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 8px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .summary-item-label {
+            color: #475569;
+            font-weight: 500;
+        }
+
+        .summary-item-value {
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .summary-section-total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #cbd5e1;
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: #0f172a;
+        }
+
+        .summary-grand-total {
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .summary-grand-total-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .summary-grand-total-value {
+            font-size: 2rem;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* ISSUE #6 FIXED: Reusable utility classes for cards */
+        .card-profit {
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            border-color: #bbf7d0;
+            color: #166534;
+        }
+
+        .card-loss {
+            background: linear-gradient(135deg, #fef2f2, #fee2e2);
+            border-color: #fecaca;
+            color: #b91c1c;
+        }
+
+        .rev-stats-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+
+        .rev-stat-pill {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            min-width: 78px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1.5px solid #e2e8f0;
+            background: #ffffff;
+            cursor: pointer;
+            transition: all .18s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+            touch-action: manipulation;
+        }
+
+        .rev-stat-pill:hover {
+            border-color: #16a34a;
+            background: #f0fdf4;
+        }
+
+        .rev-stat-pill.active {
+            border-color: #16a34a;
+            background: #dcfce7;
+            box-shadow: 0 0 0 1px rgba(22, 163, 74, 0.12);
+        }
+
+        .rev-stat-pill.zero {
+            border-color: #fecaca;
+            background: #fff1f2;
+        }
+
+        .rev-stat-pill.zero:hover {
+            border-color: #dc2626;
+            background: #fee2e2;
+        }
+
+        .rev-stat-pill.zero.active {
+            border-color: #dc2626;
+            background: #fee2e2;
+            box-shadow: 0 0 0 1px rgba(220, 38, 38, 0.12);
+        }
+
+        .rev-stat-pill.zero .rev-stat-num,
+        .rev-stat-pill.zero .rev-stat-lbl {
+            color: #dc2626;
+        }
+
+        .rev-stat-num {
+            font-size: 22px;
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -0.5px;
+            color: #166534;
+        }
+
+        .rev-stat-lbl {
+            font-size: 10px;
+            letter-spacing: .8px;
+            text-transform: uppercase;
+            color: #475569;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 4px;
+        }
+
+        .rev-stat-pill:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #f8fafc;
+            border-color: #e2e8f0;
+        }
+
+        /* ============ PAGINATION ============ */
+        .pagination-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffffff;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+
+        .page-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-btn {
+            padding: 6px 12px;
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .page-select {
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            font-family: inherit;
+            color: #334155;
+            font-weight: 500;
+            outline: none;
+        }
+
+        /* ============ CHARTS (MOBILE FIXED) ============ */
+        .chart-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+            height: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-table {
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        /* ============ LISTS & TABLES UI ============ */
+        .expense-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .exp-item {
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.95rem;
+        }
+
+        .exp-name {
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        .exp-cat {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .exp-meth {
+            color: #4f46e5;
+            font-weight: 600;
+        }
+
+        .exp-amt {
+            color: #059669;
+            font-weight: 600;
+        }
+
+        .exp-amt.red {
+            color: #dc2626;
+            font-weight: 700;
+        }
+
+        .rev-item {
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .rev-name {
+            color: #0f172a;
+            font-size: 1.05rem;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .rev-details {
+            color: #475569;
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .rev-amt {
+            color: #16a34a;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
+            .app-wrapper {
+                padding: 20px 10px 14px 10px;
+            }
+
+            .app-header {
+                padding: 16px 0 12px 0;
+            }
+
+            .sticky-tab-wrapper {
+                padding: 8px 10px 12px 10px;
+                margin: 0 -10px 0 -10px;
+                top: 68px;
+            }
+
+            body.scrolled .sticky-tab-wrapper {
+                top: 0;
+                padding-top: 10px;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            .input-group {
+                flex-direction: row;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .input-group label {
+                min-width: 75px;
+            }
+
+            .input-group input[type="text"] {
+                flex: 1;
+                width: auto;
+            }
+
+            .fetch-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 12px;
+                font-size: 1rem;
+            }
+
+            /* MOBILE TAB LABELS FIX */
+            .tab-btn {
+                flex-direction: column;
+                gap: 4px;
+                padding: 8px 2px;
+            }
+
+            .tab-btn .material-icons-round {
+                font-size: 20px;
+            }
+
+            .tab-btn span.tab-label {
+                display: block;
+                font-size: 0.7rem;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .pagination-bar {
+                flex-direction: column;
+                gap: 12px;
+                align-items: stretch;
+            }
+
+            .page-controls {
+                justify-content: space-between;
+                width: 100%;
+            }
+
+            .page-select {
+                flex: 1;
+            }
+
+            /* Mobile card layout for main table */
+            .table-wrapper {
+                border: none;
+            }
+
+            .results-table thead {
+                display: none;
+            }
+
+            .results-table,
+            .results-table tbody,
+            .results-table tr,
+            .results-table td {
+                display: block;
+                width: 100%;
+            }
+
+            .results-table tr {
+                background: #ffffff;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                margin-bottom: 12px;
+                padding: 14px;
+            }
+
+            .results-table td {
+                padding: 8px 0;
+                border-bottom: 1px solid #f1f5f9;
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                font-size: 1rem;
+            }
+
+            .results-table td:last-child {
+                border-bottom: none;
+            }
+
+            .results-table td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: #64748b;
+                font-size: 0.85rem;
+                text-transform: uppercase;
+                min-width: 100px;
+                padding-right: 10px;
+                padding-top: 2px;
+            }
+
+            .results-table tr.total-row {
+                background: #f8fafc;
+                border: 2px solid #cbd5e1;
+            }
+
+            /* ISSUE #5 FIXED: Empty labels and total row alignments on mobile */
+            .results-table td[data-label=""]::before {
+                display: none;
+            }
+
+            .results-table tr.total-row td {
+                justify-content: flex-end;
+                text-align: right;
+                border-top: none !important;
+                border-bottom: 1px solid #e2e8f0;
+            }
+
+            /* Analytics Chart Table Fix */
+            .chart-table .results-table tr {
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+        }
+
+        .google-visualization-tooltip {
+            pointer-events: none;
+        }
+    </style>
 </head>
+
 <body>
 
-  <div class="app-wrapper">
-    <div class="app-header">
-      <h1>Mar 2026 Raikwal</h1>
-      <p>Revenue, Expense, Payment & Analytics</p>
+    <div class="app-wrapper">
+        <div class="app-header">
+            <h1>Mar 2026 Raikwal</h1>
+            <p>Revenue, Expense, Payment & Analytics</p>
+        </div>
+
+        <div class="sticky-tab-wrapper">
+            <div class="tab-bar">
+                <button class="tab-btn active" onclick="switchTab('revenue')"><span
+                        class="material-icons-round">trending_up</span><span class="tab-label">Revenue</span></button>
+                <button class="tab-btn" onclick="switchTab('expense')"><span
+                        class="material-icons-round">receipt_long</span><span class="tab-label">Expense</span></button>
+                <button class="tab-btn" onclick="switchTab('payment')"><span
+                        class="material-icons-round">payments</span><span class="tab-label">Payment</span></button>
+                <button class="tab-btn" onclick="switchTab('analytics')"><span
+                        class="material-icons-round">insights</span><span class="tab-label">Analytics</span></button>
+            </div>
+        </div>
+
+        <div id="tab-revenue" class="tab-content active">
+            <div class="controls">
+                <div class="input-group"><label for="startDate">Start Date</label><input type="text" id="startDate"
+                        placeholder="DD/MM/YYYY" readonly></div>
+                <div class="input-group"><label for="endDate">End Date</label><input type="text" id="endDate"
+                        placeholder="DD/MM/YYYY" readonly></div>
+                <button class="fetch-btn" id="revFetchBtn" onclick="fetchRevenue()"><span
+                        class="material-icons-round">search</span>Fetch</button>
+            </div>
+            <div id="revWarningMsg" class="msg-box msg-warning hidden"><span
+                    class="material-icons-round">warning</span><span id="revWarningText"></span></div>
+            <div id="revInfoMsg" class="msg-box msg-info hidden">
+                <div class="spinner"></div><span id="revInfoText"></span>
+            </div>
+            <div id="resultsArea"></div>
+        </div>
+
+        <div id="tab-expense" class="tab-content">
+            <div class="controls">
+                <div class="input-group"><label for="expStartDate">Start Date</label><input type="text"
+                        id="expStartDate" placeholder="DD/MM/YYYY" readonly></div>
+                <div class="input-group"><label for="expEndDate">End Date</label><input type="text" id="expEndDate"
+                        placeholder="DD/MM/YYYY" readonly></div>
+                <div class="input-group"><label for="expCategory">Category</label><select id="expCategory"
+                        class="page-select" style="width: 155px; height: 38px;">
+                        <option value="All">All</option>
+                    </select></div>
+                <button class="fetch-btn" id="expFetchBtn" onclick="fetchExpense()"><span
+                        class="material-icons-round">search</span>Fetch</button>
+            </div>
+            <div id="expWarningMsg" class="msg-box msg-warning hidden"><span
+                    class="material-icons-round">warning</span><span id="expWarningText"></span></div>
+            <div id="expInfoMsg" class="msg-box msg-info hidden">
+                <div class="spinner"></div><span id="expInfoText"></span>
+            </div>
+            <div id="expResultsArea"></div>
+        </div>
+
+        <div id="tab-payment" class="tab-content">
+            <div class="controls" style="flex-wrap: wrap;">
+                <div class="input-group"><label for="payStartDate">Start Date</label><input type="text"
+                        id="payStartDate" placeholder="DD/MM/YYYY" readonly></div>
+                <div class="input-group"><label for="payEndDate">End Date</label><input type="text" id="payEndDate"
+                        placeholder="DD/MM/YYYY" readonly></div>
+                <div class="input-group"><label for="payMethod">Payment Method</label><select id="payMethod"
+                        class="page-select" style="min-width: 140px; height: 38px;">
+                        <option value="">Select Option</option>
+                        <option value="All">All</option>
+                    </select></div>
+                <div class="input-group"><label for="payType">Transaction</label><select id="payType"
+                        class="page-select" style="min-width: 140px; height: 38px;">
+                        <option value="">Select Option</option>
+                        <option value="All">All</option>
+                        <option value="Revenue">Revenue</option>
+                        <option value="Expense">Expense</option>
+                    </select></div>
+                <button class="fetch-btn" id="payFetchBtn" onclick="fetchPayment()"><span
+                        class="material-icons-round">search</span>Fetch</button>
+            </div>
+            <div id="payWarningMsg" class="msg-box msg-warning hidden"><span
+                    class="material-icons-round">warning</span><span id="payWarningText"></span></div>
+            <div id="payInfoMsg" class="msg-box msg-info hidden">
+                <div class="spinner"></div><span id="payInfoText"></span>
+            </div>
+            <div id="payResultsArea"></div>
+        </div>
+
+        <div id="tab-analytics" class="tab-content">
+            <div class="controls" style="justify-content: flex-end;">
+                <button class="fetch-btn" id="analyticsFetchBtn" onclick="fetchAnalytics()"><span
+                        class="material-icons-round">search</span>Fetch Analytics</button>
+            </div>
+            <div id="analyticsInfoMsg" class="msg-box msg-info hidden">
+                <div class="spinner"></div><span id="analyticsInfoText">Loading Analytics...</span>
+            </div>
+            <div id="analyticsWarningMsg" class="msg-box msg-warning hidden"><span
+                    class="material-icons-round">warning</span><span id="analyticsWarningText"></span></div>
+            <div id="analyticsResultsArea" class="hidden"></div>
+        </div>
     </div>
 
-    <div class="sticky-tab-wrapper">
-      <div class="tab-bar">
-        <button class="tab-btn active" onclick="switchTab('revenue')"><span class="material-icons-round">trending_up</span><span class="tab-label">Revenue</span></button>
-        <button class="tab-btn" onclick="switchTab('expense')"><span class="material-icons-round">receipt_long</span><span class="tab-label">Expense</span></button>
-        <button class="tab-btn" onclick="switchTab('payment')"><span class="material-icons-round">payments</span><span class="tab-label">Payment</span></button>
-        <button class="tab-btn" onclick="switchTab('analytics')"><span class="material-icons-round">insights</span><span class="tab-label">Analytics</span></button>
-      </div>
-    </div>
+    <script>
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 20) {
+                document.body.classList.add('scrolled');
+            } else {
+                document.body.classList.remove('scrolled');
+            }
+        });
 
-    <div id="tab-revenue" class="tab-content active">
-      <div class="controls">
-        <div class="input-group"><label for="startDate">Start Date</label><input type="text" id="startDate" placeholder="DD/MM/YYYY" readonly></div>
-        <div class="input-group"><label for="endDate">End Date</label><input type="text" id="endDate" placeholder="DD/MM/YYYY" readonly></div>
-        <button class="fetch-btn" id="revFetchBtn" onclick="fetchRevenue()"><span class="material-icons-round">search</span>Fetch</button>
-      </div>
-      <div id="revWarningMsg" class="msg-box msg-warning hidden"><span class="material-icons-round">warning</span><span id="revWarningText"></span></div>
-      <div id="revInfoMsg" class="msg-box msg-info hidden"><div class="spinner"></div><span id="revInfoText"></span></div>
-      <div id="resultsArea"></div>
-    </div>
+        const API_URL = "https://script.google.com/macros/s/AKfycby7awN50axcwHv3HuuDGnS_S9vJLPLiLeZGKZYLiV7A-OLrRxIhUSvqlhGs5wcTzQc3vQ/exec";
 
-    <div id="tab-expense" class="tab-content">
-      <div class="controls">
-        <div class="input-group"><label for="expStartDate">Start Date</label><input type="text" id="expStartDate" placeholder="DD/MM/YYYY" readonly></div>
-        <div class="input-group"><label for="expEndDate">End Date</label><input type="text" id="expEndDate" placeholder="DD/MM/YYYY" readonly></div>
-        <div class="input-group"><label for="expCategory">Category</label><select id="expCategory" class="page-select" style="width: 155px; height: 38px;"><option value="All">All</option></select></div>
-        <button class="fetch-btn" id="expFetchBtn" onclick="fetchExpense()"><span class="material-icons-round">search</span>Fetch</button>
-      </div>
-      <div id="expWarningMsg" class="msg-box msg-warning hidden"><span class="material-icons-round">warning</span><span id="expWarningText"></span></div>
-      <div id="expInfoMsg" class="msg-box msg-info hidden"><div class="spinner"></div><span id="expInfoText"></span></div>
-      <div id="expResultsArea"></div>
-    </div>
+        // ========== TAB SWITCHING ==========
+        var currentActiveTab = 'revenue';
+        function switchTab(tabName) {
+            currentActiveTab = tabName;
+            var btns = document.querySelectorAll('.tab-btn');
+            var contents = document.querySelectorAll('.tab-content');
+            for (var i = 0; i < btns.length; i++) {
+                btns[i].classList.remove('active');
+                contents[i].classList.remove('active');
+            }
+            var tabIndex = { 'revenue': 0, 'expense': 1, 'payment': 2, 'analytics': 3 };
+            btns[tabIndex[tabName]].classList.add('active');
+            contents[tabIndex[tabName]].classList.add('active');
 
-    <div id="tab-payment" class="tab-content">
-      <div class="controls" style="flex-wrap: wrap;">
-        <div class="input-group"><label for="payStartDate">Start Date</label><input type="text" id="payStartDate" placeholder="DD/MM/YYYY" readonly></div>
-        <div class="input-group"><label for="payEndDate">End Date</label><input type="text" id="payEndDate" placeholder="DD/MM/YYYY" readonly></div>
-        <div class="input-group"><label for="payMethod">Payment Method</label><select id="payMethod" class="page-select" style="min-width: 140px; height: 38px;"><option value="">Select Option</option><option value="All">All</option></select></div>
-        <div class="input-group"><label for="payType">Transaction</label><select id="payType" class="page-select" style="min-width: 140px; height: 38px;"><option value="">Select Option</option><option value="All">All</option><option value="Revenue">Revenue</option><option value="Expense">Expense</option></select></div>
-        <button class="fetch-btn" id="payFetchBtn" onclick="fetchPayment()"><span class="material-icons-round">search</span>Fetch</button>
-      </div>
-      <div id="payWarningMsg" class="msg-box msg-warning hidden"><span class="material-icons-round">warning</span><span id="payWarningText"></span></div>
-      <div id="payInfoMsg" class="msg-box msg-info hidden"><div class="spinner"></div><span id="payInfoText"></span></div>
-      <div id="payResultsArea"></div>
-    </div>
-
-    <div id="tab-analytics" class="tab-content">
-      <div id="analyticsInfoMsg" class="msg-box msg-info"><div class="spinner"></div><span id="analyticsInfoText">Loading Analytics...</span></div>
-      <div id="analyticsWarningMsg" class="msg-box msg-warning hidden"><span class="material-icons-round">warning</span><span id="analyticsWarningText"></span></div>
-      <div id="analyticsResultsArea" class="hidden"></div>
-    </div>
-  </div>
-
-  <script>
-    window.addEventListener('scroll', function() {
-      if (window.scrollY > 20) {
-        document.body.classList.add('scrolled');
-      } else {
-        document.body.classList.remove('scrolled');
-      }
-    });
-
-    const API_URL = "https://script.google.com/macros/s/AKfycby7awN50axcwHv3HuuDGnS_S9vJLPLiLeZGKZYLiV7A-OLrRxIhUSvqlhGs5wcTzQc3vQ/exec";
-
-    // ========== TAB SWITCHING ==========
-    var currentActiveTab = 'revenue';
-    function switchTab(tabName) {
-      currentActiveTab = tabName;
-      var btns = document.querySelectorAll('.tab-btn');
-      var contents = document.querySelectorAll('.tab-content');
-      for (var i = 0; i < btns.length; i++) {
-        btns[i].classList.remove('active');
-        contents[i].classList.remove('active');
-      }
-      var tabIndex = { 'revenue': 0, 'expense': 1, 'payment': 2, 'analytics': 3 };
-      btns[tabIndex[tabName]].classList.add('active');
-      contents[tabIndex[tabName]].classList.add('active');
-
-      if (tabName === 'analytics') {
-        fetchAnalytics();
-      }
-    }
-
-    // ========== DATE HELPERS ==========
-    function isValidDate(dateStr) {
-      if (!dateStr || typeof dateStr !== 'string') return false;
-      var parts = dateStr.trim().split('/');
-      if (parts.length !== 3) return false;
-      var day = parseInt(parts[0], 10);
-      var month = parseInt(parts[1], 10);
-      var year = parseInt(parts[2], 10);
-      if (isNaN(day) || isNaN(month) || isNaN(year)) return false;
-      if (month < 1 || month > 12) return false;
-      if (day < 1 || day > 31) return false;
-      if (year < 1900 || year > 2100) return false;
-      var d = new Date(year, month - 1, day);
-      return d.getFullYear() === year && d.getMonth() === (month - 1) && d.getDate() === day;
-    }
-
-    function parseDDMMYYYY(dateStr) {
-      var parts = dateStr.trim().split('/');
-      return new Date(parseInt(parts[2], 10), parseInt(parts[1], 10) - 1, parseInt(parts[0], 10));
-    }
-
-    // ========== UI HELPERS ==========
-    function showMsg(prefix, type, text) {
-      document.getElementById(prefix + 'WarningMsg').classList.add('hidden');
-      document.getElementById(prefix + 'InfoMsg').classList.add('hidden');
-      if (type !== 'none') {
-        var el = document.getElementById(prefix + (type === 'warning' ? 'Warning' : 'Info') + 'Text');
-        if(el) el.innerText = text;
-        document.getElementById(prefix + (type === 'warning' ? 'Warning' : 'Info') + 'Msg').classList.remove('hidden');
-      }
-    }
-    
-    function setBtnState(prefix, disabled) {
-      var btn = document.getElementById(prefix + 'FetchBtn');
-      if (!btn) return;
-      btn.disabled = disabled;
-      btn.innerHTML = disabled ? '<span class="material-icons-round">hourglass_empty</span> Loading' : '<span class="material-icons-round">search</span> Fetch';
-    }
-
-    // ========== PAGINATION HELPERS ==========
-    function renderPaginationBar(prefix, dataLength, currentPage, rowsPerPage, itemName) {
-      var totalPages = rowsPerPage === 'All' ? 1 : Math.ceil(dataLength / rowsPerPage);
-      var html = '<div class="pagination-bar"><div class="page-info">Showing ' + dataLength + ' ' + itemName + (dataLength > 1 ? 's' : '') + '</div><div class="page-controls">';
-      html += '<select id="' + prefix + 'RowsPerPageSelect" class="page-select" onchange="changeRowsPerPage(\'' + prefix + '\')">';
-      var opts =[10, 20, 50, 'All'];
-      for (var i = 0; i < opts.length; i++) {
-        var sel = (rowsPerPage == opts[i]) ? 'selected' : '';
-        html += '<option value="' + opts[i] + '" ' + sel + '>' + opts[i] + ' per page</option>';
-      }
-      html += '</select>';
-      if (rowsPerPage !== 'All') {
-        var prevDis = currentPage <= 1 ? 'disabled' : '';
-        var nextDis = currentPage >= totalPages ? 'disabled' : '';
-        html += '<button class="page-btn" onclick="changePage(\'' + prefix + '\', -1)" ' + prevDis + '>Prev</button>';
-        html += '<span style="font-weight:600">' + currentPage + ' / ' + totalPages + '</span>';
-        html += '<button class="page-btn" onclick="changePage(\'' + prefix + '\', 1)" ' + nextDis + '>Next</button>';
-      }
-      html += '</div></div>';
-      return html;
-    }
-
-    function changeRowsPerPage(prefix) {
-      var val = document.getElementById(prefix + 'RowsPerPageSelect').value;
-      var lines = val === 'All' ? 'All' : parseInt(val, 10);
-      if (prefix === 'rev') { rowsPerPage = lines; currentPage = 1; renderAll(); }
-      else if (prefix === 'exp') { expRowsPerPage = lines; expCurrentPage = 1; renderExpAll(); }
-      else if (prefix === 'pay') { payRowsPerPage = lines; payCurrentPage = 1; renderPayAll(); }
-    }
-
-    function changePage(prefix, delta) {
-      if (prefix === 'rev') { currentPage += delta; renderAll(); }
-      else if (prefix === 'exp') { expCurrentPage += delta; renderExpAll(); }
-      else if (prefix === 'pay') { payCurrentPage += delta; renderPayAll(); }
-    }
-
-    // ========== FETCH REVENUE ==========
-    function fetchRevenue() {
-      showMsg('rev', 'none');
-      document.getElementById('resultsArea').innerHTML = '';
-
-      var startDateStr = document.getElementById('startDate').value.trim();
-      var endDateStr = document.getElementById('endDate').value.trim();
-
-      if (!startDateStr || !endDateStr) { return showMsg('rev', 'warning', 'Please enter both Start Date and End Date.'); }
-      if (!isValidDate(startDateStr) || !isValidDate(endDateStr)) { return showMsg('rev', 'warning', 'Date is not valid. Use DD/MM/YYYY format.'); }
-      if (parseDDMMYYYY(startDateStr) > parseDDMMYYYY(endDateStr)) { return showMsg('rev', 'warning', 'Start Date cannot be after End Date.'); }
-
-      showMsg('rev', 'info', 'Data is being fetched... Please wait.');
-      setBtnState('rev', true);
-
-      var url = API_URL + "?action=getGuestsDataForDateRange&start=" + encodeURIComponent(startDateStr) + "&end=" + encodeURIComponent(endDateStr);
-      fetch(url).then(res => res.json()).then(data => {
-        if(data.error) throw new Error(data.error);
-        onFetchSuccess(data);
-      }).catch(err => onFetchError(err));
-    }
-
-    function onFetchSuccess(data) {
-      showMsg('rev', 'none'); setBtnState('rev', false);
-      if (!data || data.length === 0) {
-        document.getElementById('resultsArea').innerHTML = '<div class="no-data"><span class="material-icons-round">search_off</span><p>No data found for the selected date range.</p></div>';
-        return;
-      }
-      appData = data; currentPage = 1; revenueFilter = 'all'; renderAll();
-    }
-    function onFetchError(error) { showMsg('rev', 'warning', 'Error: ' + (error.message || 'Something went wrong.')); setBtnState('rev', false); }
-
-    var appData =[]; var currentPage = 1; var rowsPerPage = 10; var revenueFilter = 'all';
-    function formatPaymentBreakdown(payments) {
-      if (!payments || Object.keys(payments).length === 0) return '';
-      var html = '<div class="payment-chips">';
-      for (var method in payments) {
-        if (payments.hasOwnProperty(method)) {
-          html += '<span class="payment-chip"><span class="method-name">' + method + '</span><span class="method-amounts">' + payments[method].join('+') + '</span></span>';
+            if (tabName === 'analytics' && currentAnalyticsData) {
+                renderAnalytics(currentAnalyticsData);
+            }
         }
-      }
-      html += '</div>'; return html;
-    }
-    function formatCurrency(num) { return num === 0 ? '' : num.toLocaleString('en-IN'); }
-    function getFilteredRevenueData() {
-      if (revenueFilter === 'all') return appData;
-      if (revenueFilter === 'food-only') return appData.filter(function (g) { return (g.foodTotal || 0) > 0 && (g.roomTotal || 0) === 0; });
-      if (revenueFilter === 'room-only') return appData.filter(function (g) { return (g.roomTotal || 0) > 0 && (g.foodTotal || 0) === 0; });
-      if (revenueFilter === 'both') return appData.filter(function (g) { return (g.foodTotal || 0) > 0 && (g.roomTotal || 0) > 0; });
-      if (revenueFilter === 'zero') return appData.filter(function (g) { return (g.foodTotal || 0) === 0 && (g.roomTotal || 0) === 0; });
-      return appData;
-    }
 
-    function setRevenueFilter(f) {
-      revenueFilter = f;
-      currentPage = 1;
-      renderAll();
-      try {
-        var box = document.querySelector('.summary-box');
-        if (box) { box.classList.add('summary-hover'); setTimeout(function(){ box.classList.remove('summary-hover'); }, 220); }
-      } catch (e) {}
-    }
-
-    function renderAll() {
-      var filteredData = getFilteredRevenueData();
-      var html = renderSummaryBox(filteredData, appData);
-      var totalPages = rowsPerPage === 'All' ? 1 : Math.ceil(filteredData.length / rowsPerPage);
-      if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
-      if (filteredData.length > 0) { html += renderPaginationBar('rev', filteredData.length, currentPage, rowsPerPage, 'guest'); html += renderTablePage(filteredData); }
-      document.getElementById('resultsArea').innerHTML = html;
-    }
-
-    function renderSummaryBox(data, allData) {
-      if (data.length === 0) return '';
-      var totalFood = 0, totalRoom = 0, methodTotals = {};
-      for (var i = 0; i < data.length; i++) {
-        var g = data[i]; totalFood += g.foodTotal; totalRoom += g.roomTotal;
-        if (g.food) { for (var m in g.food) { if (!methodTotals[m]) methodTotals[m] = 0; for (var j=0; j<g.food[m].length; j++) methodTotals[m] += g.food[m][j]; } }
-        if (g.room) { for (var m in g.room) { if (!methodTotals[m]) methodTotals[m] = 0; for (var j=0; j<g.room[m].length; j++) methodTotals[m] += g.room[m][j]; } }
-      }
-      var grandTotal = totalFood + totalRoom;
-      var allCount = allData.length;
-      var foodOnlyCount = allData.filter(function(g){ return (g.foodTotal || 0) > 0 && (g.roomTotal || 0) === 0; }).length;
-      var roomOnlyCount = allData.filter(function(g){ return (g.roomTotal || 0) > 0 && (g.foodTotal || 0) === 0; }).length;
-      var bothCount = allData.filter(function(g){ return (g.foodTotal || 0) > 0 && (g.roomTotal || 0) > 0; }).length;
-      var zeroCount = allData.filter(function(g){ return (g.foodTotal || 0) === 0 && (g.roomTotal || 0) === 0; }).length;
-
-      var html = '<div class="summary-box">';
-      var leftItems =[{ label: 'Room', val: totalRoom }, { label: 'Food', val: totalFood }].sort(function(a, b) { return b.val - a.val; });
-      html += '<div class="summary-grid">';
-      html += '<div class="summary-section"><div class="summary-title">Category Breakdown</div>';
-      for (var i=0; i<leftItems.length; i++) {
-        var amtStr = leftItems[i].val > 0 ? '₹ ' + leftItems[i].val.toLocaleString('en-IN') : '₹ 0';
-        html += '<div class="summary-item"><span class="summary-item-label">' + leftItems[i].label + '</span><span class="summary-item-value">' + amtStr + '</span></div>';
-      }
-      html += '<div class="summary-section-total"><span>Total</span><span>₹ ' + grandTotal.toLocaleString('en-IN') + '</span></div></div>';
-
-      html += '<div class="summary-section"><div class="summary-title">Payment Methods</div>';
-      var methodTotalSum = 0, hasPayments = false;
-      var revenueMethodKeys = Object.keys(methodTotals).sort(function(a,b) { return methodTotals[b] - methodTotals[a]; });
-      for (var k = 0; k < revenueMethodKeys.length; k++) {
-        var m = revenueMethodKeys[k]; hasPayments = true;
-        html += '<div class="summary-item"><span class="summary-item-label">' + m + '</span><span class="summary-item-value">₹ ' + methodTotals[m].toLocaleString('en-IN') + '</span></div>';
-        methodTotalSum += methodTotals[m];
-      }
-      if (!hasPayments) html += '<div class="summary-item"><span class="summary-item-label">No Payments</span></div>';
-      html += '<div class="summary-section-total"><span>Total</span><span>₹ ' + methodTotalSum.toLocaleString('en-IN') + '</span></div></div></div>';
-      
-      /* USING CSS UTILITY CLASS FOR CARD */
-      html += '<div class="summary-grand-total card-profit"><div class="summary-grand-total-label">Total Revenue</div><div class="summary-grand-total-value">₹ ' + grandTotal.toLocaleString('en-IN') + '</div></div>';
-
-      html += '<div class="rev-stats-row">';
-      html += '<button class="rev-stat-pill ' + (revenueFilter === "all" ? "active" : "") + '" data-filter="all" onclick="setRevenueFilter(\'all\')"><span class="rev-stat-num">' + allCount + '</span><span class="rev-stat-lbl">All</span></button>';
-      html += '<button class="rev-stat-pill ' + (revenueFilter === "food-only" ? "active" : "") + '" data-filter="food-only" onclick="setRevenueFilter(\'food-only\')"><span class="rev-stat-num">' + foodOnlyCount + '</span><span class="rev-stat-lbl">Food Only</span></button>';
-      html += '<button class="rev-stat-pill ' + (revenueFilter === "room-only" ? "active" : "") + '" data-filter="room-only" onclick="setRevenueFilter(\'room-only\')"><span class="rev-stat-num">' + roomOnlyCount + '</span><span class="rev-stat-lbl">Room Only</span></button>';
-      html += '<button class="rev-stat-pill ' + (revenueFilter === "both" ? "active" : "") + '" data-filter="both" onclick="setRevenueFilter(\'both\')"><span class="rev-stat-num">' + bothCount + '</span><span class="rev-stat-lbl">Food + Room</span></button>';
-      html += '<button class="rev-stat-pill zero ' + (revenueFilter === "zero" ? "active" : "") + '" data-filter="zero" onclick="setRevenueFilter(\'zero\')"><span class="rev-stat-num">' + zeroCount + '</span><span class="rev-stat-lbl">Zero Payment</span></button>';
-      html += '</div></div>';
-      return html;
-    }
-
-    function renderTablePage(data) {
-      var startIdx = 0, endIdx = data.length;
-      if (rowsPerPage !== 'All') { startIdx = (currentPage - 1) * rowsPerPage; endIdx = startIdx + rowsPerPage; }
-      var pageData = data.slice(startIdx, endIdx);
-      var html = '<div class="table-wrapper"><table class="results-table"><thead><tr><th>Date</th><th>Guest Name</th><th>Food Breakdown</th><th>Total Food</th><th>Room Breakdown</th><th>Total Room</th><th>Grand Total</th></tr></thead><tbody>';
-      var pageFoodTotal = 0, pageRoomTotal = 0, pageGrandTotal = 0;
-      for (var i = 0; i < pageData.length; i++) {
-        var g = pageData[i];
-        html += '<tr><td data-label="Date"><span class="guest-date">' + g.date + '</span></td><td data-label="Guest"><span class="guest-name">' + g.guestName + '</span></td><td data-label="Food">' + formatPaymentBreakdown(g.food) + '</td><td data-label="Total Food"><span class="amount-total food-total">' + formatCurrency(g.foodTotal) + '</span></td><td data-label="Room">' + formatPaymentBreakdown(g.room) + '</td><td data-label="Total Room"><span class="amount-total room-total">' + formatCurrency(g.roomTotal) + '</span></td><td data-label="Grand Total"><span class="amount-total grand-total">' + formatCurrency(g.grandTotal) + '</span></td></tr>';
-        pageFoodTotal += g.foodTotal; pageRoomTotal += g.roomTotal; pageGrandTotal += g.grandTotal;
-      }
-      html += '<tr class="total-row"><td colspan="3" data-label="" class="total-label">Page Total (' + pageData.length + ' guest' + (pageData.length > 1 ? 's' : '') + ')</td><td data-label="Total Food"><span class="amount-total food-total">' + formatCurrency(pageFoodTotal) + '</span></td><td data-label=""></td><td data-label="Total Room"><span class="amount-total room-total">' + formatCurrency(pageRoomTotal) + '</span></td><td data-label="Grand Total"><span class="amount-total grand-total">' + formatCurrency(pageGrandTotal) + '</span></td></tr></tbody></table></div>';
-      return html;
-    }
-
-    // ========== EXPENSE TAB LOGIC ==========
-    var expAppData =[], expCategoryFilter = 'All';
-    window.addEventListener('load', function() {
-      if(API_URL !== "PASTE_YOUR_NEW_WEB_APP_URL_HERE") {
-        fetch(API_URL + "?action=getExpenseCategories").then(res => res.json()).then(categories => {
-          var drp = document.getElementById('expCategory');
-          for (var i = 0; i < categories.length; i++) { var opt = document.createElement('option'); opt.value = categories[i]; opt.innerHTML = categories[i]; drp.appendChild(opt); }
-        }).catch(err => console.log(err));
-
-        fetch(API_URL + "?action=getPaymentMethods").then(res => res.json()).then(methods => {
-          var drp = document.getElementById('payMethod');
-          for (var i = 0; i < methods.length; i++) { var opt = document.createElement('option'); opt.value = methods[i]; opt.innerHTML = methods[i]; drp.appendChild(opt); }
-        }).catch(err => console.log(err));
-      }
-    });
-
-    function fetchExpense() {
-      var start = document.getElementById('expStartDate').value.trim();
-      var end = document.getElementById('expEndDate').value.trim();
-      expCategoryFilter = document.getElementById('expCategory').value;
-
-      if (!start || !end) { return showMsg('exp', 'warning', 'Please select both Start and End dates.'); }
-      if (!isValidDate(start) || !isValidDate(end)) { return showMsg('exp', 'warning', 'Date is not valid. Use DD/MM/YYYY format.'); }
-      if (parseDDMMYYYY(start) > parseDDMMYYYY(end)) { return showMsg('exp', 'warning', 'Start Date cannot be after End Date.'); }
-
-      showMsg('exp', 'info', 'Fetching expenses... Please wait.'); setBtnState('exp', true);
-
-      var url = API_URL + "?action=getExpensesDataForDateRange&start=" + encodeURIComponent(start) + "&end=" + encodeURIComponent(end) + "&category=" + encodeURIComponent(expCategoryFilter);
-      fetch(url).then(res => res.json()).then(data => {
-        if(data.error) throw new Error(data.error); onExpFetchSuccess(data);
-      }).catch(err => onExpFetchError(err));
-    }
-
-    var expCurrentPage = 1, expRowsPerPage = 10;
-    function onExpFetchSuccess(data) {
-      showMsg('exp', 'none'); setBtnState('exp', false);
-      if (!data || data.length === 0) { document.getElementById('expResultsArea').innerHTML = '<div class="no-data"><span class="material-icons-round">search_off</span><p>No expenses found.</p></div>'; return; }
-      expAppData = data; expCurrentPage = 1; renderExpAll();
-    }
-    function onExpFetchError(error) { showMsg('exp', 'warning', 'Error: ' + (error.message || 'Something went wrong.')); setBtnState('exp', false); }
-
-    function renderExpAll() {
-      var html = renderExpSummary(expAppData);
-      var totalPages = expRowsPerPage === 'All' ? 1 : Math.ceil(expAppData.length / expRowsPerPage);
-      if (expCurrentPage > totalPages && totalPages > 0) expCurrentPage = totalPages;
-      if (expAppData.length > 0) { html += renderPaginationBar('exp', expAppData.length, expCurrentPage, expRowsPerPage, 'day'); html += renderExpTablePage(); }
-      document.getElementById('expResultsArea').innerHTML = html;
-    }
-
-    function renderExpTablePage() {
-      var startIdx = 0, endIdx = expAppData.length;
-      if (expRowsPerPage !== 'All') { startIdx = (expCurrentPage - 1) * expRowsPerPage; endIdx = startIdx + expRowsPerPage; }
-      var pageData = expAppData.slice(startIdx, endIdx);
-      var html = '<div class="table-wrapper"><table class="results-table"><thead><tr><th>Date</th><th>Expense Details</th><th>Daily Total</th></tr></thead><tbody>';
-      var pageTotal = 0;
-      for (var i = 0; i < pageData.length; i++) {
-        var day = pageData[i]; var detailsHtml = '<ul class="expense-list">';
-        for (var j = 0; j < day.expenses.length; j++) { var exp = day.expenses[j]; detailsHtml += '<li class="exp-item"><span class="exp-name">&bull; ' + exp.name + '</span> <span class="exp-cat">(' + exp.category + ')</span> | <span class="exp-meth">' + exp.method + '</span>: <span class="exp-amt">₹' + formatCurrency(exp.amount) + '</span></li>'; }
-        detailsHtml += '</ul>';
-        html += '<tr><td data-label="Date" class="tbl-date">' + day.date + '</td><td data-label="Expense Details">' + detailsHtml + '</td><td data-label="Daily Total" class="tbl-total">₹' + formatCurrency(day.dailyTotal) + '</td></tr>';
-        pageTotal += day.dailyTotal;
-      }
-      html += '<tr class="total-row"><td colspan="2" data-label="" class="total-label">Page Total</td><td data-label="Grand Total" class="tbl-grand">₹' + formatCurrency(pageTotal) + '</td></tr></tbody></table></div>';
-      return html;
-    }
-
-    function renderExpSummary(data) {
-      var catTotals = {}, methodTotals = {}, grandTotal = 0;
-      for (var i=0; i<data.length; i++) {
-        for (var j=0; j<data[i].expenses.length; j++) {
-          var exp = data[i].expenses[j]; grandTotal += exp.amount;
-          if(!catTotals[exp.category]) catTotals[exp.category] = 0; catTotals[exp.category] += exp.amount;
-          if(!methodTotals[exp.method]) methodTotals[exp.method] = 0; methodTotals[exp.method] += exp.amount;
+        // ========== DATE HELPERS ==========
+        function isValidDate(dateStr) {
+            if (!dateStr || typeof dateStr !== 'string') return false;
+            var parts = dateStr.trim().split('/');
+            if (parts.length !== 3) return false;
+            var day = parseInt(parts[0], 10);
+            var month = parseInt(parts[1], 10);
+            var year = parseInt(parts[2], 10);
+            if (isNaN(day) || isNaN(month) || isNaN(year)) return false;
+            if (month < 1 || month > 12) return false;
+            if (day < 1 || day > 31) return false;
+            if (year < 1900 || year > 2100) return false;
+            var d = new Date(year, month - 1, day);
+            return d.getFullYear() === year && d.getMonth() === (month - 1) && d.getDate() === day;
         }
-      }
-      var html = '<div class="summary-box"><div class="summary-grid"><div class="summary-section"><div class="summary-title">Category Breakdown</div>';
-      var catKeys = Object.keys(catTotals).sort(function(a,b) { return catTotals[b] - catTotals[a]; });
-      for (var k=0; k<catKeys.length; k++) { html += '<div class="summary-item"><span class="summary-item-label">' + catKeys[k] + '</span><span class="summary-item-value">₹ ' + formatCurrency(catTotals[catKeys[k]]) + '</span></div>'; }
-      html += '<div class="summary-section-total"><span>Total</span><span>₹ ' + formatCurrency(grandTotal) + '</span></div></div><div class="summary-section"><div class="summary-title">Payment Methods</div>';
-      var methodKeys = Object.keys(methodTotals).sort(function(a,b) { return methodTotals[b] - methodTotals[a]; });
-      for (var k=0; k<methodKeys.length; k++) { html += '<div class="summary-item"><span class="summary-item-label">' + methodKeys[k] + '</span><span class="summary-item-value">₹ ' + formatCurrency(methodTotals[methodKeys[k]]) + '</span></div>'; }
-      html += '<div class="summary-section-total"><span>Total</span><span>₹ ' + formatCurrency(grandTotal) + '</span></div></div></div>';
-      var revLabel = expCategoryFilter === 'All' ? 'Total Expense' : 'Total Expense (' + expCategoryFilter + ')';
-      
-      /* USING CSS UTILITY CLASS FOR CARD */
-      html += '<div class="summary-grand-total card-loss"><div class="summary-grand-total-label">' + revLabel + '</div><div class="summary-grand-total-value">₹ ' + formatCurrency(grandTotal) + '</div></div></div>';
-      return html;
-    }
 
-    // ========== PAYMENT TAB LOGIC ==========
-    var payAppData =[], payMethodFilter = 'All', payTypeFilter = 'All', payCurrentPage = 1, payRowsPerPage = 10;
-    function fetchPayment() {
-      var start = document.getElementById('payStartDate').value.trim();
-      var end = document.getElementById('payEndDate').value.trim();
-      payMethodFilter = document.getElementById('payMethod').value;
-      payTypeFilter = document.getElementById('payType').value;
-
-      if (!start || !end) { return showMsg('pay', 'warning', 'Please select both Start and End dates.'); }
-      if (!isValidDate(start) || !isValidDate(end)) { return showMsg('pay', 'warning', 'Date is not valid.'); }
-      if (!payMethodFilter) { return showMsg('pay', 'warning', 'Please select a Payment Method.'); }
-      if (!payTypeFilter) { return showMsg('pay', 'warning', 'Please select a Transaction Type.'); }
-      if (parseDDMMYYYY(start) > parseDDMMYYYY(end)) { return showMsg('pay', 'warning', 'Start Date cannot be after End Date.'); }
-
-      showMsg('pay', 'info', 'Fetching transactions... Please wait.'); setBtnState('pay', true);
-
-      var url = API_URL + "?action=getPaymentTabDataForDateRange&start=" + encodeURIComponent(start) + "&end=" + encodeURIComponent(end) + "&method=" + encodeURIComponent(payMethodFilter) + "&type=" + encodeURIComponent(payTypeFilter);
-      fetch(url).then(res => res.json()).then(data => {
-        if(data.error) throw new Error(data.error); onPayFetchSuccess(data);
-      }).catch(err => onPayFetchError(err));
-    }
-
-    function onPayFetchSuccess(data) {
-      showMsg('pay', 'none'); setBtnState('pay', false);
-      if (!data || data.length === 0) { document.getElementById('payResultsArea').innerHTML = '<div class="no-data"><span class="material-icons-round">search_off</span><p>No transactions found.</p></div>'; return; }
-      payAppData = data; payCurrentPage = 1; renderPayAll();
-    }
-    function onPayFetchError(error) { showMsg('pay', 'warning', 'Error: ' + (error.message || 'Something went wrong.')); setBtnState('pay', false); }
-
-    function renderPayAll() {
-      var html = renderPaySummary(payAppData);
-      var totalPages = payRowsPerPage === 'All' ? 1 : Math.ceil(payAppData.length / payRowsPerPage);
-      if (payCurrentPage > totalPages && totalPages > 0) payCurrentPage = totalPages;
-      if (payAppData.length > 0) { html += renderPaginationBar('pay', payAppData.length, payCurrentPage, payRowsPerPage, 'day'); html += renderPayTablePage(); }
-      document.getElementById('payResultsArea').innerHTML = html;
-    }
-
-    function renderPayTablePage() {
-      var startIdx = 0, endIdx = payAppData.length;
-      if (payRowsPerPage !== 'All') { startIdx = (payCurrentPage - 1) * payRowsPerPage; endIdx = startIdx + payRowsPerPage; }
-      var pageData = payAppData.slice(startIdx, endIdx);
-      var html = '<div class="table-wrapper"><table class="results-table"><thead><tr><th>Date</th>';
-      if (payTypeFilter === 'All' || payTypeFilter === 'Revenue') { html += '<th>Revenue Details' + (payMethodFilter !== 'All' ? ' (' + payMethodFilter + ')' : '') + '</th>'; }
-      if (payTypeFilter === 'All' || payTypeFilter === 'Expense') { html += '<th>Expense Details' + (payMethodFilter !== 'All' ? ' (' + payMethodFilter + ')' : '') + '</th>'; }
-      html += '</tr></thead><tbody>';
-
-      for (var i = 0; i < pageData.length; i++) {
-        var day = pageData[i];
-        
-        var revHtml = '<ul class="expense-list">';
-        for (var j = 0; j < day.revenues.length; j++) {
-          var rv = day.revenues[j]; var methodsStrs =[];
-          if (Object.keys(rv.food).length > 0) { var foodStr =[]; for(var m in rv.food) foodStr.push(m + ': ' + rv.food[m].join('+')); methodsStrs.push('Food: ' + foodStr.join(' + ')); }
-          if (Object.keys(rv.room).length > 0) { var roomStr =[]; for(var m in rv.room) roomStr.push(m + ': ' + rv.room[m].join('+')); methodsStrs.push('Room: ' + roomStr.join(' + ')); }
-          revHtml += '<li class="rev-item"><span class="rev-name">' + rv.guestName + '</span><span class="rev-details">' + methodsStrs.join(' | ') + '</span><span class="rev-amt">₹' + formatCurrency(rv.guestTotal) + '</span></li>';
+        function parseDDMMYYYY(dateStr) {
+            var parts = dateStr.trim().split('/');
+            return new Date(parseInt(parts[2], 10), parseInt(parts[1], 10) - 1, parseInt(parts[0], 10));
         }
-        revHtml += '</ul>'; if(day.revenues.length === 0) revHtml = '<span style="color:#94a3b8;">—</span>';
 
-        var expHtml = '<ul class="expense-list">';
-        for (var j = 0; j < day.expenses.length; j++) {
-          var ex = day.expenses[j];
-          expHtml += '<li class="exp-item"><span class="exp-name">&bull; ' + ex.name + '</span> <span class="exp-cat">(' + ex.category + ')</span> | <span class="exp-meth">' + ex.method + '</span>: <span class="exp-amt red">₹' + formatCurrency(ex.amount) + '</span></li>';
+        // ========== UI HELPERS ==========
+        function showMsg(prefix, type, text) {
+            document.getElementById(prefix + 'WarningMsg').classList.add('hidden');
+            document.getElementById(prefix + 'InfoMsg').classList.add('hidden');
+            if (type !== 'none') {
+                var el = document.getElementById(prefix + (type === 'warning' ? 'Warning' : 'Info') + 'Text');
+                if (el) el.innerText = text;
+                document.getElementById(prefix + (type === 'warning' ? 'Warning' : 'Info') + 'Msg').classList.remove('hidden');
+            }
         }
-        expHtml += '</ul>'; if(day.expenses.length === 0) expHtml = '<span style="color:#94a3b8;">—</span>';
 
-        html += '<tr><td data-label="Date" class="tbl-date">' + day.date + '</td>';
-        if (payTypeFilter === 'All' || payTypeFilter === 'Revenue') { html += '<td data-label="Revenue Details">' + revHtml + '</td>'; }
-        if (payTypeFilter === 'All' || payTypeFilter === 'Expense') { html += '<td data-label="Expense Details">' + expHtml + '</td>'; }
-        html += '</tr>';
-      }
-      html += '</tbody></table></div>'; return html;
-    }
-
-    function renderPaySummary(data) {
-      var grandRev = 0, grandExp = 0;
-      for (var i = 0; i < data.length; i++) { var day = data[i]; for (var j = 0; j < day.revenues.length; j++) grandRev += day.revenues[j].guestTotal; for (var j = 0; j < day.expenses.length; j++) grandExp += day.expenses[j].amount; }
-      var html = '<div class="summary-box" style="display:flex; gap:20px; flex-wrap:wrap; justify-content:center; align-items:center;">';
-      var lblPost = payMethodFilter !== 'All' ? ' (' + payMethodFilter + ')' : '';
-      if (payTypeFilter === 'All' || payTypeFilter === 'Revenue') {
-        /* USING CSS UTILITY CLASS FOR CARD */
-        html += '<div class="summary-grand-total card-profit" style="flex:1; min-width:200px;"><div class="summary-grand-total-label">Total Revenue' + lblPost + '</div>';
-        if (grandRev > 0) { html += '<div class="summary-grand-total-value">₹ ' + formatCurrency(grandRev) + '</div>'; } else { html += '<div class="summary-grand-total-value" style="font-size:1.15rem; color:#15803d; margin-top:4px;">No Revenue</div>'; }
-        html += '</div>';
-      }
-      if (payTypeFilter === 'All' || payTypeFilter === 'Expense') {
-        /* USING CSS UTILITY CLASS FOR CARD */
-        html += '<div class="summary-grand-total card-loss" style="flex:1; min-width:200px;"><div class="summary-grand-total-label">Total Expense' + lblPost + '</div>';
-        if (grandExp > 0) { html += '<div class="summary-grand-total-value">₹ ' + formatCurrency(grandExp) + '</div>'; } else { html += '<div class="summary-grand-total-value" style="font-size:1.15rem; color:#b91c1c; margin-top:4px;">No Expense</div>'; }
-        html += '</div>';
-      }
-      html += '</div>'; return html;
-    }
-
-    // ========== ANALYTICS LOGIC ==========
-    var currentAnalyticsData = null;
-    function fetchAnalytics() {
-      document.getElementById('analyticsResultsArea').classList.add('hidden');
-      showMsg('analytics', 'info', 'Loading Analytics...');
-
-      var url = API_URL + "?action=getAllAnalyticsData";
-      fetch(url).then(res => res.json()).then(data => {
-        if(data.error) throw new Error(data.error); onAnalyticsSuccess(data);
-      }).catch(err => onAnalyticsError(err));
-    }
-
-    function onAnalyticsSuccess(data) {
-      if (currentActiveTab !== 'analytics') return; 
-      showMsg('analytics', 'none');
-      if (!data) { return showMsg('analytics', 'warning', 'No analytics data available.'); }
-      currentAnalyticsData = data;
-      renderAnalytics(data);
-    }
-    function onAnalyticsError(err) {
-      if (currentActiveTab !== 'analytics') return;
-      showMsg('analytics', 'warning', 'Error loading analytics: ' + (err.message || 'Unknown'));
-    }
-
-    function renderAnalytics(data) {
-      document.getElementById('analyticsResultsArea').classList.remove('hidden');
-
-      /* USING CSS UTILITY CLASSES FOR CARDS */
-      var html = '<div class="summary-box" style="display:flex; gap:20px; flex-wrap:wrap; justify-content:center; align-items:center; margin-bottom:30px;">';
-      html += '<div class="summary-grand-total card-profit" style="flex:1; min-width:200px;"><div class="summary-grand-total-label">Total Revenue</div><div class="summary-grand-total-value">₹ ' + formatCurrency(data.totalRevenue) + '</div></div>';
-      html += '<div class="summary-grand-total card-loss" style="flex:1; min-width:200px;"><div class="summary-grand-total-label">Total Expense</div><div class="summary-grand-total-value">₹ ' + formatCurrency(data.totalExpense) + '</div></div>';
-
-      var netClass = data.netProfit >= 0 ? 'card-profit' : 'card-loss';
-      var netLabel = data.netProfit >= 0 ? 'Net Profit' : 'Net Loss';
-      html += '<div class="summary-grand-total ' + netClass + '" style="flex:1; min-width:200px;"><div class="summary-grand-total-label">' + netLabel + '</div><div class="summary-grand-total-value">₹ ' + formatCurrency(Math.abs(data.netProfit)) + '</div></div></div>';
-
-      /* ISSUE #1 FIXED: Changed minmax from 320px to 280px */
-      html += '<div class="chart-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">';
-      html += '<div class="chart-card"><div id="chart1" style="height:300px;"></div><div id="table1" class="chart-table"></div></div>';
-      html += '<div class="chart-card"><div id="chart2" style="height:300px;"></div><div id="table2" class="chart-table"></div></div>';
-      html += '<div class="chart-card"><div id="chart3" style="height:300px;"></div><div id="table3" class="chart-table"></div></div>';
-      html += '<div class="chart-card"><div id="chart4" style="height:300px;"></div><div id="table4" class="chart-table"></div></div>';
-      html += '<div class="chart-card"><div id="chart5" style="height:300px;"></div><div id="table5" class="chart-table"></div></div>';
-      html += '</div>';
-
-      document.getElementById('analyticsResultsArea').innerHTML = html;
-
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(function() {
-        var pData = data.netProfit >= 0 ? [['Net Profit', data.netProfit],['Total Expense', data.totalExpense]] : [['Total Revenue', data.totalRevenue],['Net Loss', Math.abs(data.netProfit)]];
-        drawChartAndTable('chart1', 'table1', '1. Net Income vs Expense', pData);
-        var srcData =[]; for (var k in data.revSource) srcData.push([k, data.revSource[k]]); drawChartAndTable('chart2', 'table2', '2. Revenue Source', srcData);
-        var revMethData =[]; for (var k in data.revMethod) revMethData.push([k, data.revMethod[k]]); drawChartAndTable('chart3', 'table3', '3. Revenue Mode', revMethData);
-        var expCatData =[]; for (var k in data.expCategory) expCatData.push([k, data.expCategory[k]]); drawChartAndTable('chart4', 'table4', '4. Expense Categories', expCatData);
-        var expMethData =[]; for (var k in data.expMethod) expMethData.push([k, data.expMethod[k]]); drawChartAndTable('chart5', 'table5', '5. Expense Mode', expMethData);
-      });
-    }
-
-    function drawChartAndTable(chartId, tableId, title, rawData) {
-      if (rawData.length === 0) {
-        document.getElementById(chartId).innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#94a3b8;">No data for ' + title + '</div>';
-        return;
-      }
-      
-      rawData.sort(function(a,b) { return b[1] - a[1]; });
-      var dt = new google.visualization.DataTable(); dt.addColumn('string', 'Item'); dt.addColumn('number', 'Value'); dt.addRows(rawData);
-      var options = {
-        title: title, titleTextStyle: { fontSize: 16, color: '#0f172a', bold: true }, pieHole: 0.45,
-        legend: { position: 'bottom', textStyle: { color: '#334155', fontSize: 12 } }, pieSliceText: 'none',
-        tooltip: { text: 'percentage' }, chartArea: { width: '90%', height: '70%', top: 40 },
-        colors:['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#64748b'], backgroundColor: 'transparent'
-      };
-
-      if (title.indexOf('Net Income') !== -1) {
-         if (rawData[0][0] === 'Net Profit' || rawData[1][0] === 'Net Profit') { options.colors = rawData[0][0] === 'Net Profit' ?['#10b981', '#ef4444'] :['#ef4444', '#10b981']; } 
-         else { options.colors = rawData[0][0] === 'Total Revenue' ?['#f59e0b', '#ef4444'] :['#ef4444', '#f59e0b']; }
-      }
-
-      new google.visualization.PieChart(document.getElementById(chartId)).draw(dt, options);
-
-      var total = 0; for (var i=0; i<rawData.length; i++) total += rawData[i][1];
-      var tblHtml = '<table class="results-table" style="margin-top:20px; font-size: 0.9rem;"><thead><tr><th>Name</th><th>Amount</th><th>%</th></tr></thead><tbody>';
-      for (var i=0; i<rawData.length; i++) {
-        var pct = total > 0 ? ((rawData[i][1]/total)*100).toFixed(1) + '%' : '0%';
-        tblHtml += '<tr><td data-label="Name" style="color:#334155; font-weight:500;">' + rawData[i][0] + '</td><td data-label="Amount" style="color:#0f172a; font-weight:600;">₹' + formatCurrency(rawData[i][1]) + '</td><td data-label="%" style="color:#64748b;">' + pct + '</td></tr>';
-      }
-      tblHtml += '<tr style="background:#f8fafc; font-weight:700;"><td data-label="" colspan="1" style="color:#0f172a; border-top:2px solid #cbd5e1;">Total</td><td data-label="Total Amount" colspan="2" style="color:#16a34a; border-top:2px solid #cbd5e1; font-size:1rem;">₹' + formatCurrency(total) + '</td></tr></tbody></table>';
-      document.getElementById(tableId).innerHTML = tblHtml;
-    }
-
-    /* ISSUE #2 FIXED: Re-draw charts when window resizes */
-    /* ISSUE #2 FIXED: Re-draw charts when window resizes (Mobile Scroll Issue Fixed) */
-/* ISSUE #2 FIXED: Re-draw charts when window resizes (Mobile Scroll & Desktop Resize Fixed with Debounce) */
-var lastWindowWidth = window.innerWidth;
-var resizeTimer; // <-- Ek timer variable add kiya
-
-window.addEventListener('resize', function() {
-  if (window.innerWidth !== lastWindowWidth) {
-    lastWindowWidth = window.innerWidth;
-    
-    if (currentActiveTab === 'analytics' && !document.getElementById('analyticsResultsArea').classList.contains('hidden')) {
-      
-      // Agar lagatar resize ho raha hai, toh pichle wale redraw command ko cancel kar do
-      clearTimeout(resizeTimer);
-      
-      // Jab resize ruk jaye, uske 300 milliseconds (0.3s) baad data redraw karo
-      resizeTimer = setTimeout(function() {
-        if (currentAnalyticsData) {
-          renderAnalytics(currentAnalyticsData);
-        } else {
-          fetchAnalytics();
+        function setBtnState(prefix, disabled) {
+            var btn = document.getElementById(prefix + 'FetchBtn');
+            if (!btn) return;
+            btn.disabled = disabled;
+            btn.innerHTML = disabled ? '<span class="material-icons-round">hourglass_empty</span> Loading' : '<span class="material-icons-round">search</span> Fetch';
         }
-      }, 300);
-      
-    }
-  }
-});
-  </script>
 
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  <script>
-    var fpConfig = { dateFormat: 'd/m/Y', allowInput: false, disableMobile: true, animate: true };
-    flatpickr('#startDate', fpConfig); flatpickr('#endDate', fpConfig);
-    flatpickr('#expStartDate', fpConfig); flatpickr('#expEndDate', fpConfig);
-    flatpickr('#payStartDate', fpConfig); flatpickr('#payEndDate', fpConfig);
-  </script>
+        // ========== PAGINATION HELPERS ==========
+        function renderPaginationBar(prefix, dataLength, currentPage, rowsPerPage, itemName) {
+            var totalPages = rowsPerPage === 'All' ? 1 : Math.ceil(dataLength / rowsPerPage);
+            var html = '<div class="pagination-bar"><div class="page-info">Showing ' + dataLength + ' ' + itemName + (dataLength > 1 ? 's' : '') + '</div><div class="page-controls">';
+            html += '<select id="' + prefix + 'RowsPerPageSelect" class="page-select" onchange="changeRowsPerPage(\'' + prefix + '\')">';
+            var opts = [10, 20, 50, 'All'];
+            for (var i = 0; i < opts.length; i++) {
+                var sel = (rowsPerPage == opts[i]) ? 'selected' : '';
+                html += '<option value="' + opts[i] + '" ' + sel + '>' + opts[i] + ' per page</option>';
+            }
+            html += '</select>';
+            if (rowsPerPage !== 'All') {
+                var prevDis = currentPage <= 1 ? 'disabled' : '';
+                var nextDis = currentPage >= totalPages ? 'disabled' : '';
+                html += '<button class="page-btn" onclick="changePage(\'' + prefix + '\', -1)" ' + prevDis + '>Prev</button>';
+                html += '<span style="font-weight:600">' + currentPage + ' / ' + totalPages + '</span>';
+                html += '<button class="page-btn" onclick="changePage(\'' + prefix + '\', 1)" ' + nextDis + '>Next</button>';
+            }
+            html += '</div></div>';
+            return html;
+        }
+
+        function changeRowsPerPage(prefix) {
+            var val = document.getElementById(prefix + 'RowsPerPageSelect').value;
+            var lines = val === 'All' ? 'All' : parseInt(val, 10);
+            if (prefix === 'rev') { rowsPerPage = lines; currentPage = 1; renderAll(); }
+            else if (prefix === 'exp') { expRowsPerPage = lines; expCurrentPage = 1; renderExpAll(); }
+            else if (prefix === 'pay') { payRowsPerPage = lines; payCurrentPage = 1; renderPayAll(); }
+        }
+
+        function changePage(prefix, delta) {
+            if (prefix === 'rev') { currentPage += delta; renderAll(); }
+            else if (prefix === 'exp') { expCurrentPage += delta; renderExpAll(); }
+            else if (prefix === 'pay') { payCurrentPage += delta; renderPayAll(); }
+        }
+
+        // ========== FETCH REVENUE ==========
+        function fetchRevenue() {
+            showMsg('rev', 'none');
+            document.getElementById('resultsArea').innerHTML = '';
+
+            var startDateStr = document.getElementById('startDate').value.trim();
+            var endDateStr = document.getElementById('endDate').value.trim();
+
+            if (!startDateStr || !endDateStr) { return showMsg('rev', 'warning', 'Please enter both Start Date and End Date.'); }
+            if (!isValidDate(startDateStr) || !isValidDate(endDateStr)) { return showMsg('rev', 'warning', 'Date is not valid. Use DD/MM/YYYY format.'); }
+            if (parseDDMMYYYY(startDateStr) > parseDDMMYYYY(endDateStr)) { return showMsg('rev', 'warning', 'Start Date cannot be after End Date.'); }
+
+            showMsg('rev', 'info', 'Data is being fetched... Please wait.');
+            setBtnState('rev', true);
+
+            var url = API_URL + "?action=getGuestsDataForDateRange&start=" + encodeURIComponent(startDateStr) + "&end=" + encodeURIComponent(endDateStr);
+            fetch(url).then(res => res.json()).then(data => {
+                if (data.error) throw new Error(data.error);
+                onFetchSuccess(data);
+            }).catch(err => onFetchError(err));
+        }
+
+        function onFetchSuccess(data) {
+            showMsg('rev', 'none'); setBtnState('rev', false);
+            if (!data || data.length === 0) {
+                document.getElementById('resultsArea').innerHTML = '<div class="no-data"><span class="material-icons-round">search_off</span><p>No data found for the selected date range.</p></div>';
+                return;
+            }
+            appData = data; currentPage = 1; revenueFilter = 'all'; renderAll();
+        }
+        function onFetchError(error) { showMsg('rev', 'warning', 'Error: ' + (error.message || 'Something went wrong.')); setBtnState('rev', false); }
+
+        var appData = []; var currentPage = 1; var rowsPerPage = 10; var revenueFilter = 'all';
+        function formatPaymentBreakdown(payments) {
+            if (!payments || Object.keys(payments).length === 0) return '';
+            var html = '<div class="payment-chips">';
+            for (var method in payments) {
+                if (payments.hasOwnProperty(method)) {
+                    html += '<span class="payment-chip"><span class="method-name">' + method + '</span><span class="method-amounts">' + payments[method].join('+') + '</span></span>';
+                }
+            }
+            html += '</div>'; return html;
+        }
+        function formatCurrency(num) { return num === 0 ? '' : num.toLocaleString('en-IN'); }
+        function getFilteredRevenueData() {
+            if (revenueFilter === 'all') return appData;
+            if (revenueFilter === 'food-only') return appData.filter(function (g) { return Number(g.foodTotal || 0) > 0 && Number(g.roomTotal || 0) === 0; });
+            if (revenueFilter === 'room-only') return appData.filter(function (g) { return Number(g.roomTotal || 0) > 0 && Number(g.foodTotal || 0) === 0; });
+            if (revenueFilter === 'both') return appData.filter(function (g) { return Number(g.foodTotal || 0) > 0 && Number(g.roomTotal || 0) > 0; });
+            if (revenueFilter === 'zero') return appData.filter(function (g) { return Number(g.foodTotal || 0) === 0 && Number(g.roomTotal || 0) === 0; });
+            return appData;
+        }
+
+        function setRevenueFilter(f) {
+            revenueFilter = f;
+            currentPage = 1;
+            renderAll();
+            try {
+                var box = document.querySelector('.summary-box');
+                if (box) { box.classList.add('summary-hover'); setTimeout(function () { box.classList.remove('summary-hover'); }, 220); }
+            } catch (e) { }
+        }
+
+        function renderAll() {
+            var filteredData = getFilteredRevenueData();
+            var html = renderSummaryBox(filteredData, appData);
+            var totalPages = rowsPerPage === 'All' ? 1 : Math.ceil(filteredData.length / rowsPerPage);
+            if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
+            if (filteredData.length > 0) { html += renderPaginationBar('rev', filteredData.length, currentPage, rowsPerPage, 'guest'); html += renderTablePage(filteredData); }
+            document.getElementById('resultsArea').innerHTML = html;
+        }
+
+        function renderSummaryBox(data, allData) {
+            if (data.length === 0) return '';
+            var totalFood = 0, totalRoom = 0, methodTotals = {};
+            for (var i = 0; i < data.length; i++) {
+                var g = data[i]; totalFood += Number(g.foodTotal); totalRoom += Number(g.roomTotal);
+                if (g.food) { for (var m in g.food) { if (!methodTotals[m]) methodTotals[m] = 0; for (var j = 0; j < g.food[m].length; j++) methodTotals[m] += Number(g.food[m][j]); } }
+                if (g.room) { for (var m in g.room) { if (!methodTotals[m]) methodTotals[m] = 0; for (var j = 0; j < g.room[m].length; j++) methodTotals[m] += Number(g.room[m][j]); } }
+            }
+            var grandTotal = totalFood + totalRoom;
+            var allCount = allData.length;
+            var foodOnlyCount = allData.filter(function (g) { return Number(g.foodTotal || 0) > 0 && Number(g.roomTotal || 0) === 0; }).length;
+            var roomOnlyCount = allData.filter(function (g) { return Number(g.roomTotal || 0) > 0 && Number(g.foodTotal || 0) === 0; }).length;
+            var bothCount = allData.filter(function (g) { return Number(g.foodTotal || 0) > 0 && Number(g.roomTotal || 0) > 0; }).length;
+            var zeroCount = allData.filter(function (g) { return Number(g.foodTotal || 0) === 0 && Number(g.roomTotal || 0) === 0; }).length;
+
+            var html = '<div class="summary-box">';
+            var leftItems = [{ label: 'Room', val: totalRoom }, { label: 'Food', val: totalFood }].sort(function (a, b) { return b.val - a.val; });
+            html += '<div class="summary-grid">';
+            html += '<div class="summary-section"><div class="summary-title">Category Breakdown</div>';
+            for (var i = 0; i < leftItems.length; i++) {
+                var amtStr = leftItems[i].val > 0 ? '₹ ' + leftItems[i].val.toLocaleString('en-IN') : '₹ 0';
+                html += '<div class="summary-item"><span class="summary-item-label">' + leftItems[i].label + '</span><span class="summary-item-value">' + amtStr + '</span></div>';
+            }
+            html += '<div class="summary-section-total"><span>Total</span><span>₹ ' + grandTotal.toLocaleString('en-IN') + '</span></div></div>';
+
+            html += '<div class="summary-section"><div class="summary-title">Payment Methods</div>';
+            var methodTotalSum = 0, hasPayments = false;
+            var revenueMethodKeys = Object.keys(methodTotals).sort(function (a, b) { return methodTotals[b] - methodTotals[a]; });
+            for (var k = 0; k < revenueMethodKeys.length; k++) {
+                var m = revenueMethodKeys[k]; hasPayments = true;
+                html += '<div class="summary-item"><span class="summary-item-label">' + m + '</span><span class="summary-item-value">₹ ' + methodTotals[m].toLocaleString('en-IN') + '</span></div>';
+                methodTotalSum += methodTotals[m];
+            }
+            if (!hasPayments) html += '<div class="summary-item"><span class="summary-item-label">No Payments</span></div>';
+            html += '<div class="summary-section-total"><span>Total</span><span>₹ ' + methodTotalSum.toLocaleString('en-IN') + '</span></div></div></div>';
+
+            /* USING CSS UTILITY CLASS FOR CARD */
+            html += '<div class="summary-grand-total card-profit"><div class="summary-grand-total-label">Total Revenue</div><div class="summary-grand-total-value">₹ ' + grandTotal.toLocaleString('en-IN') + '</div></div>';
+
+            html += '<div class="rev-stats-row">';
+            html += '<button class="rev-stat-pill ' + (revenueFilter === "all" ? "active" : "") + '" data-filter="all" onclick="setRevenueFilter(\'all\')" ' + (allCount === 0 ? "disabled" : "") + '><span class="rev-stat-num">' + allCount + '</span><span class="rev-stat-lbl">All</span></button>';
+            html += '<button class="rev-stat-pill ' + (revenueFilter === "food-only" ? "active" : "") + '" data-filter="food-only" onclick="setRevenueFilter(\'food-only\')" ' + (foodOnlyCount === 0 ? "disabled" : "") + '><span class="rev-stat-num">' + foodOnlyCount + '</span><span class="rev-stat-lbl">Food Only</span></button>';
+            html += '<button class="rev-stat-pill ' + (revenueFilter === "room-only" ? "active" : "") + '" data-filter="room-only" onclick="setRevenueFilter(\'room-only\')" ' + (roomOnlyCount === 0 ? "disabled" : "") + '><span class="rev-stat-num">' + roomOnlyCount + '</span><span class="rev-stat-lbl">Room Only</span></button>';
+            html += '<button class="rev-stat-pill ' + (revenueFilter === "both" ? "active" : "") + '" data-filter="both" onclick="setRevenueFilter(\'both\')" ' + (bothCount === 0 ? "disabled" : "") + '><span class="rev-stat-num">' + bothCount + '</span><span class="rev-stat-lbl">Food + Room</span></button>';
+            html += '<button class="rev-stat-pill zero ' + (revenueFilter === "zero" ? "active" : "") + '" data-filter="zero" onclick="setRevenueFilter(\'zero\')" ' + (zeroCount === 0 ? "disabled" : "") + '><span class="rev-stat-num">' + zeroCount + '</span><span class="rev-stat-lbl">No Payment</span></button>';
+            html += '</div></div>';
+            return html;
+        }
+
+        function renderTablePage(data) {
+            var startIdx = 0, endIdx = data.length;
+            if (rowsPerPage !== 'All') { startIdx = (currentPage - 1) * rowsPerPage; endIdx = startIdx + rowsPerPage; }
+            var pageData = data.slice(startIdx, endIdx);
+            var html = '<div class="table-wrapper"><table class="results-table"><thead><tr><th>Date</th><th>Guest Name</th><th>Food Breakdown</th><th>Total Food</th><th>Room Breakdown</th><th>Total Room</th><th>Grand Total</th></tr></thead><tbody>';
+            var pageFoodTotal = 0, pageRoomTotal = 0, pageGrandTotal = 0;
+            for (var i = 0; i < pageData.length; i++) {
+                var g = pageData[i];
+                html += '<tr><td data-label="Date"><span class="guest-date">' + g.date + '</span></td><td data-label="Guest"><span class="guest-name">' + g.guestName + '</span></td><td data-label="Food">' + formatPaymentBreakdown(g.food) + '</td><td data-label="Total Food"><span class="amount-total food-total">' + formatCurrency(g.foodTotal) + '</span></td><td data-label="Room">' + formatPaymentBreakdown(g.room) + '</td><td data-label="Total Room"><span class="amount-total room-total">' + formatCurrency(g.roomTotal) + '</span></td><td data-label="Grand Total"><span class="amount-total grand-total">' + formatCurrency(g.grandTotal) + '</span></td></tr>';
+                pageFoodTotal += Number(g.foodTotal); pageRoomTotal += Number(g.roomTotal); pageGrandTotal += Number(g.grandTotal);
+            }
+            html += '<tr class="total-row"><td colspan="3" data-label="" class="total-label">Page Total (' + pageData.length + ' guest' + (pageData.length > 1 ? 's' : '') + ')</td><td data-label="Total Food"><span class="amount-total food-total">' + formatCurrency(pageFoodTotal) + '</span></td><td data-label=""></td><td data-label="Total Room"><span class="amount-total room-total">' + formatCurrency(pageRoomTotal) + '</span></td><td data-label="Grand Total"><span class="amount-total grand-total">' + formatCurrency(pageGrandTotal) + '</span></td></tr></tbody></table></div>';
+            return html;
+        }
+
+        // ========== EXPENSE TAB LOGIC ==========
+        var expAppData = [], expCategoryFilter = 'All';
+        window.addEventListener('load', function () {
+            if (API_URL !== "PASTE_YOUR_NEW_WEB_APP_URL_HERE") {
+                fetch(API_URL + "?action=getExpenseCategories").then(res => res.json()).then(categories => {
+                    var drp = document.getElementById('expCategory');
+                    for (var i = 0; i < categories.length; i++) { var opt = document.createElement('option'); opt.value = categories[i]; opt.innerHTML = categories[i]; drp.appendChild(opt); }
+                }).catch(err => console.log(err));
+
+                fetch(API_URL + "?action=getPaymentMethods").then(res => res.json()).then(methods => {
+                    var drp = document.getElementById('payMethod');
+                    for (var i = 0; i < methods.length; i++) { var opt = document.createElement('option'); opt.value = methods[i]; opt.innerHTML = methods[i]; drp.appendChild(opt); }
+                }).catch(err => console.log(err));
+            }
+        });
+
+        function fetchExpense() {
+            var start = document.getElementById('expStartDate').value.trim();
+            var end = document.getElementById('expEndDate').value.trim();
+            expCategoryFilter = document.getElementById('expCategory').value;
+
+            if (!start || !end) { return showMsg('exp', 'warning', 'Please select both Start and End dates.'); }
+            if (!isValidDate(start) || !isValidDate(end)) { return showMsg('exp', 'warning', 'Date is not valid. Use DD/MM/YYYY format.'); }
+            if (parseDDMMYYYY(start) > parseDDMMYYYY(end)) { return showMsg('exp', 'warning', 'Start Date cannot be after End Date.'); }
+
+            showMsg('exp', 'info', 'Fetching expenses... Please wait.'); setBtnState('exp', true);
+
+            var url = API_URL + "?action=getExpensesDataForDateRange&start=" + encodeURIComponent(start) + "&end=" + encodeURIComponent(end) + "&category=" + encodeURIComponent(expCategoryFilter);
+            fetch(url).then(res => res.json()).then(data => {
+                if (data.error) throw new Error(data.error); onExpFetchSuccess(data);
+            }).catch(err => onExpFetchError(err));
+        }
+
+        var expCurrentPage = 1, expRowsPerPage = 10;
+        function onExpFetchSuccess(data) {
+            showMsg('exp', 'none'); setBtnState('exp', false);
+            if (!data || data.length === 0) { document.getElementById('expResultsArea').innerHTML = '<div class="no-data"><span class="material-icons-round">search_off</span><p>No expenses found.</p></div>'; return; }
+            expAppData = data; expCurrentPage = 1; renderExpAll();
+        }
+        function onExpFetchError(error) { showMsg('exp', 'warning', 'Error: ' + (error.message || 'Something went wrong.')); setBtnState('exp', false); }
+
+        function renderExpAll() {
+            var html = renderExpSummary(expAppData);
+            var totalPages = expRowsPerPage === 'All' ? 1 : Math.ceil(expAppData.length / expRowsPerPage);
+            if (expCurrentPage > totalPages && totalPages > 0) expCurrentPage = totalPages;
+            if (expAppData.length > 0) { html += renderPaginationBar('exp', expAppData.length, expCurrentPage, expRowsPerPage, 'day'); html += renderExpTablePage(); }
+            document.getElementById('expResultsArea').innerHTML = html;
+        }
+
+        function renderExpTablePage() {
+            var startIdx = 0, endIdx = expAppData.length;
+            if (expRowsPerPage !== 'All') { startIdx = (expCurrentPage - 1) * expRowsPerPage; endIdx = startIdx + expRowsPerPage; }
+            var pageData = expAppData.slice(startIdx, endIdx);
+            var html = '<div class="table-wrapper"><table class="results-table"><thead><tr><th>Date</th><th>Expense Details</th><th>Daily Total</th></tr></thead><tbody>';
+            var pageTotal = 0;
+            for (var i = 0; i < pageData.length; i++) {
+                var day = pageData[i]; var detailsHtml = '<ul class="expense-list">';
+                var expenses = day.expenses || [];
+                for (var j = 0; j < expenses.length; j++) { var exp = expenses[j]; detailsHtml += '<li class="exp-item"><span class="exp-name">&bull; ' + exp.name + '</span> <span class="exp-cat">(' + exp.category + ')</span> | <span class="exp-meth">' + exp.method + '</span>: <span class="exp-amt">₹' + formatCurrency(exp.amount) + '</span></li>'; }
+                detailsHtml += '</ul>';
+                html += '<tr><td data-label="Date" class="tbl-date">' + day.date + '</td><td data-label="Expense Details">' + detailsHtml + '</td><td data-label="Daily Total" class="tbl-total">₹' + formatCurrency(day.dailyTotal) + '</td></tr>';
+                pageTotal += Number(day.dailyTotal);
+            }
+            html += '<tr class="total-row"><td colspan="2" data-label="" class="total-label">Page Total</td><td data-label="Grand Total" class="tbl-grand">₹' + formatCurrency(pageTotal) + '</td></tr></tbody></table></div>';
+            return html;
+        }
+
+        function renderExpSummary(data) {
+            var catTotals = {}, methodTotals = {}, grandTotal = 0;
+            for (var i = 0; i < data.length; i++) {
+                var expenses = data[i].expenses || [];
+                for (var j = 0; j < expenses.length; j++) {
+                    var exp = expenses[j]; grandTotal += Number(exp.amount);
+                    if (!catTotals[exp.category]) catTotals[exp.category] = 0; catTotals[exp.category] += Number(exp.amount);
+                    if (!methodTotals[exp.method]) methodTotals[exp.method] = 0; methodTotals[exp.method] += Number(exp.amount);
+                }
+            }
+            var html = '<div class="summary-box"><div class="summary-grid"><div class="summary-section"><div class="summary-title">Category Breakdown</div>';
+            var catKeys = Object.keys(catTotals).sort(function (a, b) { return catTotals[b] - catTotals[a]; });
+            for (var k = 0; k < catKeys.length; k++) { html += '<div class="summary-item"><span class="summary-item-label">' + catKeys[k] + '</span><span class="summary-item-value">₹ ' + formatCurrency(catTotals[catKeys[k]]) + '</span></div>'; }
+            html += '<div class="summary-section-total"><span>Total</span><span>₹ ' + formatCurrency(grandTotal) + '</span></div></div><div class="summary-section"><div class="summary-title">Payment Methods</div>';
+            var methodKeys = Object.keys(methodTotals).sort(function (a, b) { return methodTotals[b] - methodTotals[a]; });
+            for (var k = 0; k < methodKeys.length; k++) { html += '<div class="summary-item"><span class="summary-item-label">' + methodKeys[k] + '</span><span class="summary-item-value">₹ ' + formatCurrency(methodTotals[methodKeys[k]]) + '</span></div>'; }
+            html += '<div class="summary-section-total"><span>Total</span><span>₹ ' + formatCurrency(grandTotal) + '</span></div></div></div>';
+            var revLabel = expCategoryFilter === 'All' ? 'Total Expense' : 'Total Expense (' + expCategoryFilter + ')';
+
+            /* USING CSS UTILITY CLASS FOR CARD */
+            html += '<div class="summary-grand-total card-loss"><div class="summary-grand-total-label">' + revLabel + '</div><div class="summary-grand-total-value">₹ ' + formatCurrency(grandTotal) + '</div></div></div>';
+            return html;
+        }
+
+        // ========== PAYMENT TAB LOGIC ==========
+        var payAppData = [], payMethodFilter = 'All', payTypeFilter = 'All', payCurrentPage = 1, payRowsPerPage = 10;
+        function fetchPayment() {
+            var start = document.getElementById('payStartDate').value.trim();
+            var end = document.getElementById('payEndDate').value.trim();
+            payMethodFilter = document.getElementById('payMethod').value;
+            payTypeFilter = document.getElementById('payType').value;
+
+            if (!start || !end) { return showMsg('pay', 'warning', 'Please select both Start and End dates.'); }
+            if (!isValidDate(start) || !isValidDate(end)) { return showMsg('pay', 'warning', 'Date is not valid.'); }
+            if (!payMethodFilter) { return showMsg('pay', 'warning', 'Please select a Payment Method.'); }
+            if (!payTypeFilter) { return showMsg('pay', 'warning', 'Please select a Transaction Type.'); }
+            if (parseDDMMYYYY(start) > parseDDMMYYYY(end)) { return showMsg('pay', 'warning', 'Start Date cannot be after End Date.'); }
+
+            showMsg('pay', 'info', 'Fetching transactions... Please wait.'); setBtnState('pay', true);
+
+            var url = API_URL + "?action=getPaymentTabDataForDateRange&start=" + encodeURIComponent(start) + "&end=" + encodeURIComponent(end) + "&method=" + encodeURIComponent(payMethodFilter) + "&type=" + encodeURIComponent(payTypeFilter);
+            fetch(url).then(res => res.json()).then(data => {
+                if (data.error) throw new Error(data.error); onPayFetchSuccess(data);
+            }).catch(err => onPayFetchError(err));
+        }
+
+        function onPayFetchSuccess(data) {
+            showMsg('pay', 'none'); setBtnState('pay', false);
+            if (!data || data.length === 0) { document.getElementById('payResultsArea').innerHTML = '<div class="no-data"><span class="material-icons-round">search_off</span><p>No transactions found.</p></div>'; return; }
+            payAppData = data; payCurrentPage = 1; renderPayAll();
+        }
+        function onPayFetchError(error) { showMsg('pay', 'warning', 'Error: ' + (error.message || 'Something went wrong.')); setBtnState('pay', false); }
+
+        function renderPayAll() {
+            var html = renderPaySummary(payAppData);
+            var totalPages = payRowsPerPage === 'All' ? 1 : Math.ceil(payAppData.length / payRowsPerPage);
+            if (payCurrentPage > totalPages && totalPages > 0) payCurrentPage = totalPages;
+            if (payAppData.length > 0) { html += renderPaginationBar('pay', payAppData.length, payCurrentPage, payRowsPerPage, 'day'); html += renderPayTablePage(); }
+            document.getElementById('payResultsArea').innerHTML = html;
+        }
+
+        function renderPayTablePage() {
+            var startIdx = 0, endIdx = payAppData.length;
+            if (payRowsPerPage !== 'All') { startIdx = (payCurrentPage - 1) * payRowsPerPage; endIdx = startIdx + payRowsPerPage; }
+            var pageData = payAppData.slice(startIdx, endIdx);
+            var html = '<div class="table-wrapper"><table class="results-table"><thead><tr><th>Date</th>';
+            if (payTypeFilter === 'All' || payTypeFilter === 'Revenue') { html += '<th>Revenue Details' + (payMethodFilter !== 'All' ? ' (' + payMethodFilter + ')' : '') + '</th>'; }
+            if (payTypeFilter === 'All' || payTypeFilter === 'Expense') { html += '<th>Expense Details' + (payMethodFilter !== 'All' ? ' (' + payMethodFilter + ')' : '') + '</th>'; }
+            html += '</tr></thead><tbody>';
+
+            for (var i = 0; i < pageData.length; i++) {
+                var day = pageData[i];
+                var revenues = day.revenues || [];
+                var expenses = day.expenses || [];
+
+                var revHtml = '<ul class="expense-list">';
+                for (var j = 0; j < revenues.length; j++) {
+                    var rv = revenues[j]; var methodsStrs = [];
+                    var foodData = rv.food || {};
+                    var roomData = rv.room || {};
+                    if (Object.keys(foodData).length > 0) { var foodStr = []; for (var m in foodData) foodStr.push(m + ': ' + foodData[m].join('+')); methodsStrs.push('Food: ' + foodStr.join(' + ')); }
+                    if (Object.keys(roomData).length > 0) { var roomStr = []; for (var m in roomData) roomStr.push(m + ': ' + roomData[m].join('+')); methodsStrs.push('Room: ' + roomStr.join(' + ')); }
+                    revHtml += '<li class="rev-item"><span class="rev-name">' + rv.guestName + '</span><span class="rev-details">' + methodsStrs.join(' | ') + '</span><span class="rev-amt">₹' + formatCurrency(rv.guestTotal) + '</span></li>';
+                }
+                revHtml += '</ul>'; if (revenues.length === 0) revHtml = '<span style="color:#94a3b8;">—</span>';
+
+                var expHtml = '<ul class="expense-list">';
+                for (var j = 0; j < expenses.length; j++) {
+                    var ex = expenses[j];
+                    expHtml += '<li class="exp-item"><span class="exp-name">&bull; ' + ex.name + '</span> <span class="exp-cat">(' + ex.category + ')</span> | <span class="exp-meth">' + ex.method + '</span>: <span class="exp-amt red">₹' + formatCurrency(ex.amount) + '</span></li>';
+                }
+                expHtml += '</ul>'; if (expenses.length === 0) expHtml = '<span style="color:#94a3b8;">—</span>';
+
+                html += '<tr><td data-label="Date" class="tbl-date">' + day.date + '</td>';
+                if (payTypeFilter === 'All' || payTypeFilter === 'Revenue') { html += '<td data-label="Revenue Details">' + revHtml + '</td>'; }
+                if (payTypeFilter === 'All' || payTypeFilter === 'Expense') { html += '<td data-label="Expense Details">' + expHtml + '</td>'; }
+                html += '</tr>';
+            }
+            html += '</tbody></table></div>'; return html;
+        }
+
+        function renderPaySummary(data) {
+            var grandRev = 0, grandExp = 0;
+            for (var i = 0; i < data.length; i++) { var day = data[i]; var revenues = day.revenues || []; var expenses = day.expenses || []; for (var j = 0; j < revenues.length; j++) grandRev += Number(revenues[j].guestTotal); for (var j = 0; j < expenses.length; j++) grandExp += Number(expenses[j].amount); }
+            var html = '<div class="summary-box" style="display:flex; gap:20px; flex-wrap:wrap; justify-content:center; align-items:center;">';
+            var lblPost = payMethodFilter !== 'All' ? ' (' + payMethodFilter + ')' : '';
+            if (payTypeFilter === 'All' || payTypeFilter === 'Revenue') {
+                /* USING CSS UTILITY CLASS FOR CARD */
+                html += '<div class="summary-grand-total card-profit" style="flex:1; min-width:200px;"><div class="summary-grand-total-label">Total Revenue' + lblPost + '</div>';
+                if (grandRev > 0) { html += '<div class="summary-grand-total-value">₹ ' + formatCurrency(grandRev) + '</div>'; } else { html += '<div class="summary-grand-total-value" style="font-size:1.15rem; color:#15803d; margin-top:4px;">No Revenue</div>'; }
+                html += '</div>';
+            }
+            if (payTypeFilter === 'All' || payTypeFilter === 'Expense') {
+                /* USING CSS UTILITY CLASS FOR CARD */
+                html += '<div class="summary-grand-total card-loss" style="flex:1; min-width:200px;"><div class="summary-grand-total-label">Total Expense' + lblPost + '</div>';
+                if (grandExp > 0) { html += '<div class="summary-grand-total-value">₹ ' + formatCurrency(grandExp) + '</div>'; } else { html += '<div class="summary-grand-total-value" style="font-size:1.15rem; color:#b91c1c; margin-top:4px;">No Expense</div>'; }
+                html += '</div>';
+            }
+            html += '</div>'; return html;
+        }
+
+        // ========== ANALYTICS LOGIC ==========
+        var currentAnalyticsData = null;
+        function fetchAnalytics() {
+            document.getElementById('analyticsResultsArea').classList.add('hidden');
+            showMsg('analytics', 'info', 'Loading Analytics...');
+            setBtnState('analytics', true);
+
+            var url = API_URL + "?action=getAllAnalyticsData";
+            fetch(url).then(res => res.json()).then(data => {
+                if (data.error) throw new Error(data.error); onAnalyticsSuccess(data);
+            }).catch(err => onAnalyticsError(err));
+        }
+
+        function onAnalyticsSuccess(data) {
+            setBtnState('analytics', false);
+            showMsg('analytics', 'none');
+            if (!data) { return showMsg('analytics', 'warning', 'No analytics data available.'); }
+            currentAnalyticsData = data;
+            if (currentActiveTab === 'analytics') {
+                renderAnalytics(data);
+            }
+        }
+        function onAnalyticsError(err) {
+            setBtnState('analytics', false);
+            showMsg('analytics', 'warning', 'Error loading analytics: ' + (err.message || 'Unknown'));
+        }
+
+        function renderAnalytics(data) {
+            document.getElementById('analyticsResultsArea').classList.remove('hidden');
+
+            /* USING CSS UTILITY CLASSES FOR CARDS */
+            var html = '<div class="summary-box" style="display:flex; gap:20px; flex-wrap:wrap; justify-content:center; align-items:center; margin-bottom:30px;">';
+            html += '<div class="summary-grand-total card-profit" style="flex:1; min-width:200px;"><div class="summary-grand-total-label">Total Revenue</div><div class="summary-grand-total-value">₹ ' + formatCurrency(data.totalRevenue) + '</div></div>';
+            html += '<div class="summary-grand-total card-loss" style="flex:1; min-width:200px;"><div class="summary-grand-total-label">Total Expense</div><div class="summary-grand-total-value">₹ ' + formatCurrency(data.totalExpense) + '</div></div>';
+
+            var netClass = data.netProfit >= 0 ? 'card-profit' : 'card-loss';
+            var netLabel = data.netProfit >= 0 ? 'Net Profit' : 'Net Loss';
+            html += '<div class="summary-grand-total ' + netClass + '" style="flex:1; min-width:200px;"><div class="summary-grand-total-label">' + netLabel + '</div><div class="summary-grand-total-value">₹ ' + formatCurrency(Math.abs(data.netProfit)) + '</div></div></div>';
+
+            /* ISSUE #1 FIXED: Changed minmax from 320px to 280px */
+            html += '<div class="chart-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">';
+            html += '<div class="chart-card"><div id="chart1" style="height:300px;"></div><div id="table1" class="chart-table"></div></div>';
+            html += '<div class="chart-card"><div id="chart2" style="height:300px;"></div><div id="table2" class="chart-table"></div></div>';
+            html += '<div class="chart-card"><div id="chart3" style="height:300px;"></div><div id="table3" class="chart-table"></div></div>';
+            html += '<div class="chart-card"><div id="chart4" style="height:300px;"></div><div id="table4" class="chart-table"></div></div>';
+            html += '<div class="chart-card"><div id="chart5" style="height:300px;"></div><div id="table5" class="chart-table"></div></div>';
+            html += '</div>';
+
+            document.getElementById('analyticsResultsArea').innerHTML = html;
+
+            google.charts.load('current', { 'packages': ['corechart'] });
+            google.charts.setOnLoadCallback(function () {
+                var pData = data.netProfit >= 0 ? [['Net Profit', data.netProfit], ['Total Expense', data.totalExpense]] : [['Total Revenue', data.totalRevenue], ['Net Loss', Math.abs(data.netProfit)]];
+                drawChartAndTable('chart1', 'table1', '1. Net Income vs Expense', pData);
+                var srcData = []; for (var k in data.revSource) srcData.push([k, data.revSource[k]]); drawChartAndTable('chart2', 'table2', '2. Revenue Source', srcData);
+                var revMethData = []; for (var k in data.revMethod) revMethData.push([k, data.revMethod[k]]); drawChartAndTable('chart3', 'table3', '3. Revenue Mode', revMethData);
+                var expCatData = []; for (var k in data.expCategory) expCatData.push([k, data.expCategory[k]]); drawChartAndTable('chart4', 'table4', '4. Expense Categories', expCatData);
+                var expMethData = []; for (var k in data.expMethod) expMethData.push([k, data.expMethod[k]]); drawChartAndTable('chart5', 'table5', '5. Expense Mode', expMethData);
+            });
+        }
+
+        function drawChartAndTable(chartId, tableId, title, rawData) {
+            if (rawData.length === 0) {
+                document.getElementById(chartId).innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#94a3b8;">No data for ' + title + '</div>';
+                return;
+            }
+
+            rawData.sort(function (a, b) { return b[1] - a[1]; });
+            var dt = new google.visualization.DataTable(); dt.addColumn('string', 'Item'); dt.addColumn('number', 'Value'); dt.addRows(rawData);
+            var options = {
+                title: title, titleTextStyle: { fontSize: 16, color: '#0f172a', bold: true }, pieHole: 0.45,
+                legend: { position: 'bottom', textStyle: { color: '#334155', fontSize: 12 } }, pieSliceText: 'none',
+                tooltip: { text: 'percentage' }, chartArea: { width: '90%', height: '70%', top: 40 },
+                colors: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#64748b'], backgroundColor: 'transparent'
+            };
+
+            if (title.indexOf('Net Income') !== -1) {
+                if (rawData[0][0] === 'Net Profit' || rawData[1][0] === 'Net Profit') { options.colors = rawData[0][0] === 'Net Profit' ? ['#10b981', '#ef4444'] : ['#ef4444', '#10b981']; }
+                else { options.colors = rawData[0][0] === 'Total Revenue' ? ['#f59e0b', '#ef4444'] : ['#ef4444', '#f59e0b']; }
+            }
+
+            new google.visualization.PieChart(document.getElementById(chartId)).draw(dt, options);
+
+            var total = 0; for (var i = 0; i < rawData.length; i++) total += rawData[i][1];
+            var tblHtml = '<table class="results-table" style="margin-top:20px; font-size: 0.9rem;"><thead><tr><th>Name</th><th>Amount</th><th>%</th></tr></thead><tbody>';
+            for (var i = 0; i < rawData.length; i++) {
+                var pct = total > 0 ? ((rawData[i][1] / total) * 100).toFixed(1) + '%' : '0%';
+                tblHtml += '<tr><td data-label="Name" style="color:#334155; font-weight:500;">' + rawData[i][0] + '</td><td data-label="Amount" style="color:#0f172a; font-weight:600;">₹' + formatCurrency(rawData[i][1]) + '</td><td data-label="%" style="color:#64748b;">' + pct + '</td></tr>';
+            }
+            tblHtml += '<tr style="background:#f8fafc; font-weight:700;"><td data-label="" colspan="1" style="color:#0f172a; border-top:2px solid #cbd5e1;">Total</td><td data-label="Total Amount" colspan="2" style="color:#16a34a; border-top:2px solid #cbd5e1; font-size:1rem;">₹' + formatCurrency(total) + '</td></tr></tbody></table>';
+            document.getElementById(tableId).innerHTML = tblHtml;
+        }
+
+        /* ISSUE #2 FIXED: Re-draw charts when window resizes */
+        /* ISSUE #2 FIXED: Re-draw charts when window resizes (Mobile Scroll Issue Fixed) */
+        /* ISSUE #2 FIXED: Re-draw charts when window resizes (Mobile Scroll & Desktop Resize Fixed with Debounce) */
+        var lastWindowWidth = window.innerWidth;
+        var resizeTimer; // <-- Ek timer variable add kiya
+
+        window.addEventListener('resize', function () {
+            if (window.innerWidth !== lastWindowWidth) {
+                lastWindowWidth = window.innerWidth;
+
+                if (currentActiveTab === 'analytics' && !document.getElementById('analyticsResultsArea').classList.contains('hidden')) {
+
+                    // Agar lagatar resize ho raha hai, toh pichle wale redraw command ko cancel kar do
+                    clearTimeout(resizeTimer);
+
+                    // Jab resize ruk jaye, uske 300 milliseconds (0.3s) baad data redraw karo
+                    resizeTimer = setTimeout(function () {
+                        if (currentAnalyticsData) {
+                            renderAnalytics(currentAnalyticsData);
+                        } else {
+                            fetchAnalytics();
+                        }
+                    }, 300);
+
+                }
+            }
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        var fpConfig = { dateFormat: 'd/m/Y', allowInput: false, disableMobile: true, animate: true };
+        flatpickr('#startDate', fpConfig); flatpickr('#endDate', fpConfig);
+        flatpickr('#expStartDate', fpConfig); flatpickr('#expEndDate', fpConfig);
+        flatpickr('#payStartDate', fpConfig); flatpickr('#payEndDate', fpConfig);
+    </script>
 
 </body>
+
 </html>
