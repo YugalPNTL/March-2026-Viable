@@ -526,16 +526,7 @@
                 <button id="fetchBtn" class="fetch-btn" onclick="fetchData()">Fetch Data</button>
                 <div style="font-size: 0.82em; margin-top: 3px; min-height: 1.2em;"></div>
             </div>
-            <div id="viewModeBox" style="display: none;">
-                <label>View Mode:</label>
-                <select id="vMode" style="width: 100%;" onchange="renderUI()">
-                    <option value="table">Table</option>
-                    <option value="card">Cards</option>
-                </select>
-                <div class="hint"
-                    style="font-size: 0.85em; margin-top: 3px; font-weight: bold; min-height: 1.2em; line-height: 1.2; color: red;">
-                    📱 Cards For Mobile.</div>
-            </div>
+
         </div>
 
         <!-- [Point 5 FIX] CSS spinner instead of external Imgur image -->
@@ -677,6 +668,19 @@
                 renderAnalytics(cached.analyticsData);
                 return;
             }
+            // Restore input controls to match cached data
+            if (cached.inputs) {
+                document.getElementById('startDate').value = cached.inputs.startDate || '';
+                document.getElementById('endDate').value = cached.inputs.endDate || '';
+                if (tabName === 'expenses' && cached.inputs.category) {
+                    document.getElementById('expCategory').value = cached.inputs.category;
+                }
+                if (tabName === 'search') {
+                    if (cached.inputs.method) document.getElementById('payMethod').value = cached.inputs.method;
+                    if (cached.inputs.transType) document.getElementById('transType').value = cached.inputs.transType;
+                    updateTransHint();
+                }
+            }
             globalData = cached.data;
             curPage = cached.page || 1;
             perPage = cached.perPage || 10;
@@ -738,15 +742,19 @@
 
             let startF = formatDateStr(sDate); let endF = formatDateStr(eDate);
             let url = API_URL;
+            let fetchInputs = { startDate: sDate, endDate: eDate };
 
             if (fetchTab === 'revenue') {
                 url += `?action=getGuestsData&start=${startF}&end=${endF}`;
             } else if (fetchTab === 'expenses') {
                 let cat = document.getElementById('expCategory').value;
+                fetchInputs.category = cat;
                 url += `?action=getExpensesData&start=${startF}&end=${endF}&cat=${encodeURIComponent(cat)}`;
             } else if (fetchTab === 'search') {
                 let sel = document.getElementById('payMethod').value;
                 let tType = document.getElementById('transType').value;
+                fetchInputs.method = sel;
+                fetchInputs.transType = tType;
                 url += `?action=getPaymentSearchData&start=${startF}&end=${endF}&method=${encodeURIComponent(sel)}&type=${encodeURIComponent(tType)}`;
             }
 
@@ -755,14 +763,14 @@
                 .then(data => {
                     if (data.error) throw new Error(data.error);
                     tabFetching[fetchTab] = false;
-                    onDataSuccess(data, fetchTab);
+                    onDataSuccess(data, fetchTab, fetchInputs);
                 })
                 .catch(err => { tabFetching[fetchTab] = false; handleErr(err); });
         }
 
         function handleErr(err) { showModernAlert("❌ Error: " + err.message); document.getElementById('loader').style.display = 'none'; document.getElementById('fetchBtn').disabled = false; document.getElementById('fetchBtn').textContent = 'Fetch Data'; }
 
-        function onDataSuccess(response, fetchTab) {
+        function onDataSuccess(response, fetchTab, fetchInputs) {
             let dataForTab;
             if (fetchTab === 'revenue') dataForTab = response.guests;
             else if (fetchTab === 'expenses') dataForTab = response.expenses;
@@ -770,13 +778,13 @@
 
             let dashData;
             if (fetchTab === 'search') {
-                dashData = { totalReceived: response.totalReceived, totalPaid: response.totalPaid, method: document.getElementById('payMethod').value, tType: document.getElementById('transType').value };
+                dashData = { totalReceived: response.totalReceived, totalPaid: response.totalPaid, method: fetchInputs.method, tType: fetchInputs.transType };
             } else {
                 dashData = response.dashboard;
             }
 
-            // Cache the data for this tab
-            tabCache[fetchTab] = { data: dataForTab, dashboard: dashData, page: 1, perPage: 10, pageSizeVal: '10', filter: 'all' };
+            // Cache the data for this tab including input state
+            tabCache[fetchTab] = { data: dataForTab, dashboard: dashData, page: 1, perPage: 10, pageSizeVal: '10', filter: 'all', inputs: fetchInputs };
 
             // Only render if still on the same tab
             if (currentTab === fetchTab) {
@@ -1058,11 +1066,11 @@
             let html = ``;
             if (currentTab === 'revenue') {
                 html += `<div class="table-res"><table><tr><th>Date</th><th>Guest Name</th><th>Food Breakdown</th><th>Total Food</th><th>Room Breakdown</th><th>Total Room</th><th>Grand Total</th></tr>`;
-                data.forEach(item => { let fStr = item.foodBreakdown.map(b => `${b.method}: ${b.text}`).join('<br>'); let rStr = item.roomBreakdown.map(b => `${b.method}: ${b.text}`).join('<br>'); html += `<tr><td>${item.date}</td><td><b>${item.name}</b></td><td>${fStr}</td><td style="color:#27ae60; font-weight:bold;">${item.totalFood ? '₹' + item.totalFood : ''}</td><td>${rStr}</td><td style="color:#27ae60; font-weight:bold;">${item.totalRoom ? '₹' + item.totalRoom : ''}</td><td><b>${item.grandTotal ? '₹' + item.grandTotal : ''}</b></td></tr>`; });
+                data.forEach(item => { let fStr = (item.foodBreakdown || []).map(b => `${b.method}: ${b.text}`).join('<br>'); let rStr = (item.roomBreakdown || []).map(b => `${b.method}: ${b.text}`).join('<br>'); html += `<tr><td>${item.date}</td><td><b>${item.name}</b></td><td>${fStr}</td><td style="color:#27ae60; font-weight:bold;">${item.totalFood ? '₹' + item.totalFood : ''}</td><td>${rStr}</td><td style="color:#27ae60; font-weight:bold;">${item.totalRoom ? '₹' + item.totalRoom : ''}</td><td><b>${item.grandTotal ? '₹' + item.grandTotal : ''}</b></td></tr>`; });
                 html += `</table></div>`;
             } else if (currentTab === 'expenses') {
                 html += `<div class="table-res"><table><tr><th>Date</th><th>Expense Details</th><th>Daily Total</th></tr>`;
-                data.forEach(item => { let details = item.sets.map(s => `• ${s.item} (${s.type}) | ${s.method}: <b>₹${s.amt}</b>`).join('<br>'); html += `<tr><td style="white-space:nowrap;">${item.date}</td><td>${details}</td><td style="color:#d35400; font-weight:bold;">${item.dayTotal ? '₹' + item.dayTotal : ''}</td></tr>`; });
+                data.forEach(item => { let details = (item.sets || []).map(s => `• ${s.item} (${s.type}) | ${s.method}: <b>₹${s.amt}</b>`).join('<br>'); html += `<tr><td style="white-space:nowrap;">${item.date}</td><td>${details}</td><td style="color:#d35400; font-weight:bold;">${item.dayTotal ? '₹' + item.dayTotal : ''}</td></tr>`; });
                 html += `</table></div>`;
             } else if (currentTab === 'search') {
                 let selMethod = document.getElementById('payMethod').value;
@@ -1075,12 +1083,13 @@
                 data.forEach(item => {
                     let rowHtml = `<tr><td style="white-space:nowrap; vertical-align:top;"><b>${item.displayDate}</b></td>`;
                     if (tType === "All" || tType === "Revenue") {
-                        let incHtml = item.incomes.map(inc => `<div style="margin-bottom:6px;"><b>${inc.name}</b><br><span style="color:#555; font-size:0.9em;">Food: ${inc.foodStr} | Room: ${inc.roomStr}</span><br><b style="color:#27ae60; font-size:1.1em;">₹${inc.total}</b></div>`).join('<hr style="margin:6px 0; border:0; border-top:1px dashed #ccc;">');
+                        let incHtml = (item.incomes || []).map(inc => `<div style="margin-bottom:6px;"><b>${inc.name}</b><br><span style="color:#555; font-size:0.9em;">Food: ${inc.foodStr} | Room: ${inc.roomStr}</span><br><b style="color:#27ae60; font-size:1.1em;">₹${inc.total}</b></div>`).join('<hr style="margin:6px 0; border:0; border-top:1px dashed #ccc;">');
                         if (!incHtml) incHtml = `<span style="color:#999; font-style:italic;">No Income</span>`;
                         rowHtml += `<td style="vertical-align:top; border-right: 1px solid #eee;">${incHtml}</td>`;
                     }
                     if (tType === "All" || tType === "Expense") {
-                        let expHtml = item.expenses.length > 0 ? `<div style="padding-top:2px;">${item.expenses.join('')}</div>` : `<span style="color:#999; font-style:italic;">No Expenses</span>`;
+                        let exps = item.expenses || [];
+                        let expHtml = exps.length > 0 ? `<div style="padding-top:2px;">${exps.join('')}</div>` : `<span style="color:#999; font-style:italic;">No Expenses</span>`;
                         rowHtml += `<td style="vertical-align:top;">${expHtml}</td>`;
                     }
                     rowHtml += `</tr>`;
