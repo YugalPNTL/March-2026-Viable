@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Viable &amp; Raikwal — 2026</title>
+<style>
+  :root {
+    --bg:       #0f1117;
+    --surface:  #181c27;
+    --border:   #2a3050;
+    --accent-v: #f0a500;
+    --accent-r: #4ecdc4;
+    --text:     #e8eaf2;
+    --muted:    #6b7280;
+    --radius:   14px;
+    --font-head: Georgia, 'Times New Roman', serif;
+    --font-body: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HEADER ── */
+  header {
+    text-align: center;
+    padding: 48px 24px 28px;
+  }
+  header::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-v), var(--accent-r));
+    margin: 18px auto 0;
+    border-radius: 2px;
+  }
+  .year-badge {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-family: var(--font-head);
+    font-size: clamp(26px, 6vw, 40px);
+    font-weight: 400;
+    background: linear-gradient(135deg, #e8eaf2 40%, var(--muted));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── TAB BAR ── */
+  .tab-wrapper {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 0 16px 80px;
+  }
+
+  .tab-bar {
+    display: flex;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 5px;
+    gap: 4px;
+    margin-bottom: 32px;
+    position: sticky;
+    top: 12px;
+    z-index: 100;
+  }
+
+  .tab-btn {
+    flex: 1;
+    height: 44px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.22s ease;
+  }
+  .tab-btn.active-v { color: #111; background: var(--accent-v); box-shadow: 0 4px 18px rgba(240,165,0,0.32); }
+  .tab-btn.active-r { color: #111; background: var(--accent-r); box-shadow: 0 4px 18px rgba(78,205,196,0.32); }
+
+  /* ── PANELS ── */
+  .tab-panel { display: none; animation: fadeUp 0.28s ease both; }
+  .tab-panel.active { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SEASON LABEL ── */
+  .season-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: center;
+    padding: 4px 0 16px;
+    position: relative;
+  }
+  .season-label::before, .season-label::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: calc(50% - 52px);
+    height: 1px;
+    background: var(--border);
+    transform: translateY(-4px);
+  }
+  .season-label::before { left: 0; }
+  .season-label::after  { right: 0; }
+
+  /* ── MONTH LIST ── */
+  .month-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .month-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .month-row:hover { border-color: #3a4468; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+
+  .month-num {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    width: 28px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .viable  .month-num { color: var(--accent-v); }
+  .raikwal .month-num { color: var(--accent-r); }
+
+  .month-divider {
+    width: 1px;
+    height: 22px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+
+  .month-link {
+    font-family: var(--font-head);
+    font-size: 18px;
+    font-weight: 400;
+    text-decoration: none;
+    transition: color 0.18s;
+    flex: 1;
+  }
+  .viable  .month-link { color: var(--text); }
+  .viable  .month-link:hover { color: var(--accent-v); }
+  .raikwal .month-link { color: var(--text); }
+  .raikwal .month-link:hover { color: var(--accent-r); }
+
+  .link-arrow {
+    font-size: 13px;
+    color: var(--muted);
+    transition: transform 0.18s, color 0.18s;
+    flex-shrink: 0;
+  }
+  .month-row:hover .link-arrow {
+    transform: translateX(4px);
+    color: var(--text);
+  }
+
+  footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+  }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 6px; }
+
+  @media (max-width: 480px) {
+    header { padding: 36px 20px 22px; }
+    .month-link { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="year-badge">&#x2022; 2026 &#x2022;</span>
+  <h1>Viable &amp; Raikwal</h1>
+</header>
+
+<div class="tab-wrapper">
+
+  <div class="tab-bar" role="tablist">
+    <button class="tab-btn active-v" id="btn-viable"  onclick="switchTab('viable')"  role="tab" aria-selected="true"  aria-controls="panel-viable">&#9670; Viable</button>
+    <button class="tab-btn"          id="btn-raikwal" onclick="switchTab('raikwal')" role="tab" aria-selected="false" aria-controls="panel-raikwal">&#9670; Raikwal</button>
+  </div>
+
+  <!-- ══ VIABLE ══ -->
+  <div class="tab-panel active viable" id="panel-viable" role="tabpanel">
+
+    <div class="season-label">Spring</div>
+    <div class="month-list">
+      <div class="month-row">
+        <span class="month-num">03</span>
+        <div class="month-divider"></div>
+        <a class="month-link" href="https://yugalpntl.github.io/Hotel/Viable-Mar26.html">March 2026</a>
+        <span class="link-arrow">&#8594;</span>
+      </div>
+      <div class="month-row">
+        <span class="month-num">04</span>
+        <div class="month-divider"></div>
+        <a class="month-link" href="">April 2026</a>
+        <span class="link-arrow">&#8594;</span>
+      </div>
+      <div class="month-row">
+        <span class="month-num">05</span>
+        <div class="month-divider"></div>
+        <a class="month-link" href="">May 2026</a>
+        <span class="link-arrow">&#8594;</span>
+      </div>
+    </div>
+
+    <div class="season-label">Summer</div>
+    <div class="month-list">
+      <div class="month-row">
+        <span class="month-num">06</span>
+        <div class="month-divider"></div>
+        <a class="month-link" href="">June 2026</a>
+        <span class="link-arrow">&#8594;</span>
+      </div>
+      <div class="month-row">
+        <span class="month-num">07</span>
+        <div class="month-divider"></div>
+        <a class="month-link" href="">July 2026</a>
+        <span class="link-arrow">&#8594;</span>
+      </div>
+      <div class="month-row">
+        <span class="month-num">08</span>
+        <div class="month-divider"></div>
+        <a class="month-link" href="">August 2026</a>
+        <span class="link-arrow">&#8594;</span>
+      </div>
+    </div>
+
+    <div class="season-label">Autumn</div>
+    <div class="month-list">
+      <div class="month-row">
+        <span class="month-num">09</span>
+        <div class="month-divider"></div>
+        <a class="month-link" href="">September 2026</a>
+        <span class="link-arrow">&#8594;</span>
+      </div>
+      <div class="month-row">
+        <span class="month-num">10</span>
+        <div class="month-divider"></div>
+        <a class="month-link" href="">October 2026</a>
+        <span class="link-arrow">&#8594;</span>
+      </div>
+    </div>
+
+    <div class="season-label">Winter</div>
+    <div class="month-list">
+      <div class="month-row">
+        <span class="month-num">11</span>
+        <div class="month-divider"></div>
+        <a class="month-link" href="">November 2026</a>
+        <span class="link-arrow">&#8594;</span>
+      </div>
+      <div class="month-row">
+        <span class="month-num">12</span>
+        <div class="month-divider"></div>
+        <a class="month-link" href="">December 2026</a>
+        <span class="link-arrow">&#8594;</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ RAIKWAL ══ -->
+  <div class="tab-panel raikwal" id="panel-raikwal" role="tabpanel">
+
+    <div class="season-label">Spring</div>
+    <div class="month-list">
+      <div class="month-row">
+        <span class="month-num">03</span>
+        <div class="month-divider"></div>
+        <a class="month-link" href="https://yugalpntl.github.io/Hotel/Raikwal-Mar26.html">March 2026</a>
+        <span class="link-arrow">&#8594;</span>
+      </div>
+      <div class="month-row">
+        <span class="month-num">04</span>
+        <div class="month-divider"></div>
+        <a class="month-link" href="https://yugalpntl.github.io/Hotel/Raikwal-Apr26.html">April 2026</a>
+        <span class="link-arrow">&#8594;</span>
+      </div>
+      <div class="month-row">
+        <span class="month-num">05</span>
+        <div class="month-divider"></div>
+        <a class="month-link" href="">May 2026</a>
+        <span class="link-arrow">&#8594;</span>
+      </div>
+    </div>
+
+    <div class="season-label">Summer</div>
+    <div class="month-list">
+      <div class="month-row">
+        <span class="month-num">06</span>
+        <div class="month-divider"></div>
+        <a class="month-link" href="">June 2026</a>
+        <span class="link-arrow">&#8594;</span>
+      </div>
+      <div class="month-row">
+        <span class="month-num">07</span>
+        <div class="month-divider"></div>
+        <a class="month-link" href="">July 2026</a>
+        <span class="link-arrow">&#8594;</span>
+      </div>
+      <div class="month-row">
+        <span class="month-num">08</span>
+        <div class="month-divider"></div>
+        <a class="month-link" href="">August 2026</a>
+        <span class="link-arrow">&#8594;</span>
+      </div>
+    </div>
+
+    <div class="season-label">Autumn</div>
+    <div class="month-list">
+      <div class="month-row">
+        <span class="month-num">09</span>
+        <div class="month-divider"></div>
+        <a class="month-link" href="">September 2026</a>
+        <span class="link-arrow">&#8594;</span>
+      </div>
+      <div class="month-row">
+        <span class="month-num">10</span>
+        <div class="month-divider"></div>
+        <a class="month-link" href="">October 2026</a>
+        <span class="link-arrow">&#8594;</span>
+      </div>
+    </div>
+
+    <div class="season-label">Winter</div>
+    <div class="month-list">
+      <div class="month-row">
+        <span class="month-num">11</span>
+        <div class="month-divider"></div>
+        <a class="month-link" href="">November 2026</a>
+        <span class="link-arrow">&#8594;</span>
+      </div>
+      <div class="month-row">
+        <span class="month-num">12</span>
+        <div class="month-divider"></div>
+        <a class="month-link" href="">December 2026</a>
+        <span class="link-arrow">&#8594;</span>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<footer>Viable &amp; Raikwal &nbsp;&#x2014;&nbsp; 2026</footer>
+
+<script>
+  let activeTab = 'viable';
+  function switchTab(name) {
+    if (name === activeTab) return;
+    activeTab = name;
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active-v','active-r'); b.setAttribute('aria-selected','false'); });
+    document.getElementById('panel-' + name).classList.add('active');
+    const btn = document.getElementById('btn-' + name);
+    btn.classList.add(name === 'viable' ? 'active-v' : 'active-r');
+    btn.setAttribute('aria-selected','true');
+  }
+</script>
+</body>
+</html>
