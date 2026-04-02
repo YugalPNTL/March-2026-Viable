@@ -440,6 +440,7 @@ function fetchData() {
       .then(data => {
         if (data.error) throw new Error(data.error);
         allData    = data;
+        normalizeAllDates(allData); // fix any non-yyyy-MM-dd date strings
         isFetching = false;
         populateDropdowns(data.dropdown);
         onDataReady();
@@ -463,6 +464,25 @@ function populateDropdowns(dropdown) {
   const cat = document.getElementById('expCategory');
   cat.innerHTML = '<option value="All">All Categories</option>';
   (dropdown.expenseCategories || []).forEach(c => cat.innerHTML += `<option value="${c}">${c}</option>`);
+}
+
+// Converts any date string format to "yyyy-MM-dd"
+// Handles: "2026-04-01", "Wed Apr 01 2026...", "2026-04-01T18:30:00.000Z", etc.
+function normalizeDateStr(val) {
+  if (!val) return '';
+  if (/^\d{4}-\d{2}-\d{2}$/.test(val)) return val; // already correct
+  const d = new Date(val);
+  if (isNaN(d.getTime())) return val; // unparseable — return as-is
+  // Use local date parts to avoid UTC day-shift
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+function normalizeAllDates(data) {
+  (data.guests   || []).forEach(g => { g.checkOutDate = normalizeDateStr(g.checkOutDate); });
+  (data.expenses || []).forEach(e => { e.date         = normalizeDateStr(e.date); });
 }
 
 // processAndCache — reads current UI filter values, processes allData, stores in tabCache[tab]
