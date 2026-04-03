@@ -12,12 +12,12 @@
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #f4f7f6;
-      margin: 0; padding: 5px 15px 15px 15px; color: #333;
+      margin: 0; padding: 0 15px 15px 15px; color: #333;
     }
 
     .container {
       max-width: 1100px; margin: 0 auto; background: white;
-      padding: 10px 20px 20px 20px; border-radius: 12px;
+      padding: 0 20px 20px 20px; border-radius: 12px;
       box-shadow: 0 5px 15px rgba(0,0,0,0.1); position: relative;
     }
 
@@ -111,7 +111,7 @@
 
     /* --- TABLE --- */
     .table-res {
-      overflow-x: auto; overflow-y: auto; max-height: 70vh;
+      overflow-x: auto;
       margin-top: 15px; border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.05); width: 100%;
     }
@@ -220,7 +220,7 @@
 
 <div class="container">
 
-  <h2 style="text-align:center; color:#2c3e50; margin-bottom:5px;">Revenue, Expense, Analytics</h2>
+  <h2 style="text-align:center; color:#2c3e50; margin:0 0 5px 0;">Revenue, Expense, Analytics</h2>
   <div id="headerSubtitle" style="text-align:center; font-weight:bold; color:#7f8c8d; margin-bottom:20px; font-size:1.1em;">
     🏨 Viable Inn | 📅 ...
   </div>
@@ -278,7 +278,6 @@
 
   <div id="loader"><span class="css-spinner"></span> Fetching data, please wait...</div>
   <div id="dashboard" class="dashboard"></div>
-  <div id="content"></div>
 
   <div class="pagination" id="pagin">
     <button class="p-btn" id="prevB" onclick="changePage(-1)">Previous</button>
@@ -291,6 +290,8 @@
       <option value="all">View All</option>
     </select>
   </div>
+
+  <div id="content"></div>
 
 </div>
 
