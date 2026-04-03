@@ -481,13 +481,17 @@ function fetchData() {
 
 function populateDropdowns(dropdown) {
   if (!dropdown) return;
-  const pay = document.getElementById('payMethod');
-  pay.innerHTML = '<option value="">-- Select Method --</option><option value="All">All Payments</option>';
+  const pay     = document.getElementById('payMethod');
+  const savedPay = pay.value; // preserve user's selection
+  pay.innerHTML  = '<option value="">-- Select Method --</option><option value="All">All Payments</option>';
   (dropdown.paymentMethods || []).forEach(m => pay.innerHTML += `<option value="${m}">${m}</option>`);
+  if (savedPay) pay.value = savedPay; // restore — no-op if option no longer exists
 
-  const cat = document.getElementById('expCategory');
-  cat.innerHTML = '<option value="All">All Categories</option>';
+  const cat      = document.getElementById('expCategory');
+  const savedCat = cat.value; // preserve user's selection
+  cat.innerHTML  = '<option value="All">All Categories</option>';
   (dropdown.expenseCategories || []).forEach(c => cat.innerHTML += `<option value="${c}">${c}</option>`);
+  if (savedCat) cat.value = savedCat; // restore — no-op if option no longer exists
 }
 
 // Converts any date string format to "yyyy-MM-dd"
