@@ -386,7 +386,6 @@ let perPage          = 10;
 let activeGuestFilter= 'all';
 let chartsReady      = false;
 let isFetching       = false;
-let fetchTab         = null;  // which tab initiated the current/last fetch
 let pendingCallbacks = [];    // queued actions waiting for in-flight API response
 let tabCache         = { revenue: null, expenses: null, search: null, analytics: null };
 // Per-tab independent date memory
@@ -568,7 +567,7 @@ function fetchData() {
   if (currentTab === 'search' && !document.getElementById('payMethod').value)
     { showAlert('⚠️ Please select a Payment Method!'); return; }
 
-  fetchTab = currentTab; // record which tab owns this fetch
+  const myTab = currentTab; // capture locally — won't be overwritten by other tabs
 
   document.getElementById('content').innerHTML      = '';
   document.getElementById('dashboard').style.display = 'none';
@@ -581,10 +580,10 @@ function fetchData() {
     unlockButtons();
 
     // Process + cache result for the tab that initiated the fetch
-    processAndCache(fetchTab);
+    processAndCache(myTab);
 
     // Only render if user is still on the same tab that clicked Fetch
-    if (currentTab === fetchTab) restoreFromCache(fetchTab);
+    if (currentTab === myTab) restoreFromCache(myTab);
   }
 
   if (allData && !isDataStale()) {
@@ -1254,19 +1253,22 @@ function hideAlert() {
 //  REMARKS MODAL
 // ============================================================
 function getRemarks() {
+  const remarksTab = currentTab; // capture which tab initiated this
   lockButtons();
 
   function showRemarks() {
     unlockButtons();
 
-    const tab   = currentTab;
+    // If user switched tabs, don't show modal — data is cached for next click
+    if (currentTab !== remarksTab) return;
+
     const modal = document.getElementById('remarksModal');
     const title = document.getElementById('remarksModalTitle');
     const body  = document.getElementById('remarksModalBody');
 
     let html = '';
 
-    if (tab === 'revenue') {
+    if (remarksTab === 'revenue') {
       title.textContent = '\ud83d\udcdd Guest Remarks \u2014 Whole Month';
       const withRemarks = (allData.guests || []).filter(g => g.remarks && g.remarks.trim() !== '');
       if (!withRemarks.length) {
@@ -1282,7 +1284,7 @@ function getRemarks() {
         });
         html += `</table>`;
       }
-    } else if (tab === 'expenses') {
+    } else if (remarksTab === 'expenses') {
       title.textContent = '\ud83d\udcdd Expense Remarks \u2014 Whole Month';
       const withRemarks = (allData.expenses || []).filter(e => e.remarks && e.remarks.trim() !== '');
       if (!withRemarks.length) {
