@@ -1,1124 +1,1145 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hotel Dashboard</title>
-  <meta name="description" content="Hotel revenue and expense dashboard">
-  <script src="https://www.gstatic.com/charts/loader.js"></script>
-  <style>
-    * { box-sizing: border-box; }
+    <base target="_top">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mar 2026 Viable</title>
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f4f7f6;
-      margin: 0; padding: 5px 15px 15px 15px; color: #333;
-    }
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
 
-    .container {
-      max-width: 1100px; margin: 0 auto; background: white;
-      padding: 10px 20px 20px 20px; border-radius: 12px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1); position: relative;
-    }
+    <style>
+        /* --- General Styling --- */
+        * {
+            box-sizing: border-box;
+        }
 
-    /* --- TABS --- */
-    .tabs {
-      display: flex; border-bottom: 2px solid #ddd;
-      margin-bottom: 20px; overflow-x: auto; gap: 5px;
-      padding-bottom: 2px; position: sticky; top: 0;
-      background: white; z-index: 200;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      margin-left: -20px; margin-right: -20px;
-      padding-left: 20px; padding-right: 20px;
-    }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 15px;
+            color: #333;
+        }
 
-    .tab-btn {
-      padding: 12px 20px; cursor: pointer; border: none;
-      background: none; font-weight: bold; font-size: 1.05em;
-      color: #7f8c8d; transition: 0.3s; white-space: nowrap;
-      border-radius: 5px 5px 0 0;
-    }
-    .tab-btn:hover { color: #2c3e50; background: #f8f9fa; }
-    .tab-btn.active {
-      color: #3498db; border-bottom: 3px solid #3498db;
-      background: #ebf5fb; margin-bottom: -2px;
-    }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
 
-    /* --- ALERT --- */
-    #alertBar {
-      display: none; background: #e74c3c; color: white;
-      padding: 15px; border-radius: 8px; text-align: center;
-      font-weight: bold; margin-bottom: 20px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-      opacity: 0; transition: opacity 0.4s ease-in-out;
-      position: relative; z-index: 1000;
-    }
+        /* --- Tabs Styling --- */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            gap: 5px;
+            padding-bottom: 2px;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 200;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-left: -20px;
+            margin-right: -20px;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
 
-    /* --- LOADER --- */
-    #loader {
-      display: none; text-align: center; color: #34495e;
-      font-weight: bold; margin: 20px 0;
-      font-size: 1.1em; font-style: italic;
-    }
-    .css-spinner {
-      display: inline-block; width: 22px; height: 22px;
-      border: 3px solid #ccc; border-top: 3px solid #3498db;
-      border-radius: 50%; animation: spin 0.8s linear infinite;
-      vertical-align: middle; margin-right: 8px;
-    }
-    @keyframes spin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+        .tab-btn {
+            padding: 12px 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-weight: bold;
+            font-size: 1.05em;
+            color: #7f8c8d;
+            transition: 0.3s;
+            white-space: nowrap;
+            border-radius: 5px 5px 0 0;
+        }
 
-    /* --- DASHBOARD --- */
-    .dashboard {
-      display: none; background: #ebf5fb; padding: 20px;
-      border-radius: 8px; margin-bottom: 20px;
-      border-left: 6px solid #3498db;
-    }
-    .dashboard h3 { margin-top: 0; color: #2c3e50; }
-    .dash-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;
-    }
-    .dash-card {
-      background: #fff; padding: 15px; border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
+        .tab-btn:hover {
+            color: #2c3e50;
+            background: #f8f9fa;
+        }
 
-    /* --- CONTROLS --- */
-    .controls {
-      display: flex; flex-wrap: wrap; gap: 15px;
-      background: #f8f9fa; padding: 15px; border-radius: 8px;
-      align-items: flex-start; margin-bottom: 20px;
-    }
-    .controls > div { display: flex; flex-direction: column; min-width: 160px; }
-    .controls label { font-weight: bold; margin-bottom: 5px; font-size: 0.9em; color: #2c3e50; }
+        .tab-btn.active {
+            color: #3498db;
+            border-bottom: 3px solid #3498db;
+            background: #ebf5fb;
+            margin-bottom: -2px;
+        }
 
-    input[type="date"], select {
-      padding: 8px; border: 1px solid #ccc; border-radius: 5px;
-      font-family: inherit; font-size: 1em; background: white;
-    }
+        /* --- Alert and Loader --- */
+        #alertBar {
+            display: none;
+            background: #e74c3c;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+            position: relative;
+            z-index: 1000;
+        }
 
-    button.fetch-btn {
-      background: #27ae60; color: white; border: none;
-      padding: 10px 20px; border-radius: 5px; cursor: pointer;
-      font-weight: bold; transition: 0.3s; font-size: 1em;
-      align-self: flex-start;
-    }
-    button.fetch-btn:hover { background: #219150; transform: translateY(-1px); }
-    button.fetch-btn:disabled {
-      background: #c0392b; cursor: not-allowed; opacity: 0.9; transform: none;
-    }
+        #loader {
+            display: none;
+            text-align: center;
+            color: #34495e;
+            font-weight: bold;
+            margin: 20px 0;
+            font-size: 1.1em;
+            font-style: italic;
+        }
 
-    /* --- TABLE --- */
-    .table-res {
-      overflow-x: auto; overflow-y: auto; max-height: 70vh;
-      margin-top: 15px; border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05); width: 100%;
-    }
-    .table-res table {
-      width: 100%; border-collapse: collapse;
-      background: white; min-width: 600px;
-    }
-    .table-res th, .table-res td { border: 1px solid #eee; padding: 12px; text-align: left; }
-    .table-res th {
-      background: #34495e; color: white;
-      position: sticky; top: 0; z-index: 10;
-    }
-    tr:nth-child(even) { background-color: #fcfcfc; }
+        /* [Point 5 FIX] CSS Spinner instead of external Imgur image */
+        .css-spinner {
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            border: 3px solid #ccc;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
 
-    /* --- CARDS --- */
-    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
-    .card {
-      background: white; border: 1px solid #e0e0e0;
-      border-radius: 10px; padding: 18px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: 0.3s;
-    }
-    .card:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.08); }
-    .empty-state { color: #95a5a6; font-style: italic; padding: 8px 0; }
-    .total-line { font-weight: bold; font-size: 1.1em; padding-top: 8px; }
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
 
+            100% {
+                transform: rotate(360deg);
+            }
+        }
 
+        /* --- Dashboard Summary --- */
+        .dashboard {
+            display: none;
+            background: #ebf5fb;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 6px solid #3498db;
+        }
 
-    /* --- FILTER CHIPS --- */
-    .filter-chips {
-      display: flex; flex-wrap: wrap; gap: 10px;
-      margin: 15px 0 5px 0; justify-content: center;
-    }
-    #recordCount {
-      text-align: center; font-weight: bold; color: #2c3e50;
-      font-size: 1em; margin: 8px 0 10px 0; min-height: 1.4em;
-    }
-    .filter-chip {
-      padding: 8px 18px; border-radius: 20px;
-      border: 2px solid #27ae60; background: white;
-      color: #27ae60; font-weight: bold; font-size: 0.9em;
-      cursor: pointer; transition: 0.2s;
-    }
-    .filter-chip:hover { background: #27ae60; color: white; }
-    .filter-chip.active { background: #1a7a44; border-color: #1a7a44; color: white; }
-    .filter-chip:disabled {
-      opacity: 0.35; cursor: not-allowed; border-color: #bdc3c7; color: #bdc3c7;
-    }
-    .filter-chip:disabled:hover { background: white; color: #bdc3c7; }
+        .dashboard h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
 
-    /* --- PAGINATION --- */
-    .pagination {
-      display: none; justify-content: center; align-items: center;
-      gap: 15px; margin-top: 30px; flex-wrap: wrap;
-      padding: 20px; background: #f8f9fa; border-radius: 8px;
-    }
-    .p-btn {
-      padding: 10px 18px; background: #34495e; color: white;
-      border: none; border-radius: 5px; cursor: pointer; font-weight: bold;
-    }
-    .p-btn:disabled { background: #bdc3c7; cursor: not-allowed; }
+        .dash-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
 
-    /* --- ANALYTICS --- */
-    .chart-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 20px; margin-top: 20px;
-    }
-    .chart-box {
-      background: #fff; border: 1px solid #e0e0e0; padding: 15px;
-      border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-      width: 100%; overflow: hidden;
-    }
-    .perc-table {
-      width: 100% !important; min-width: auto !important;
-      margin-top: 15px; font-size: 0.85em;
-      border-collapse: collapse; table-layout: fixed;
-    }
-    .perc-table th {
-      background: #f8f9fa; color: #2c3e50;
-      padding: 10px 5px; border-bottom: 2px solid #ddd; text-align: left;
-    }
-    .perc-table td {
-      padding: 10px 5px; border-bottom: 1px solid #eee;
-      text-align: left; word-wrap: break-word;
-    }
-    .perc-table th:nth-child(1), .perc-table td:nth-child(1) { width: 45%; }
-    .perc-table th:nth-child(2), .perc-table td:nth-child(2) { width: 35%; white-space: nowrap; }
-    .perc-table th:nth-child(3), .perc-table td:nth-child(3) { width: 20%; }
+        .dash-grid ul {
+            margin: 5px 0 0 0;
+            padding-left: 20px;
+            font-size: 0.95em;
+        }
 
-    /* --- RESPONSIVE --- */
-    @media (max-width: 600px) {
-      .controls { flex-direction: column; align-items: stretch; }
-      .controls > div { min-width: 100%; }
-      button.fetch-btn { margin-top: 10px; width: 100%; }
-      .tabs { gap: 2px; justify-content: space-between; }
-      .tab-btn { padding: 10px 4px; font-size: 0.82em; }
-      .chart-container { grid-template-columns: 1fr; }
-      .card-grid { grid-template-columns: 1fr; }
-      .perc-table { font-size: 0.8em; }
-    }
+        .grand-total {
+            font-size: 1.4em;
+            color: #d35400;
+            text-align: center;
+            margin-top: 15px;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+            font-weight: bold;
+        }
 
-    .google-visualization-tooltip { pointer-events: none; }
-  </style>
+        /* --- Controls Section --- */
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .controls div {
+            display: flex;
+            flex-direction: column;
+            min-width: 160px;
+        }
+
+        .controls label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            color: #2c3e50;
+        }
+
+        input[type="date"],
+        select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 1em;
+            background: white;
+        }
+
+        button.fetch-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            font-size: 1em;
+            align-self: flex-start;
+            margin-top: 0px;
+        }
+
+        button.fetch-btn:hover {
+            background: #219150;
+            transform: translateY(-1px);
+        }
+
+        button.fetch-btn:disabled {
+            background: #c0392b;
+            cursor: not-allowed;
+            opacity: 0.9;
+            transform: none;
+        }
+
+        /* --- Table & Card Styling --- */
+        .table-res {
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: 70vh;
+            margin-top: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            width: 100%;
+        }
+
+        .table-res table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            min-width: 600px;
+        }
+
+        .table-res th,
+        .table-res td {
+            border: 1px solid #eee;
+            padding: 12px;
+            text-align: left;
+        }
+
+        /* [Point 6 FIX] Removed dead position:sticky from th (doesn't work with overflow-x:auto parent) */
+        .table-res th {
+            background: #34495e;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        tr:nth-child(even) {
+            background-color: #fcfcfc;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 18px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .empty-state {
+            color: #95a5a6;
+            font-style: italic;
+            padding: 8px 0;
+        }
+
+        .total-line {
+            font-weight: bold;
+            font-size: 1.1em;
+            padding-top: 8px;
+        }
+
+        /* --- Pagination --- */
+        .pagination {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .p-btn {
+            padding: 10px 18px;
+            background: #34495e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .p-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        /* --- Analytics Section --- */
+        .chart-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .chart-box {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .perc-table {
+            width: 100% !important;
+            min-width: auto !important;
+            margin-top: 15px;
+            font-size: 0.85em;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        .perc-table th {
+            background: #f8f9fa;
+            color: #2c3e50;
+            padding: 10px 5px;
+            border-bottom: 2px solid #ddd;
+            text-align: left;
+        }
+
+        .perc-table td {
+            padding: 10px 5px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+        }
+
+        .perc-table th:nth-child(1),
+        .perc-table td:nth-child(1) {
+            width: 45%;
+        }
+
+        .perc-table th:nth-child(2),
+        .perc-table td:nth-child(2) {
+            width: 35%;
+            white-space: nowrap;
+        }
+
+        .perc-table th:nth-child(3),
+        .perc-table td:nth-child(3) {
+            width: 20%;
+        }
+
+        /* --- Guest Filter Chips --- */
+        .filter-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0 5px 0;
+            justify-content: center;
+        }
+
+        #recordCount {
+            text-align: center;
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1em;
+            margin: 8px 0 10px 0;
+            min-height: 1.4em;
+        }
+
+        .filter-chip {
+            padding: 8px 18px;
+            border-radius: 20px;
+            border: 2px solid #27ae60;
+            background: white;
+            color: #27ae60;
+            font-weight: bold;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .filter-chip:hover {
+            background: #27ae60;
+            color: white;
+        }
+
+        .filter-chip.active {
+            background: #1a7a44;
+            border-color: #1a7a44;
+            color: white;
+        }
+
+        /* --- Mobile Responsive --- */
+        @media (max-width: 600px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .controls div {
+                min-width: 100%;
+            }
+
+            button.fetch-btn {
+                margin-top: 10px;
+                width: 100%;
+            }
+
+            /* Adjust tab container gap for mobile */
+            .tabs {
+                gap: 2px;
+                justify-content: space-between;
+            }
+
+            /* Significantly reduced padding and font-size to fit all 4 tabs */
+            .tab-btn {
+                padding: 10px 4px;
+                font-size: 0.82em;
+            }
+
+            /* ... rest of the media query ... */
+            .chart-container {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-box {
+                padding: 10px;
+            }
+
+            .perc-table {
+                font-size: 0.8em;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .google-visualization-tooltip {
+            pointer-events: none;
+        }
+    </style>
 </head>
+
 <body>
 
-<div class="container">
+    <div class="container">
+        <h2 style="text-align: center; color: #2c3e50; margin-bottom: 5px;">Revenue, Expense, Analytics</h2>
+        <div style="text-align: center; font-weight: bold; color: #7f8c8d; margin-bottom: 20px; font-size: 1.1em;">
+            🏨 Viable Inn | 📅 March 2026
+        </div>
 
-  <h2 style="text-align:center; color:#2c3e50; margin-bottom:5px;">Revenue, Expense, Analytics</h2>
-  <div id="headerSubtitle" style="text-align:center; font-weight:bold; color:#7f8c8d; margin-bottom:20px; font-size:1.1em;">
-    🏨 Viable Inn | 📅 ...
-  </div>
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('revenue', this)">🛏️ Revenue</button>
+            <button class="tab-btn" onclick="switchTab('expenses', this)">💸 Expenses</button>
+            <button class="tab-btn" onclick="switchTab('search', this)">🔍 Payment</button>
+            <button class="tab-btn" style="color:#d35400;" onclick="switchTab('analytics', this)">📊 Analytics</button>
+        </div>
 
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('revenue',this)">🛏️ Revenue</button>
-    <button class="tab-btn" onclick="switchTab('expenses',this)">💸 Expenses</button>
-    <button class="tab-btn" onclick="switchTab('search',this)">🔍 Payment</button>
-    <button class="tab-btn" style="color:#d35400;" onclick="switchTab('analytics',this)">📊 Analytics</button>
-  </div>
+        <div id="alertBar"></div>
 
-  <div id="alertBar"></div>
+        <div class="controls">
+            <div id="dateStartBox">
+                <label>From Date:</label>
+                <input type="date" id="startDate" value="2026-03-01" min="2026-03-01" max="2026-03-31"
+                    onclick="this.showPicker()">
+                <div style="font-size: 0.82em; margin-top: 3px; min-height: 1.2em;"></div>
+            </div>
+            <div id="dateEndBox">
+                <label>To Date:</label>
+                <input type="date" id="endDate" value="2026-03-31" min="2026-03-01" max="2026-03-31"
+                    onclick="this.showPicker()">
+                <div style="font-size: 0.82em; margin-top: 3px; min-height: 1.2em;"></div>
+            </div>
+            <div id="categoryContainer" style="display: none; min-width: 160px; max-width: 190px;">
+                <label>Expense Category:</label>
+                <select id="expCategory" style="width: 100%;">
+                    <option value="All Categories">All Categories</option>
+                    <option value="Food">Food</option>
+                    <option value="Salary">Salary</option>
+                    <option value="Laundry">Laundry</option>
+                    <option value="Repair and Maintenance">Repair and Maintenance</option>
+                    <option value="Bill">Bill</option>
+                    <option value="Other">Other</option>
+                </select>
+                <div id="catHint"
+                    style="font-size: 0.82em; margin-top: 3px; font-weight: bold; min-height: 1.2em; line-height: 1.2;">
+                </div>
+            </div>
+            <div id="methodContainer" style="display: none; min-width: 160px; max-width: 190px;">
+                <label>Payment Method:</label>
+                <select id="payMethod" style="width: 100%;">
+                    <option value="">-- Select Method --</option>
+                    <option value="All Payments">All Payments</option>
+                    <option value="Trishul">Trishul</option>
+                    <option value="ChetanS">ChetanS</option>
+                    <option value="Cash">Cash</option>
+                </select>
+                <div id="searchHint"
+                    style="font-size: 0.82em; margin-top: 3px; font-weight: bold; min-height: 1.2em; line-height: 1.2;">
+                </div>
+            </div>
+            <div id="transTypeContainer" style="display: none; min-width: 160px;">
+                <label>Transaction Type:</label>
+                <select id="transType" style="width: 100%;" onchange="updateTransHint()">
+                    <option value="All">All</option>
+                    <option value="Revenue">Revenue</option>
+                    <option value="Expense">Expense</option>
+                </select>
+                <div id="transHint"
+                    style="font-size: 0.82em; margin-top: 3px; font-weight: bold; min-height: 1.2em; line-height: 1.2;">
+                </div>
+            </div>
+            <div>
+                <label style="visibility: hidden;">Fetch</label>
+                <button id="fetchBtn" class="fetch-btn" onclick="fetchData()">Fetch Data</button>
+                <div style="font-size: 0.82em; margin-top: 3px; min-height: 1.2em;"></div>
+            </div>
 
-  <div class="controls">
-    <div id="dateStartBox">
-      <label>From Date:</label>
-      <input type="date" id="startDate" onclick="this.showPicker&&this.showPicker()">
-      <div style="font-size:0.82em;margin-top:3px;min-height:1.2em;"></div>
+        </div>
+
+        <!-- [Point 5 FIX] CSS spinner instead of external Imgur image -->
+        <div id="loader"><span class="css-spinner"></span> Fetching data, please wait...</div>
+        <div id="dashboard" class="dashboard"></div>
+        <div id="content"></div>
+
+        <div class="pagination" id="pagin">
+            <button class="p-btn" id="prevB" onclick="changePage(-1)">Previous</button>
+            <span id="pageTxt" style="font-weight: bold; color: #2c3e50;"></span>
+            <button class="p-btn" id="nextB" onclick="changePage(1)">Next</button>
+            <select id="pageSize" class="page-size-select" onchange="changePageSize()">
+                <option value="10">10 / page</option>
+                <option value="20">20 / page</option>
+                <option value="50">50 / page</option>
+                <option value="all">View All</option>
+            </select>
+        </div>
     </div>
-    <div id="dateEndBox">
-      <label>To Date:</label>
-      <input type="date" id="endDate" onclick="this.showPicker&&this.showPicker()">
-      <div style="font-size:0.82em;margin-top:3px;min-height:1.2em;"></div>
-    </div>
-    <div id="categoryContainer" style="display:none;min-width:160px;max-width:190px;">
-      <label>Expense Category:</label>
-      <select id="expCategory" style="width:100%;">
-        <option value="All">All Categories</option>
-      </select>
-      <div id="catHint" style="font-size:0.82em;margin-top:3px;font-weight:bold;min-height:1.2em;line-height:1.2;"></div>
-    </div>
-    <div id="methodContainer" style="display:none;min-width:160px;max-width:190px;">
-      <label>Payment Method:</label>
-      <select id="payMethod" style="width:100%;">
-        <option value="">-- Select Method --</option>
-        <option value="All">All Payments</option>
-      </select>
-      <div id="searchHint" style="font-size:0.82em;margin-top:3px;font-weight:bold;min-height:1.2em;line-height:1.2;"></div>
-    </div>
-    <div id="transTypeContainer" style="display:none;min-width:160px;">
-      <label>Transaction Type:</label>
-      <select id="transType" style="width:100%;" onchange="updateTransHint()">
-        <option value="All">All</option>
-        <option value="Revenue">Revenue</option>
-        <option value="Expense">Expense</option>
-      </select>
-      <div id="transHint" style="font-size:0.82em;margin-top:3px;font-weight:bold;min-height:1.2em;line-height:1.2;"></div>
-    </div>
-    <div>
-      <label style="visibility:hidden;">Fetch</label>
-      <button id="fetchBtn" class="fetch-btn" onclick="fetchData()">Fetch Data</button>
-      <div style="font-size:0.82em;margin-top:3px;min-height:1.2em;"></div>
-    </div>
-  </div>
 
-  <div id="loader"><span class="css-spinner"></span> Fetching data, please wait...</div>
-  <div id="dashboard" class="dashboard"></div>
-  <div id="content"></div>
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbw2z8p7SYQsd76L2vdtPyZR4jecKMJq_trlrPjmA6Hhl751uig2Wms8g8Lse49QyL_y/exec";
 
-  <div class="pagination" id="pagin">
-    <button class="p-btn" id="prevB" onclick="changePage(-1)">Previous</button>
-    <span id="pageTxt" style="font-weight:bold;color:#2c3e50;"></span>
-    <button class="p-btn" id="nextB" onclick="changePage(1)">Next</button>
-    <select id="pageSize" onchange="changePageSize()">
-      <option value="10">10 / page</option>
-      <option value="20">20 / page</option>
-      <option value="50">50 / page</option>
-      <option value="all">View All</option>
-    </select>
-  </div>
+        function updateTransHint() {
+            let val = document.getElementById('transType').value;
+            let hint = document.getElementById('transHint');
+            if (val === 'All') hint.innerHTML = "";
+            else if (val === 'Revenue') hint.innerHTML = "📥 <span style='color:#27ae60;'><b>Only Revenue</b> Shown</span>";
+            else if (val === 'Expense') hint.innerHTML = "📤 <span style='color:#c0392b;'><b>Only Expense</b> Shown</span>";
+        }
 
-</div>
+        // [Point 3 FIX] Default tab is now 'revenue' (was 'guests')
+        let currentTab = 'revenue'; let globalData = []; let curPage = 1; let perPage = 10; let activeGuestFilter = 'all';
+        window.lastAnalyticsData = null;
 
-<script>
-// ============================================================
-//  PASTE YOUR DEPLOYED APPS SCRIPT URL HERE
-// ============================================================
-const API_URL = "https://script.google.com/macros/s/AKfycbwzvP6RGbBYv1CE98_gqNKrOj-x4IvCSEwkEdjbjqCl0zeVQU4NTYROoZdIUyAnUkUhow/exec";
+        // Per-tab state: caches fetched data so tab-switching doesn't lose it
+        let tabCache = { revenue: null, expenses: null, search: null, analytics: null };
+        let tabFetching = { revenue: false, expenses: false, search: false, analytics: false };
 
-// ============================================================
-//  STATE
-// ============================================================
-let allData          = null;
-let allDataTimestamp = null;              // when allData was last fetched
-const DATA_MAX_AGE_MS = 60 * 60 * 1000;  // 1 hour in milliseconds
-let currentTab       = 'revenue';
-let globalData       = [];
-let curPage          = 1;
-let perPage          = 10;
-let activeGuestFilter= 'all';
-let chartsReady      = false;
-let isFetching       = false;
-let fetchTab         = null;  // which tab initiated the current/last fetch
-let tabCache         = { revenue: null, expenses: null, search: null, analytics: null };
-// Per-tab independent date memory
-let tabDates         = {
-  revenue:  { start: '2026-04-01', end: '2026-04-30' },
-  expenses: { start: '2026-04-01', end: '2026-04-30' },
-  search:   { start: '2026-04-01', end: '2026-04-30' },
-};
+        // [Point 4 FIX] Track whether Google Charts is ready
+        let chartsReady = false;
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(function () { chartsReady = true; });
 
-function isDataStale() {
-  if (!allData || !allDataTimestamp) return true;
-  return (Date.now() - allDataTimestamp) > DATA_MAX_AGE_MS;
-}
+        window.addEventListener('load', function () {
+            document.getElementById('payMethod').addEventListener('change', function () {
+                let hint = document.getElementById('searchHint');
+                if (this.value === "") hint.innerText = "";
+                else if (this.value === "All Payments") hint.innerHTML = "";
+                else hint.innerHTML = "🎯 <span style='color:#27ae60;'>Only <b>" + this.value + "</b> Payments.</span>";
+            });
+            document.getElementById('expCategory').addEventListener('change', function () {
+                let hint = document.getElementById('catHint');
+                if (this.value === "All Categories") hint.innerHTML = "📂 <span style='color:#2980b9;'>Showing results for <b>All Categories</b>.</span>";
+                else hint.innerHTML = "🎯 <span style='color:#d35400;'>Showing results for <b>" + this.value + "</b> only.</span>";
+            });
+        });
 
-function clearDataCache() {
-  allData          = null;
-  allDataTimestamp = null;
-  tabCache         = { revenue: null, expenses: null, search: null, analytics: null };
-}
+        window.addEventListener('resize', function () {
+            if (currentTab === 'analytics' && window.lastAnalyticsData && chartsReady) {
+                drawDonut(window.lastAnalyticsData.revenueComparison, 'foodRoomChart');
+                drawDonut(window.lastAnalyticsData.revenueMode, 'cashOnlineChart');
+                drawDonut(window.lastAnalyticsData.incomeAnalysis, 'incomeExpChart', { "Total Expense": '#e74c3c', "Net Profit": '#2ecc71' });
+                drawDonut(window.lastAnalyticsData.expenseCategoryWise, 'expCatChart');
+                drawDonut(window.lastAnalyticsData.expenseMode, 'expModeChart');
+            }
+            if (currentTab !== 'analytics' && globalData && globalData.length > 0) {
+                renderUI();
+            }
+        });
 
-// ============================================================
-//  INIT
-// ============================================================
-google.charts.load('current', { packages: ['corechart'] });
-google.charts.setOnLoadCallback(() => { chartsReady = true; });
+        function switchTab(tabName, btnElement) {
+            currentTab = tabName; activeGuestFilter = 'all';
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btnElement.classList.add('active');
+            hideAlert();
 
-(function init() {
-  // Hardcoded to April 2026 — dates outside this month are blocked
-  const first = '2026-04-01';
-  const lastS = '2026-04-30';
+            let isAnalytics = (tabName === 'analytics');
+            document.getElementById('dateStartBox').style.display = isAnalytics ? 'none' : 'flex';
+            document.getElementById('dateEndBox').style.display = isAnalytics ? 'none' : 'flex';
+            document.getElementById('fetchBtn').style.display = '';
 
-  ['startDate', 'endDate'].forEach((id, i) => {
-    const el = document.getElementById(id);
-    el.value = i === 0 ? first : lastS;
-    el.min   = first;
-    el.max   = lastS;
-  });
+            document.getElementById('methodContainer').style.display = (tabName === 'search') ? 'flex' : 'none';
+            document.getElementById('transTypeContainer').style.display = (tabName === 'search') ? 'flex' : 'none';
+            document.getElementById('categoryContainer').style.display = (tabName === 'expenses') ? 'flex' : 'none';
 
-  document.getElementById('headerSubtitle').innerHTML = '🏨 Viable Inn | 📅 April 2026';
-  document.title = 'Viable Inn — April 2026';
+            // If a fetch is in progress for THIS tab, show loader; otherwise hide it
+            if (tabFetching[tabName]) {
+                document.getElementById('loader').style.display = 'block';
+                document.getElementById('content').innerHTML = '';
+                document.getElementById('dashboard').style.display = 'none';
+                document.getElementById('pagin').style.display = 'none';
+                document.getElementById('fetchBtn').disabled = true;
+                document.getElementById('fetchBtn').textContent = 'Fetching...';
+                return;
+            }
 
-  document.getElementById('payMethod').addEventListener('change', function() {
-    const h = document.getElementById('searchHint');
-    if (!this.value)            h.innerText = '';
-    else if (this.value === 'All') h.innerHTML = "📊 Showing <b>All Payment Methods</b>";
-    else h.innerHTML = `🎯 <span style='color:#27ae60;'>Only <b>${this.value}</b> Payments</span>`;
-  });
+            document.getElementById('loader').style.display = 'none';
 
-  document.getElementById('expCategory').addEventListener('change', function() {
-    const h = document.getElementById('catHint');
-    if (this.value === 'All') h.innerHTML = `📂 <span style='color:#2980b9;'>Showing <b>All Categories</b></span>`;
-    else h.innerHTML = `🎯 <span style='color:#d35400;'>Showing <b>${this.value}</b> only</span>`;
-  });
+            // Restore cached data if available
+            if (tabCache[tabName]) {
+                restoreTabData(tabName);
+            } else {
+                document.getElementById('content').innerHTML = '';
+                document.getElementById('dashboard').style.display = 'none';
+                document.getElementById('pagin').style.display = 'none';
+            }
 
-  // Silent pre-load of dropdown values on page open (no loader shown)
-  fetch(API_URL + '?action=getDropdown')
-    .then(r => r.json())
-    .then(data => { if (!data.error) populateDropdowns(data); })
-    .catch(() => { /* silent fail — dropdowns stay with default static options */ });
-})();
+            document.getElementById('fetchBtn').disabled = false;
+            document.getElementById('fetchBtn').textContent = 'Fetch Data';
+        }
 
-window.addEventListener('resize', () => {
-  if (currentTab === 'analytics' && tabCache.analytics && chartsReady) drawAnalyticsCharts(tabCache.analytics);
-  else if (globalData.length > 0) renderUI();
-});
+        function restoreTabData(tabName) {
+            let cached = tabCache[tabName];
+            if (tabName === 'analytics') {
+                renderAnalytics(cached.analyticsData);
+                return;
+            }
+            // Restore input controls to match cached data
+            if (cached.inputs) {
+                document.getElementById('startDate').value = cached.inputs.startDate || '';
+                document.getElementById('endDate').value = cached.inputs.endDate || '';
+                if (tabName === 'expenses' && cached.inputs.category) {
+                    document.getElementById('expCategory').value = cached.inputs.category;
+                }
+                if (tabName === 'search') {
+                    if (cached.inputs.method) document.getElementById('payMethod').value = cached.inputs.method;
+                    if (cached.inputs.transType) document.getElementById('transType').value = cached.inputs.transType;
+                    updateTransHint();
+                }
+            }
+            globalData = cached.data;
+            curPage = cached.page || 1;
+            perPage = cached.perPage || 10;
+            if (tabName === 'revenue') activeGuestFilter = cached.filter || 'all';
+            document.getElementById('pageSize').value = cached.pageSizeVal || '10';
+            renderDashboard(cached.dashboard);
+            renderUI();
+        }
 
-// When tab regains focus (e.g. user switches back on mobile),
-// silently expire stale data so the next Fetch click goes to the server.
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible' && isDataStale()) {
-    clearDataCache();
-    // Clear rendered content on all tabs so user knows data is stale
-    globalData = [];
-    document.getElementById('content').innerHTML   = '';
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('pagin').style.display     = 'none';
-  }
-});
+        function showModernAlert(msg) { const bar = document.getElementById('alertBar'); bar.innerText = msg; bar.style.display = 'block'; setTimeout(() => { bar.style.opacity = '1'; }, 10); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+        function hideAlert() { const bar = document.getElementById('alertBar'); bar.style.opacity = '0'; setTimeout(() => { if (bar.style.opacity === '0') bar.style.display = 'none'; }, 400); }
+        function formatDateStr(htmlDate) { let parts = htmlDate.split('-'); return `${parts[2]}/${parts[1]}/${parts[0]}`; }
 
-// ============================================================
-//  TAB SWITCHING
-// ============================================================
-function switchTab(tab, btn) {
-  // Save current date values to the tab we're leaving (not analytics — it has no pickers)
-  if (currentTab !== 'analytics') {
-    tabDates[currentTab] = {
-      start: document.getElementById('startDate').value,
-      end:   document.getElementById('endDate').value
-    };
-  }
+        function fetchData() {
+            hideAlert(); document.getElementById('content').innerHTML = ''; document.getElementById('dashboard').style.display = 'none'; document.getElementById('pagin').style.display = 'none';
+            document.getElementById('loader').style.display = 'block';
+            let fetchBtn = document.getElementById('fetchBtn');
+            fetchBtn.disabled = true;
+            fetchBtn.textContent = 'Fetching...';
 
-  currentTab = tab; activeGuestFilter = 'all';
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  hideAlert();
+            let fetchTab = currentTab;
+            tabFetching[fetchTab] = true;
 
-  const isAnalytics = tab === 'analytics';
-  document.getElementById('dateStartBox').style.display    = isAnalytics ? 'none' : 'flex';
-  document.getElementById('dateEndBox').style.display      = isAnalytics ? 'none' : 'flex';
-  document.getElementById('categoryContainer').style.display = tab === 'expenses' ? 'flex' : 'none';
-  document.getElementById('methodContainer').style.display   = tab === 'search'   ? 'flex' : 'none';
-  document.getElementById('transTypeContainer').style.display= tab === 'search'   ? 'flex' : 'none';
+            if (fetchTab === 'analytics') {
+                function doAnalyticsFetch() {
+                    fetch(API_URL + "?action=getFullAnalyticsData")
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.error) throw new Error(data.error);
+                            tabFetching.analytics = false;
+                            tabCache.analytics = { analyticsData: data };
+                            if (currentTab === 'analytics') {
+                                renderAnalytics(data);
+                                document.getElementById('loader').style.display = 'none';
+                                document.getElementById('fetchBtn').disabled = false;
+                                document.getElementById('fetchBtn').textContent = 'Fetch Data';
+                            }
+                        })
+                        .catch(err => { tabFetching[fetchTab] = false; handleErr(err); });
+                }
+                if (!chartsReady) {
+                    google.charts.setOnLoadCallback(function () { chartsReady = true; doAnalyticsFetch(); });
+                } else {
+                    doAnalyticsFetch();
+                }
+                return;
+            }
 
-  // Load this tab's own saved dates into the inputs
-  if (!isAnalytics) {
-    document.getElementById('startDate').value = tabDates[tab].start;
-    document.getElementById('endDate').value   = tabDates[tab].end;
-  }
+            let sDate = document.getElementById('startDate').value;
+            let eDate = document.getElementById('endDate').value;
 
-  // If a fetch is in progress, just update the active tab visually — don't render anything
-  if (isFetching) return;
+            if (!sDate || !eDate) { document.getElementById('loader').style.display = 'none'; document.getElementById('fetchBtn').disabled = false; document.getElementById('fetchBtn').textContent = 'Fetch Data'; tabFetching[fetchTab] = false; showModernAlert("⚠️ Attention: Please select both From and To dates to proceed!"); return; }
+            if (new Date(sDate) > new Date(eDate)) { document.getElementById('loader').style.display = 'none'; document.getElementById('fetchBtn').disabled = false; document.getElementById('fetchBtn').textContent = 'Fetch Data'; tabFetching[fetchTab] = false; showModernAlert("🚫 Invalid Range: End Date cannot be before Start Date!"); return; }
 
-  document.getElementById('fetchBtn').disabled    = false;
-  document.getElementById('fetchBtn').textContent = 'Fetch Data';
+            if (fetchTab === 'search') {
+                let sel = document.getElementById('payMethod').value;
+                if (!sel || sel === "") { document.getElementById('loader').style.display = 'none'; document.getElementById('fetchBtn').disabled = false; document.getElementById('fetchBtn').textContent = 'Fetch Data'; tabFetching[fetchTab] = false; showModernAlert("⚠️ Please select one option to proceed with the payment search!"); return; }
+            }
 
-  if (tabCache[tab]) {
-    // This tab has been explicitly fetched before — restore its cached data
-    restoreFromCache(tab);
-  } else {
-    // Tab has never been fetched — show nothing until user clicks Fetch
-    document.getElementById('content').innerHTML   = '';
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('pagin').style.display     = 'none';
-  }
-}
+            let startF = formatDateStr(sDate); let endF = formatDateStr(eDate);
+            let url = API_URL;
+            let fetchInputs = { startDate: sDate, endDate: eDate };
 
-// ============================================================
-//  FETCH DATA
-// ============================================================
-function fetchData() {
-  hideAlert();
+            if (fetchTab === 'revenue') {
+                url += `?action=getGuestsData&start=${startF}&end=${endF}`;
+            } else if (fetchTab === 'expenses') {
+                let cat = document.getElementById('expCategory').value;
+                fetchInputs.category = cat;
+                url += `?action=getExpensesData&start=${startF}&end=${endF}&cat=${encodeURIComponent(cat)}`;
+            } else if (fetchTab === 'search') {
+                let sel = document.getElementById('payMethod').value;
+                let tType = document.getElementById('transType').value;
+                fetchInputs.method = sel;
+                fetchInputs.transType = tType;
+                url += `?action=getPaymentSearchData&start=${startF}&end=${endF}&method=${encodeURIComponent(sel)}&type=${encodeURIComponent(tType)}`;
+            }
 
-  if (currentTab !== 'analytics') {
-    const s = document.getElementById('startDate').value;
-    const e = document.getElementById('endDate').value;
-    if (!s || !e)                  { showAlert('⚠️ Please select both From and To dates!'); return; }
-    if (new Date(s) > new Date(e)) { showAlert('🚫 End Date cannot be before Start Date!'); return; }
-  }
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.error) throw new Error(data.error);
+                    tabFetching[fetchTab] = false;
+                    onDataSuccess(data, fetchTab, fetchInputs);
+                })
+                .catch(err => { tabFetching[fetchTab] = false; handleErr(err); });
+        }
 
-  if (currentTab === 'search' && !document.getElementById('payMethod').value)
-    { showAlert('⚠️ Please select a Payment Method!'); return; }
+        function handleErr(err) { showModernAlert("❌ Error: " + err.message); document.getElementById('loader').style.display = 'none'; document.getElementById('fetchBtn').disabled = false; document.getElementById('fetchBtn').textContent = 'Fetch Data'; }
 
-  fetchTab = currentTab; // record which tab owns this fetch
+        function onDataSuccess(response, fetchTab, fetchInputs) {
+            let dataForTab;
+            if (fetchTab === 'revenue') dataForTab = response.guests;
+            else if (fetchTab === 'expenses') dataForTab = response.expenses;
+            else if (fetchTab === 'search') dataForTab = response.records;
 
-  document.getElementById('content').innerHTML      = '';
-  document.getElementById('dashboard').style.display = 'none';
-  document.getElementById('pagin').style.display     = 'none';
-  document.getElementById('loader').style.display    = 'block';
-  document.getElementById('fetchBtn').disabled       = true;
-  document.getElementById('fetchBtn').textContent    = 'Fetching...';
+            let dashData;
+            if (fetchTab === 'search') {
+                dashData = { totalReceived: response.totalReceived, totalPaid: response.totalPaid, method: fetchInputs.method, tType: fetchInputs.transType };
+            } else {
+                dashData = response.dashboard;
+            }
 
-  function onDataReady() {
-    document.getElementById('loader').style.display = 'none';
-    document.getElementById('fetchBtn').disabled    = false;
-    document.getElementById('fetchBtn').textContent = 'Fetch Data';
+            // Cache the data for this tab including input state
+            tabCache[fetchTab] = { data: dataForTab, dashboard: dashData, page: 1, perPage: 10, pageSizeVal: '10', filter: 'all', inputs: fetchInputs };
 
-    // Process + cache result for the tab that initiated the fetch
-    processAndCache(fetchTab);
+            // Only render if still on the same tab
+            if (currentTab === fetchTab) {
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('fetchBtn').disabled = false;
+                document.getElementById('fetchBtn').textContent = 'Fetch Data';
+                globalData = dataForTab;
+                curPage = 1; perPage = 10;
+                if (fetchTab === 'revenue') activeGuestFilter = 'all';
 
-    // Only render if user is still on the same tab that clicked Fetch
-    if (currentTab === fetchTab) restoreFromCache(fetchTab);
-    // If user switched away — they see blank on new tab (correct)
-    // They'll see data when they switch back to fetchTab
-  }
+                if (!globalData || globalData.length === 0) { document.getElementById('content').innerHTML = "<h3 style='text-align:center; color:#7f8c8d; margin-top:40px;'>No records found for the selected criteria.</h3>"; return; }
 
-  if (allData && !isDataStale()) {
-    // Raw data cached and still fresh — skip API call, just re-process
-    isFetching = false;
-    onDataReady();
-  } else {
-    // First ever fetch — call the API
-    isFetching = true;
-    fetch(API_URL + '?action=getAll')
-      .then(r => r.json())
-      .then(data => {
-        if (data.error) throw new Error(data.error);
-        allData          = data;
-        allDataTimestamp = Date.now(); // record fetch time for expiry check
-        normalizeAllDates(allData); // fix any non-yyyy-MM-dd date strings
-        isFetching = false;
-        populateDropdowns(data.dropdown);
-        onDataReady();
-      })
-      .catch(err => {
-        isFetching = false;
-        document.getElementById('loader').style.display = 'none';
-        document.getElementById('fetchBtn').disabled    = false;
-        document.getElementById('fetchBtn').textContent = 'Fetch Data';
-        showAlert('❌ Error: ' + err.message);
-      });
-  }
-}
+                renderDashboard(dashData);
+                document.getElementById('pageSize').value = '10'; renderUI();
+            }
+        }
 
-function populateDropdowns(dropdown) {
-  if (!dropdown) return;
-  const pay     = document.getElementById('payMethod');
-  const savedPay = pay.value; // preserve user's selection
-  pay.innerHTML  = '<option value="">-- Select Method --</option><option value="All">All Payments</option>';
-  (dropdown.paymentMethods || []).forEach(m => pay.innerHTML += `<option value="${m}">${m}</option>`);
-  if (savedPay) pay.value = savedPay; // restore — no-op if option no longer exists
+        function filterZeros(dataObj) {
+            let filtered = {};
+            for (let key in dataObj) {
+                if (dataObj[key] > 0) filtered[key] = dataObj[key];
+            }
+            return filtered;
+        }
 
-  const cat      = document.getElementById('expCategory');
-  const savedCat = cat.value; // preserve user's selection
-  cat.innerHTML  = '<option value="All">All Categories</option>';
-  (dropdown.expenseCategories || []).forEach(c => cat.innerHTML += `<option value="${c}">${c}</option>`);
-  if (savedCat) cat.value = savedCat; // restore — no-op if option no longer exists
-}
+        // --- ANALYTICS RENDERER ---
+        function renderAnalytics(data) {
+            document.getElementById('loader').style.display = 'none';
+            window.lastAnalyticsData = data;
 
-// Converts any date string format to "yyyy-MM-dd"
-// Handles: "2026-04-01", "Wed Apr 01 2026...", "2026-04-01T18:30:00.000Z", etc.
-function normalizeDateStr(val) {
-  if (!val) return '';
-  if (/^\d{4}-\d{2}-\d{2}$/.test(val)) return val; // already correct
-  const d = new Date(val);
-  if (isNaN(d.getTime())) return val; // unparseable — return as-is
-  // Use local date parts to avoid UTC day-shift
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${y}-${m}-${day}`;
-}
+            let netBal = data.totalRevenue - data.grandTotalExp;
+            let balColor = netBal >= 0 ? '#27ae60' : '#c0392b';
 
-function normalizeAllDates(data) {
-  (data.guests   || []).forEach(g => { g.checkOutDate = normalizeDateStr(g.checkOutDate); });
-  (data.expenses || []).forEach(e => { e.date         = normalizeDateStr(e.date); });
-}
-
-// processAndCache — reads current UI filter values, processes allData, stores in tabCache[tab]
-function processAndCache(tab) {
-  const sDate = document.getElementById('startDate').value;
-  const eDate = document.getElementById('endDate').value;
-
-  if (tab === 'analytics') {
-    // Analytics always uses full month — date pickers are hidden on this tab
-    // so they may hold stale values from another tab
-    const aStart = '2026-04-01';
-    const aEnd   = '2026-04-30';
-    const guests   = filterByDate(allData.guests   || [], 'checkOutDate', aStart, aEnd);
-    const expenses = filterByDate(allData.expenses || [], 'date',         aStart, aEnd);
-    const totalFood = guests.reduce((s, g) => s + g.food.total, 0);
-    const totalRoom = guests.reduce((s, g) => s + g.room.total, 0);
-    const totalRev  = totalFood + totalRoom;
-    const totalExp  = expenses.reduce((s, d) => s + d.dailyTotal, 0);
-    const netProfit = totalRev - totalExp;
-    const revenueSource = { '🍴 Food': totalFood, '🛏️ Room': totalRoom };
-    const revByMethod = {}, expByCategory = {}, expByMethod = {};
-    guests.forEach(g => [...g.food.pairs, ...g.room.pairs].forEach(p => {
-      if (p.paymentMethod) revByMethod[p.paymentMethod] = (revByMethod[p.paymentMethod] || 0) + p.amount;
-    }));
-    expenses.forEach(d => d.entries.forEach(e => {
-      expByCategory[e.type]        = (expByCategory[e.type] || 0) + e.amount;
-      expByMethod[e.paymentMethod] = (expByMethod[e.paymentMethod] || 0) + e.amount;
-    }));
-    tabCache.analytics = { totalRev, totalExp, netProfit, revenueSource, revByMethod, expByCategory, expByMethod };
-    return;
-  }
-
-  if (tab === 'revenue') {
-    const guests = filterByDate(allData.guests || [], 'checkOutDate', sDate, eDate);
-    const dash   = computeRevenueDash(guests);
-    tabCache.revenue = guests.length ? { data: guests, dash } : null;
-
-  } else if (tab === 'expenses') {
-    const expenses = filterByDate(allData.expenses || [], 'date', sDate, eDate);
-    const category = document.getElementById('expCategory').value;
-    const filtered = category === 'All' ? expenses : expenses.map(d => ({
-      ...d,
-      entries:    d.entries.filter(e => e.type === category),
-      dailyTotal: d.entries.filter(e => e.type === category).reduce((s, e) => s + e.amount, 0)
-    })).filter(d => d.entries.length > 0);
-    const dash = computeExpenseDash(expenses, category);
-    tabCache.expenses = filtered.length ? { data: filtered, dash } : null;
-
-  } else if (tab === 'search') {
-    const method    = document.getElementById('payMethod').value;
-    const transType = document.getElementById('transType').value;
-    const rows      = buildSearchRows(allData.guests || [], allData.expenses || [], sDate, eDate, method, transType);
-    const dash      = computeSearchDash(rows, method, transType);
-    tabCache.search = rows.length ? { data: rows, dash } : null;
-  }
-}
-
-// restoreFromCache — renders whatever is stored in tabCache[tab]
-function restoreFromCache(tab) {
-  if (tab === 'analytics') {
-    if (!tabCache.analytics) { showNoRecords(); return; }
-    renderAnalyticsFromCache(tabCache.analytics);
-    return;
-  }
-
-  const cache = tabCache[tab];
-  if (!cache) { showNoRecords(); return; }
-
-  curPage = 1; perPage = 10;
-  document.getElementById('pageSize').value = '10';
-  globalData = cache.data;
-  renderDashboard(tab, cache.dash);
-  renderUI();
-}
-
-// ============================================================
-//  DATE UTILS
-// ============================================================
-function filterByDate(arr, field, s, e) {
-  if (!s || !e) return arr;
-  return arr.filter(item => item[field] >= s && item[field] <= e);
-}
-
-function fmtDate(iso) {
-  if (!iso) return '';
-  const [y, m, d] = iso.split('-');
-  return `${d}/${m}/${y}`;
-}
-
-function updateTransHint() {
-  const v = document.getElementById('transType').value;
-  const h = document.getElementById('transHint');
-  if (v === 'All')     h.innerHTML = '';
-  else if (v === 'Revenue') h.innerHTML = "📥 <span style='color:#27ae60;'><b>Only Revenue</b></span>";
-  else                 h.innerHTML = "📤 <span style='color:#c0392b;'><b>Only Expense</b></span>";
-}
-
-// ============================================================
-//  COMPUTE DASHBOARD DATA
-// ============================================================
-function computeRevenueDash(guests) {
-  let totalFood = 0, totalRoom = 0;
-  const methods = {};
-  guests.forEach(g => {
-    totalFood += g.food.total;
-    totalRoom += g.room.total;
-    [...g.food.pairs, ...g.room.pairs].forEach(p => {
-      if (p.paymentMethod) methods[p.paymentMethod] = (methods[p.paymentMethod] || 0) + p.amount;
-    });
-  });
-  return { totalFood, totalRoom, grandTotal: totalFood + totalRoom, methods };
-}
-
-function computeExpenseDash(expenses, category) {
-  const byCategory = {}, byMethod = {};
-  let grandTotal = 0;
-  expenses.forEach(day => {
-    day.entries.forEach(e => {
-      if (category !== 'All' && e.type !== category) return;
-      byCategory[e.type]          = (byCategory[e.type] || 0) + e.amount;
-      byMethod[e.paymentMethod]   = (byMethod[e.paymentMethod] || 0) + e.amount;
-      grandTotal += e.amount;
-    });
-  });
-  return { byCategory, byMethod, grandTotal, category };
-}
-
-function buildSearchRows(guests, expenses, sDate, eDate, method, transType) {
-  const gFiltered = filterByDate(guests, 'checkOutDate', sDate, eDate);
-  const eFiltered = filterByDate(expenses, 'date', sDate, eDate);
-  const dateMap   = {};
-
-  if (transType !== 'Expense') {
-    gFiltered.forEach(g => {
-      const matchingPairs = [...g.food.pairs, ...g.room.pairs].filter(p =>
-        method === 'All' || p.paymentMethod === method
-      );
-      if (!matchingPairs.length) return;
-      if (!dateMap[g.checkOutDate]) dateMap[g.checkOutDate] = { date: g.checkOutDate, incomes: [], expenseEntries: [] };
-      dateMap[g.checkOutDate].incomes.push({
-        guestName: g.guestName || '(No Name)',
-        foodTotal: g.food.pairs.filter(p => method==='All'||p.paymentMethod===method).reduce((s,p)=>s+p.amount,0),
-        roomTotal: g.room.pairs.filter(p => method==='All'||p.paymentMethod===method).reduce((s,p)=>s+p.amount,0),
-        pairs:     matchingPairs
-      });
-    });
-  }
-
-  if (transType !== 'Revenue') {
-    eFiltered.forEach(day => {
-      const matching = day.entries.filter(e => method === 'All' || e.paymentMethod === method);
-      if (!matching.length) return;
-      if (!dateMap[day.date]) dateMap[day.date] = { date: day.date, incomes: [], expenseEntries: [] };
-      matching.forEach(e => dateMap[day.date].expenseEntries.push(e));
-    });
-  }
-
-  return Object.values(dateMap).sort((a, b) => a.date.localeCompare(b.date));
-}
-
-function computeSearchDash(rows, method, transType) {
-  let totalReceived = 0, totalPaid = 0;
-  rows.forEach(r => {
-    (r.incomes || []).forEach(i => totalReceived += i.pairs.reduce((s,p)=>s+p.amount,0));
-    (r.expenseEntries || []).forEach(e => totalPaid += e.amount);
-  });
-  return { totalReceived, totalPaid, method, transType };
-}
-
-// ============================================================
-//  RENDER DASHBOARD
-// ============================================================
-function renderDashboard(type, d) {
-  const dash = document.getElementById('dashboard');
-  dash.style.display = 'block';
-  let html = '<h3>📊 Range Summary</h3>';
-
-  if (type === 'revenue') {
-    // Sort method amounts descending
-    const methHtml = Object.entries(d.methods)
-      .sort((a, b) => b[1] - a[1])
-      .map(([m, a]) =>
-        `<li style="margin-bottom:8px;padding-left:10px;border-left:3px solid #3498db;font-size:1.05em;color:#34495e;">
-          ${m}: <b style="float:right;">₹${fmt(a)}</b></li>`).join('');
-
-    // Compute per-filter guest counts to enable/disable chips
-    const guests    = globalData;
-    const cntAll    = guests.length;
-    const cntFood   = guests.filter(g => g.food.total > 0 && g.room.total === 0).length;
-    const cntRoom   = guests.filter(g => g.room.total > 0 && g.food.total === 0).length;
-    const cntBoth   = guests.filter(g => g.food.total > 0 && g.room.total > 0).length;
-    const cntZero   = guests.filter(g => g.grandTotal === 0).length;
-
-    const chip = (key, label, count) => {
-      const isActive  = activeGuestFilter === key;
-      const isDisabled = count === 0 && key !== 'all';
-      return `<button class="filter-chip ${isActive ? 'active' : ''}" 
-        onclick="applyFilter('${key}',event)" ${isDisabled ? 'disabled' : ''}>
-        ${label} ${isDisabled ? '(0)' : ''}</button>`;
-    };
-
-    html += `<div class="dash-grid">
-      <div class="dash-card">
-        <div style="margin-bottom:10px;font-size:1.15em;color:#2c3e50;"><b>🍴 Total Food:</b> <span style="color:#27ae60;float:right;">₹${fmt(d.totalFood)}</span></div>
-        <div style="font-size:1.15em;color:#2c3e50;"><b>🛏️ Total Room:</b> <span style="color:#27ae60;float:right;">₹${fmt(d.totalRoom)}</span></div>
-        <div style="margin-top:15px;border-top:2px dashed #bdc3c7;padding-top:10px;font-size:1.2em;color:#d35400;text-align:right;"><b>Total: ₹${fmt(d.grandTotal)}</b></div>
+            let html = `
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:15px; margin-bottom:20px;">
+        <div style="background:#2980b9; color:white; padding:15px; border-radius:10px; text-align:center;">
+          <small>Total Revenue</small><br><b style="font-size:1.6em;">₹${data.totalRevenue.toLocaleString('en-IN')}</b>
+        </div>
+        <div style="background:#e67e22; color:white; padding:15px; border-radius:10px; text-align:center;">
+          <small>Total Expenses</small><br><b style="font-size:1.6em;">₹${data.grandTotalExp.toLocaleString('en-IN')}</b>
+        </div>
+        <div style="background:${balColor}; color:white; padding:15px; border-radius:10px; text-align:center;">
+          <small>Net Profit/Loss</small><br><b style="font-size:1.6em;">₹${netBal.toLocaleString('en-IN')}</b>
+        </div>
       </div>
-      <div class="dash-card">
-        <b style="color:#2c3e50;font-size:1.1em;">💳 Method-wise Total:</b>
-        <ul style="list-style:none;padding-left:0;margin-top:10px;">${methHtml}</ul>
-        <div style="border-top:2px dashed #bdc3c7;padding-top:10px;font-size:1.1em;color:#d35400;text-align:right;"><b>Total: ₹${fmt(d.grandTotal)}</b></div>
-      </div>
-    </div>
-    <div style="background:#2c3e50;color:#fff;padding:15px;border-radius:8px;margin-top:20px;font-size:1.5em;text-align:center;box-shadow:0 4px 6px rgba(0,0,0,0.1);">
-      ✅ Total Revenue: ₹${fmt(d.grandTotal)}
-    </div>
-    <div class="filter-chips">
-      ${chip('all',  '🔁 All (' + cntAll + ')', cntAll)}
-      ${chip('food', '🍴 Only Food', cntFood)}
-      ${chip('room', '🛏️ Only Room', cntRoom)}
-      ${chip('both', '🍴🛏️ Both', cntBoth)}
-      ${chip('zero', '🚫 Zero Payment', cntZero)}
-    </div>
-    <div id="recordCount"></div>`;
-
-  } else if (type === 'expenses') {
-    // Sort category and method amounts descending
-    const catHtml = Object.entries(d.byCategory)
-      .sort((a, b) => b[1] - a[1])
-      .map(([c, a]) =>
-        `<li style="margin-bottom:8px;padding-left:10px;border-left:3px solid #e67e22;font-size:1.05em;color:#34495e;">${c}: <b style="float:right;">₹${fmt(a)}</b></li>`).join('');
-    const methHtml2 = Object.entries(d.byMethod)
-      .sort((a, b) => b[1] - a[1])
-      .map(([m, a]) =>
-        `<li style="margin-bottom:8px;padding-left:10px;border-left:3px solid #3498db;font-size:1.05em;color:#34495e;">${m}: <b style="float:right;">₹${fmt(a)}</b></li>`).join('');
-
-    html += `<div class="dash-grid">
-      <div class="dash-card">
-        <b style="color:#2c3e50;font-size:1.1em;">📂 By Category:</b>
-        <ul style="list-style:none;padding-left:0;margin-top:10px;">${catHtml || '<li style="color:#95a5a6;">No data</li>'}</ul>
-        ${d.category === 'All' ? `<div style="border-top:2px dashed #bdc3c7;padding-top:10px;font-size:1.1em;color:#d35400;text-align:right;"><b>Total: ₹${fmt(d.grandTotal)}</b></div>` : ''}
-      </div>
-      <div class="dash-card">
-        <b style="color:#2c3e50;font-size:1.1em;">💳 By Method:</b>
-        <ul style="list-style:none;padding-left:0;margin-top:10px;">${methHtml2 || '<li style="color:#95a5a6;">No data</li>'}</ul>
-        <div style="border-top:2px dashed #bdc3c7;padding-top:10px;font-size:1.1em;color:#d35400;text-align:right;"><b>Total: ₹${fmt(d.grandTotal)}</b></div>
-      </div>
-    </div>
-    <div style="background:#c0392b;color:#fff;padding:15px;border-radius:8px;margin-top:20px;font-size:1.5em;text-align:center;box-shadow:0 4px 6px rgba(0,0,0,0.1);">
-      📉 Grand Total Expense: ₹${fmt(d.grandTotal)}
-    </div>`;
-
-  } else if (type === 'search') {
-    html += `<div class="dash-grid">`;
-    if (d.transType !== 'Expense') html += `
-      <div style="background:#ebf5fb;padding:20px;border-radius:8px;text-align:center;box-shadow:0 2px 5px rgba(0,0,0,0.05);">
-        <b style="color:#2c3e50;font-size:1.1em;">💰 Total Received${d.method !== 'All' ? ' via ' + d.method.toUpperCase() : ''}</b>
-        <div style="font-size:1.8em;color:#27ae60;font-weight:bold;margin-top:10px;">₹${fmt(d.totalReceived)}</div>
+      <div class="chart-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px;">
+        <div class="chart-box" style="border-top: 5px solid #2ecc71;">
+          <h4 style="text-align:center;">📊 Net Income vs Expense</h4>
+          <div id="incomeExpChart" style="height: 250px;"></div>
+          ${generateAnalyticsTable(data.incomeAnalysis, data.totalRevenue, 'Item')}
+        </div>
+        <div class="chart-box">
+          <h4 style="text-align:center;">🍽️ Revenue Source</h4>
+          <div id="foodRoomChart" style="height: 250px;"></div>
+          ${generateAnalyticsTable(data.revenueComparison, data.totalRevenue, 'Source')}
+        </div>
+        <div class="chart-box">
+          <h4 style="text-align:center;">💳 Revenue Mode</h4>
+          <div id="cashOnlineChart" style="height: 250px;"></div>
+          ${generateAnalyticsTable(data.revenueMode, data.totalRevenue, 'Mode')}
+        </div>
+        <div class="chart-box">
+          <h4 style="text-align:center;">🛠️ Expense Categories</h4>
+          <div id="expCatChart" style="height: 250px;"></div>
+          ${generateAnalyticsTable(data.expenseCategoryWise, data.grandTotalExp, 'Category')}
+        </div>
+        <div class="chart-box">
+          <h4 style="text-align:center;">💰 Expense Mode</h4>
+          <div id="expModeChart" style="height: 250px;"></div>
+          ${generateAnalyticsTable(data.expenseMode, data.grandTotalExp, 'Mode')}
+        </div>
       </div>`;
-    if (d.transType !== 'Revenue') html += `
-      <div style="background:#fef5f5;padding:20px;border-radius:8px;text-align:center;box-shadow:0 2px 5px rgba(0,0,0,0.05);">
-        <b style="color:#2c3e50;font-size:1.1em;">💸 Total Paid${d.method !== 'All' ? ' via ' + d.method.toUpperCase() : ''}</b>
-        <div style="font-size:1.8em;color:#e74c3c;font-weight:bold;margin-top:10px;">₹${fmt(d.totalPaid)}</div>
-      </div>`;
-    html += `</div>`;
-  }
 
-  dash.innerHTML = html;
-}
+            document.getElementById('content').innerHTML = html;
 
-// ============================================================
-//  FILTER CHIPS
-// ============================================================
-function applyFilter(filter, event) {
-  activeGuestFilter = filter;
-  document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-  curPage = 1;
-  renderUI();
-}
+            drawDonut(data.revenueComparison, 'foodRoomChart');
+            drawDonut(data.revenueMode, 'cashOnlineChart');
+            // [Point 8 FIX] Using colorMap object instead of array
+            drawDonut(data.incomeAnalysis, 'incomeExpChart', { "Total Expense": '#e74c3c', "Net Profit": '#2ecc71' });
+            drawDonut(data.expenseCategoryWise, 'expCatChart');
+            drawDonut(data.expenseMode, 'expModeChart');
+        }
 
-function getFilteredData() {
-  if (currentTab !== 'revenue' || activeGuestFilter === 'all') return globalData;
-  return globalData.filter(g => {
-    if (activeGuestFilter === 'food') return g.food.total > 0 && g.room.total === 0;
-    if (activeGuestFilter === 'room') return g.room.total > 0 && g.food.total === 0;
-    if (activeGuestFilter === 'both') return g.food.total > 0 && g.room.total > 0;
-    if (activeGuestFilter === 'zero') return g.grandTotal === 0;
-    return true;
-  });
-}
+        // [Point 4 + 8 FIX] Added chartsReady check + colorMap support
+        function drawDonut(dataObj, elementId, colorMap) {
+            if (!chartsReady) {
+                document.getElementById(elementId).innerHTML = "<p style='text-align:center; color:#95a5a6; margin-top:100px;'>Charts loading...</p>";
+                return;
+            }
+            let filteredObj = filterZeros(dataObj);
+            if (Object.keys(filteredObj).length === 0) {
+                document.getElementById(elementId).innerHTML = "<p style='text-align:center; color:#95a5a6; margin-top:100px;'>No Data Yet</p>";
+                return;
+            }
+            let dataArr = [['Task', 'Value'], ...Object.entries(filteredObj)];
+            let data = google.visualization.arrayToDataTable(dataArr);
+            let options = {
+                pieHole: 0.4,
+                chartArea: { width: '90%', height: '75%' },
+                legend: { position: 'bottom', textStyle: { fontSize: 13, bold: true } },
+                pieSliceText: 'none',
+                tooltip: { trigger: 'focus', showColorCode: true }
+            };
+            // [Point 8 FIX] Build colors array from colorMap, matching only filtered keys in order
+            if (colorMap) {
+                let colors = [];
+                Object.keys(filteredObj).forEach(key => {
+                    if (colorMap[key]) colors.push(colorMap[key]);
+                });
+                if (colors.length > 0) options.colors = colors;
+            }
+            new google.visualization.PieChart(document.getElementById(elementId)).draw(data, options);
+        }
 
-// ============================================================
-//  RENDER UI (table or cards)
-// ============================================================
-function renderUI() {
-  const filtered   = getFilteredData();
-  const mode       = window.innerWidth < 600 ? 'card' : 'table';
-  const pagin      = document.getElementById('pagin');
-  const totalPages = Math.ceil(filtered.length / perPage) || 1;
+        function generateAnalyticsTable(dataObj, total, label) {
+            let filteredObj = filterZeros(dataObj);
+            let sortedEntries = Object.entries(filteredObj).sort((a, b) => b[1] - a[1]);
+            let html = `<div style="overflow-x: auto;"><table class="perc-table"><tr style="background:#f8f9fa;"><th>${label}</th><th>Amount</th><th>%</th></tr>`;
+            let hasData = false;
+            sortedEntries.forEach(([k, v]) => {
+                hasData = true;
+                let perc = total > 0 ? ((v / total) * 100).toFixed(1) : 0;
+                html += `<tr><td><b>${k}</b></td><td>₹${v.toLocaleString('en-IN')}</td><td style="color:#2980b9;"><b>${perc}%</b></td></tr>`;
+            });
+            if (!hasData) html += `<tr><td colspan="3" style="text-align:center; color:#95a5a6;">No Data Yet</td></tr>`;
+            html += `<tr style="background:#f1f7ff; border-top:2px solid #ddd;"><td><b>Grand Total</b></td><td style="white-space: nowrap;"><b>₹${total.toLocaleString('en-IN')}</b></td><td></td></tr></table></div>`;
+            return html;
+        }
 
-  pagin.style.display = 'flex';
+        // --- DASHBOARD RENDERER ---
+        function renderDashboard(d) {
+            let dash = document.getElementById('dashboard');
+            dash.style.display = 'block';
+            let html = `<h3>📊 Range Summary</h3>`;
 
-  const rcEl = document.getElementById('recordCount');
-  if (rcEl) rcEl.innerHTML = `📋 Total Records: <span style="color:#2980b9;font-size:1.15em;">${filtered.length}</span>`;
+            if (currentTab === 'revenue') {
+                let combinedMethods = {};
+                if (d.foodMethods) Object.entries(d.foodMethods).forEach(([m, a]) => combinedMethods[m] = (combinedMethods[m] || 0) + a);
+                if (d.roomMethods) Object.entries(d.roomMethods).forEach(([m, a]) => combinedMethods[m] = (combinedMethods[m] || 0) + a);
 
-  const pageTxt = document.getElementById('pageTxt');
-  const prevB   = document.getElementById('prevB');
-  const nextB   = document.getElementById('nextB');
-  const sizeVal = document.getElementById('pageSize').value;
+                html += `<div class="dash-grid">
+                <div style="background:#fff; padding:15px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.05);">
+                    <div style="margin-bottom:10px; font-size:1.15em; color:#2c3e50;"><b>🍴 Total Food:</b> <span style="color:#27ae60; float:right;">₹${Number(d.totalFood).toLocaleString('en-IN')}</span></div>
+  <div style="font-size:1.15em; color:#2c3e50;"><b>🛏️ Total Room:</b> <span style="color:#27ae60; float:right;">₹${Number(d.totalRoom).toLocaleString('en-IN')}</span></div>
+  <div style="margin-top:15px; border-top:2px dashed #bdc3c7; padding-top:10px; font-size:1.2em; color:#d35400; text-align:right;"><b>Total: ₹${Number(d.grandTotal).toLocaleString('en-IN')}</b></div>
 
-  if (sizeVal === 'all') {
-    pageTxt.innerText = `Showing All ${filtered.length} records`;
-    prevB.style.display = 'none'; nextB.style.display = 'none';
-  } else {
-    pageTxt.innerText = `Page ${curPage} of ${totalPages}`;
-    prevB.style.display = 'inline-block'; nextB.style.display = 'inline-block';
-    prevB.disabled = curPage === 1; nextB.disabled = curPage === totalPages;
-  }
+                </div>
+                                <div style="background:#fff; padding:15px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.05);">
+                  <b style="color:#2c3e50; font-size:1.1em;">💳 Method-wise Total:</b>
+                  <ul style="list-style-type: none; padding-left: 0; margin-top: 10px; margin-bottom: 15px;">
+                    ${Object.entries(combinedMethods).map(([m, a]) => `<li style="margin-bottom:8px; padding-left:10px; border-left:3px solid #3498db; font-size:1.1em; color:#34495e;">${m}: <b style="float:right;">₹${Number(a).toLocaleString('en-IN')}</b></li>`).join('')}
+                  </ul>
+                  <div style="margin-top:auto; border-top:2px dashed #bdc3c7; padding-top:10px; font-size:1.2em; color:#d35400; text-align:right;"><b>Total: ₹${Number(d.grandTotal).toLocaleString('en-IN')}</b></div>
+                </div>
+               </div>
+               <div class="grand-total" style="background:#2c3e50; color:#fff; padding:15px; border-radius:8px; margin-top:20px; font-size:1.5em; box-shadow:0 4px 6px rgba(0,0,0,0.1);">✅ Total Revenue: ₹${Number(d.grandTotal).toLocaleString('en-IN')}</div>
 
-  const start    = (curPage - 1) * perPage;
-  const pageData = filtered.slice(start, start + perPage);
-  document.getElementById('content').innerHTML = mode === 'table' ? buildTable(pageData) : buildCards(pageData);
-}
+               <div class="filter-chips">
+                                  <button class="filter-chip ${activeGuestFilter === 'all' ? 'active' : ''}" onclick="applyGuestFilter('all', event)">🔁 All</button>
+                 <button class="filter-chip ${activeGuestFilter === 'food' ? 'active' : ''}" onclick="applyGuestFilter('food', event)">🍴 Only Food</button>
+                 <button class="filter-chip ${activeGuestFilter === 'room' ? 'active' : ''}" onclick="applyGuestFilter('room', event)">🛏️ Only Room</button>
+                 <button class="filter-chip ${activeGuestFilter === 'both' ? 'active' : ''}" onclick="applyGuestFilter('both', event)">🍴🛏️ Both</button>
+                 <button class="filter-chip ${activeGuestFilter === 'zero' ? 'active' : ''}" onclick="applyGuestFilter('zero', event)">🚫 Zero Payment</button>
 
-// ============================================================
-//  TABLE BUILDER
-// ============================================================
-function buildTable(data) {
-  let html = '';
+               </div>
+               <div id="recordCount"></div>`;
 
-  if (currentTab === 'revenue') {
-    html += `<div class="table-res"><table>
-      <tr><th>Date</th><th>Guest Name</th><th>Food Breakdown</th><th>Food Total</th><th>Room Breakdown</th><th>Room Total</th><th>Grand Total</th></tr>`;
-    data.forEach(g => {
-      const fStr = g.food.pairs.map(p => `${p.paymentMethod}: ₹${fmt(p.amount)}`).join('<br>') || '-';
-      const rStr = g.room.pairs.map(p => `${p.paymentMethod}: ₹${fmt(p.amount)}`).join('<br>') || '-';
-      html += `<tr>
-        <td style="white-space:nowrap;">${fmtDate(g.checkOutDate)}</td>
-        <td><b>${g.guestName || '-'}</b></td>
-        <td>${fStr}</td>
-        <td style="color:#27ae60;font-weight:bold;">${g.food.total ? '₹' + fmt(g.food.total) : '-'}</td>
-        <td>${rStr}</td>
-        <td style="color:#27ae60;font-weight:bold;">${g.room.total ? '₹' + fmt(g.room.total) : '-'}</td>
-        <td><b>${g.grandTotal ? '₹' + fmt(g.grandTotal) : '-'}</b></td>
-      </tr>`;
-    });
-    html += `</table></div>`;
+            } else if (currentTab === 'expenses') {
+                let methTotal = Object.values(d.byMethod).reduce((sum, val) => sum + val, 0);
 
-  } else if (currentTab === 'expenses') {
-    html += `<div class="table-res"><table>
-      <tr><th>Date</th><th>Expense Details</th><th>Daily Total</th></tr>`;
-    data.forEach(day => {
-      const details = day.entries.map(e =>
-        `• ${e.item} <span style="color:#7f8c8d;">(${e.type})</span> | ${e.paymentMethod}: <b>₹${fmt(e.amount)}</b>`
-      ).join('<br>') || '<span style="color:#95a5a6;">No entries</span>';
-      html += `<tr>
-        <td style="white-space:nowrap;">${fmtDate(day.date)}</td>
-        <td>${details}</td>
-        <td style="color:#d35400;font-weight:bold;">${day.dailyTotal ? '₹' + fmt(day.dailyTotal) : '-'}</td>
-      </tr>`;
-    });
-    html += `</table></div>`;
+                if (!d.filteredCategory || d.filteredCategory === "All") {
+                    let catTotal = Object.values(d.byCategory).reduce((sum, val) => sum + val, 0);
+                    html += `<div class="dash-grid">
+                  <div style="background:#fff; padding:15px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.05);">
+                    <b style="color:#2c3e50; font-size:1.1em;">📂 Expenses by Category:</b>
+                    <ul style="list-style-type: none; padding-left: 0; margin-top: 10px;">
+                      ${Object.entries(d.byCategory).map(([c, a]) => `<li style="margin-bottom:8px; padding-left:10px; border-left:3px solid #e67e22; font-size:1.05em; color:#34495e;">${c}: <b style="float:right;">₹${Number(a).toLocaleString('en-IN')}</b></li>`).join('')}
+                    </ul>
+                    <div style="margin-top:10px; border-top:2px dashed #bdc3c7; padding-top:10px; font-size:1.1em; color:#d35400; text-align:right;"><b>Category Total: ₹${Number(catTotal).toLocaleString('en-IN')}</b></div>
+                  </div>
+                  <div style="background:#fff; padding:15px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.05);">
+                    <b style="color:#2c3e50; font-size:1.1em;">💳 Expenses by Method:</b>
+                    <ul style="list-style-type: none; padding-left: 0; margin-top: 10px;">
+                      ${Object.entries(d.byMethod).map(([m, a]) => `<li style="margin-bottom:8px; padding-left:10px; border-left:3px solid #3498db; font-size:1.05em; color:#34495e;">${m}: <b style="float:right;">₹${Number(a).toLocaleString('en-IN')}</b></li>`).join('')}
+                    </ul>
+                    <div style="margin-top:10px; border-top:2px dashed #bdc3c7; padding-top:10px; font-size:1.1em; color:#d35400; text-align:right;"><b>Method Total: ₹${Number(methTotal).toLocaleString('en-IN')}</b></div>
+                  </div>
+                 </div>
+                 <div class="grand-total" style="background:#c0392b; color:#fff; padding:15px; border-radius:8px; margin-top:20px; font-size:1.5em; box-shadow:0 4px 6px rgba(0,0,0,0.1);">📉 Grand Total Expense: ₹${Number(d.grandTotal).toLocaleString('en-IN')}</div>`;
 
-  } else if (currentTab === 'search') {
-    const transType = document.getElementById('transType').value;
-    let thead = `<tr><th style="width:110px;">Date</th>`;
-    if (transType !== 'Expense') thead += `<th>📥 Revenue Details</th>`;
-    if (transType !== 'Revenue') thead += `<th>📤 Expense Details</th>`;
-    thead += `</tr>`;
-    html += `<div class="table-res"><table>${thead}`;
-    data.forEach(row => {
-      let r = `<tr><td style="white-space:nowrap;vertical-align:top;"><b>${fmtDate(row.date)}</b></td>`;
-      if (transType !== 'Expense') {
-        const inc = (row.incomes || []).map(i => {
-          const pStr = i.pairs.map(p => `${p.paymentMethod}: ₹${fmt(p.amount)}`).join(', ');
-          return `<div style="margin-bottom:6px;"><b>${i.guestName}</b><br>
-            <span style="font-size:0.9em;color:#555;">🍴₹${fmt(i.foodTotal)} | 🛏️₹${fmt(i.roomTotal)}</span><br>
-            <span style="font-size:0.85em;color:#7f8c8d;">${pStr}</span></div>`;
-        }).join('<hr style="margin:6px 0;border:0;border-top:1px dashed #ccc;">') || `<span style="color:#999;font-style:italic;">No Revenue</span>`;
-        r += `<td style="vertical-align:top;">${inc}</td>`;
-      }
-      if (transType !== 'Revenue') {
-        const exp = (row.expenseEntries || []).map(e =>
-          `<div style="margin-bottom:5px;">• ${e.item} <span style="color:#7f8c8d;">(${e.type})</span> | ${e.paymentMethod}: <b>₹${fmt(e.amount)}</b></div>`
-        ).join('') || `<span style="color:#999;font-style:italic;">No Expenses</span>`;
-        r += `<td style="vertical-align:top;">${exp}</td>`;
-      }
-      html += r + `</tr>`;
-    });
-    html += `</table></div>`;
-  }
-  return html;
-}
-
-// ============================================================
-//  CARD BUILDER (mobile)
-// ============================================================
-function buildCards(data) {
-  let html = `<div class="card-grid">`;
-  data.forEach(item => {
-    html += `<div class="card">`;
-    if (currentTab === 'revenue') {
-      const fStr = item.food.pairs.map(p => `${p.paymentMethod}: ₹${fmt(p.amount)}`).join(' | ') || '-';
-      const rStr = item.room.pairs.map(p => `${p.paymentMethod}: ₹${fmt(p.amount)}`).join(' | ') || '-';
-      html += `<h4 style="margin-top:0;">${fmtDate(item.checkOutDate)}</h4>
-        <div style="font-size:1.1em;margin-bottom:10px;color:#2980b9;"><b>${item.guestName || '-'}</b></div>`;
-      if (item.food.total) html += `<b>🍴 Food:</b> <span style="font-size:0.9em;">${fStr}</span><br>`;
-      if (item.room.total) html += `<b>🛏️ Room:</b> <span style="font-size:0.9em;">${rStr}</span><br>`;
-      if (item.grandTotal) html += `<hr><div class="total-line">Grand Total: ₹${fmt(item.grandTotal)}</div>`;
-      else html += `<div class="empty-state">No billing data.</div>`;
-
-    } else if (currentTab === 'expenses') {
-      html += `<h4 style="margin-top:0;">${fmtDate(item.date)}</h4>`;
-      if (item.entries && item.entries.length) {
-        html += `<ul style="margin:0;padding-left:15px;font-size:0.95em;">`;
-        item.entries.forEach(e => html += `<li style="margin-bottom:5px;">${e.item} <span style="color:#7f8c8d;">(${e.type})</span><br>${e.paymentMethod}: <b>₹${fmt(e.amount)}</b></li>`);
-        html += `</ul><hr><div class="total-line" style="color:#d35400;">Daily Total: ₹${fmt(item.dailyTotal)}</div>`;
-      } else html += `<div class="empty-state">No records.</div>`;
-
-    } else if (currentTab === 'search') {
-      const transType = document.getElementById('transType').value;
-      html += `<h4 style="background:#2c3e50;color:white;padding:12px 18px;margin:-18px -18px 15px -18px;border-radius:10px 10px 0 0;">🗓️ ${fmtDate(item.date)}</h4>`;
-      if (transType !== 'Expense') {
-        if (item.incomes && item.incomes.length) {
-          item.incomes.forEach(i => {
-            html += `<div style="margin-bottom:8px;"><b style="color:#2980b9;">👤 ${i.guestName}</b><br>
-              <span style="font-size:0.9em;">🍴₹${fmt(i.foodTotal)} | 🛏️₹${fmt(i.roomTotal)}</span></div>
-              <hr style="margin:8px 0;border:0;border-top:1px dashed #ccc;">`;
-          });
-        } else html += `<div class="empty-state">No Revenue</div>`;
-      }
-      if (transType !== 'Revenue') {
-        if (item.expenseEntries && item.expenseEntries.length) {
-          item.expenseEntries.forEach(e => html += `<div style="margin-bottom:5px;">• ${e.item} (${e.type}) | ${e.paymentMethod}: <b>₹${fmt(e.amount)}</b></div>`);
-        } else html += `<div class="empty-state">No Expenses</div>`;
-      }
-    }
-    html += `</div>`;
-  });
-  return html + `</div>`;
-}
-
-// ============================================================
-//  ANALYTICS
-// ============================================================
-function renderAnalyticsFromCache(d) {
-  const netColor = d.netProfit >= 0 ? '#27ae60' : '#c0392b';
-
-  const html = `
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:20px;">
-      <div style="background:#2980b9;color:white;padding:15px;border-radius:10px;text-align:center;">
-        <small>Total Revenue</small><br><b style="font-size:1.6em;">₹${fmt(d.totalRev)}</b>
-      </div>
-      <div style="background:#e67e22;color:white;padding:15px;border-radius:10px;text-align:center;">
-        <small>Total Expenses</small><br><b style="font-size:1.6em;">₹${fmt(d.totalExp)}</b>
-      </div>
-      <div style="background:${netColor};color:white;padding:15px;border-radius:10px;text-align:center;">
-        <small>Net Profit/Loss</small><br><b style="font-size:1.6em;">₹${fmt(d.netProfit)}</b>
-      </div>
-    </div>
-    <div class="chart-container">
-      <div class="chart-box" style="border-top:5px solid #2ecc71;">
-        <h4 style="text-align:center;margin-top:0;">📊 Income vs Expense</h4>
-        <div id="chartIncomeExp" style="height:250px;"></div>
-        ${analyticsTable({'Total Revenue':d.totalRev,'Total Expense':d.totalExp}, d.totalRev+d.totalExp, 'Item')}
-      </div>
-      <div class="chart-box">
-        <h4 style="text-align:center;margin-top:0;">🍽️ Revenue Source</h4>
-        <div id="chartRevSource" style="height:250px;"></div>
-        ${analyticsTable(d.revenueSource, d.totalRev, 'Source')}
-      </div>
-      <div class="chart-box">
-        <h4 style="text-align:center;margin-top:0;">💳 Revenue by Method</h4>
-        <div id="chartRevMethod" style="height:250px;"></div>
-        ${analyticsTable(d.revByMethod, d.totalRev, 'Method')}
-      </div>
-      <div class="chart-box">
-        <h4 style="text-align:center;margin-top:0;">🛠️ Expense Categories</h4>
-        <div id="chartExpCat" style="height:250px;"></div>
-        ${analyticsTable(d.expByCategory, d.totalExp, 'Category')}
-      </div>
-      <div class="chart-box">
-        <h4 style="text-align:center;margin-top:0;">💰 Expense by Method</h4>
-        <div id="chartExpMethod" style="height:250px;"></div>
-        ${analyticsTable(d.expByMethod, d.totalExp, 'Method')}
-      </div>
-    </div>`;
-
-  document.getElementById('content').innerHTML = html;
-  document.getElementById('dashboard').style.display = 'none';
-  document.getElementById('pagin').style.display     = 'none';
-  drawAnalyticsCharts(d);
-}
-
-function drawAnalyticsCharts(d) {
-  drawDonut({'Total Revenue': d.totalRev, 'Total Expense': d.totalExp}, 'chartIncomeExp', {'Total Revenue':'#2980b9','Total Expense':'#e74c3c'});
-  drawDonut(d.revenueSource,  'chartRevSource');
-  drawDonut(d.revByMethod,    'chartRevMethod');
-  drawDonut(d.expByCategory,  'chartExpCat');
-  drawDonut(d.expByMethod,    'chartExpMethod');
-}
-
-function drawDonut(dataObj, elId, colorMap) {
-  const el = document.getElementById(elId);
-  if (!el) return;
-  if (!chartsReady) { el.innerHTML = `<p style="text-align:center;color:#95a5a6;margin-top:100px;">Charts loading...</p>`; return; }
-  const filtered = Object.fromEntries(Object.entries(dataObj).filter(([,v]) => v > 0));
-  if (!Object.keys(filtered).length) { el.innerHTML = `<p style="text-align:center;color:#95a5a6;margin-top:100px;">No Data Yet</p>`; return; }
-  const arr  = [['Task','Value'], ...Object.entries(filtered)];
-  const data = google.visualization.arrayToDataTable(arr);
-  const opts = {
-    pieHole: 0.4, chartArea: { width: '90%', height: '75%' },
-    legend: { position: 'bottom', textStyle: { fontSize: 13, bold: true } },
-    pieSliceText: 'none', tooltip: { trigger: 'focus', showColorCode: true }
-  };
-  if (colorMap) {
-    const colors = Object.keys(filtered).map(k => colorMap[k]).filter(Boolean);
-    if (colors.length) opts.colors = colors;
-  }
-  new google.visualization.PieChart(el).draw(data, opts);
-}
-
-function analyticsTable(obj, total, label) {
-  const filtered = Object.fromEntries(Object.entries(obj).filter(([,v]) => v > 0));
-  const sorted   = Object.entries(filtered).sort((a,b) => b[1]-a[1]);
-  let html = `<div style="overflow-x:auto;"><table class="perc-table">
-    <tr><th>${label}</th><th>Amount</th><th>%</th></tr>`;
-  if (!sorted.length) html += `<tr><td colspan="3" style="text-align:center;color:#95a5a6;">No Data Yet</td></tr>`;
-  sorted.forEach(([k,v]) => {
-    const pct = total > 0 ? ((v/total)*100).toFixed(1) : 0;
-    html += `<tr><td><b>${k}</b></td><td>₹${fmt(v)}</td><td style="color:#2980b9;"><b>${pct}%</b></td></tr>`;
-  });
-  html += `<tr style="background:#f1f7ff;border-top:2px solid #ddd;">
-    <td><b>Grand Total</b></td><td><b>₹${fmt(total)}</b></td><td></td></tr>
-  </table></div>`;
-  return html;
-}
-
-// ============================================================
-//  PAGINATION
-// ============================================================
-function changePage(dir) {
-  curPage += dir;
-  renderUI();
-  window.scrollTo(0, document.getElementById('dashboard').offsetTop - 20);
-}
-
-function changePageSize() {
-  const v = document.getElementById('pageSize').value;
-  perPage = v === 'all' ? (globalData.length || 1) : parseInt(v);
-  curPage = 1;
-  renderUI();
-}
-
-// ============================================================
-//  HELPERS
-// ============================================================
-function fmt(n) { return Number(n || 0).toLocaleString('en-IN'); }
+                } else {
+                    html += `<div class="dash-grid">
+                  <div style="background:#fff; padding:20px; border-radius:8px; border-left: 6px solid #d35400; box-shadow:0 2px 5px rgba(0,0,0,0.05); display:flex; flex-direction:column; justify-content:center;">
+                    <div style="font-size:1.1em; color:#7f8c8d; margin-bottom:5px;">Category Selected:</div>
+                    <b style="font-size:1.4em; color:#d35400;">📂 ${d.filteredCategory}</b>
+                    <div style="font-size:1.6em; color:#2c3e50; font-weight:bold; margin-top:15px; border-top:1px solid #eee; padding-top:10px;">Total: ₹${Number(d.grandTotal).toLocaleString('en-IN')}</div>
+                  </div>
+                  <div style="background:#fff; padding:15px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.05);">
+                    <b style="color:#2c3e50; font-size:1.1em;">💳 Payment Methods Used:</b>
+                    <ul style="list-style-type: none; padding-left: 0; margin-top: 10px; margin-bottom: 15px;">
+                      ${Object.entries(d.byMethod).map(([m, a]) => `<li style="margin-bottom:8px; padding-left:10px; border-left:3px solid #3498db; font-size:1.1em; color:#34495e;">${m}: <b style="float:right;">₹${Number(a).toLocaleString('en-IN')}</b></li>`).join('')}
+                    </ul>
+                    <div style="margin-top:auto; border-top:2px dashed #bdc3c7; padding-top:10px; font-size:1.1em; color:#d35400; text-align:right;"><b>Method Total: ₹${Number(methTotal).toLocaleString('en-IN')}</b></div>
+                  </div>
+                 </div>`;
+                }
 
 
+            } else if (currentTab === 'search') {
+                html += `<div class="dash-grid">`;
+                if (d.tType === "All" || d.tType === "Revenue") {
+                    html += `<div style="background:#ebf5fb; padding:20px; border-radius:8px; text-align:center; box-shadow:0 2px 5px rgba(0,0,0,0.05);">
+                  <b style="color:#2c3e50; font-size:1.1em;">💰 Total Received via ${d.method.toUpperCase()}</b>
+                  <div style="font-size:1.8em; color:#27ae60; font-weight:bold; margin-top:10px;">₹${Number(d.totalReceived).toLocaleString('en-IN')}</div>
+                 </div>`;
+                }
+                if (d.tType === "All" || d.tType === "Expense") {
+                    html += `<div style="background:#fef5f5; padding:20px; border-radius:8px; text-align:center; box-shadow:0 2px 5px rgba(0,0,0,0.05);">
+                  <b style="color:#2c3e50; font-size:1.1em;">💸 Total Paid via ${d.method.toUpperCase()}</b>
+                  <div style="font-size:1.8em; color:#e74c3c; font-weight:bold; margin-top:10px;">₹${Number(d.totalPaid).toLocaleString('en-IN')}</div>
+                 </div>`;
+                }
+                html += `</div>`;
+            }
 
-function showNoRecords() {
-  document.getElementById('content').innerHTML = `<h3 style="text-align:center;color:#7f8c8d;margin-top:40px;">No records found for the selected criteria.</h3>`;
-  document.getElementById('dashboard').style.display = 'none';
-  document.getElementById('pagin').style.display     = 'none';
-}
+            dash.innerHTML = html;
+        }
 
-function showAlert(msg) {
-  const bar = document.getElementById('alertBar');
-  bar.innerText = msg; bar.style.display = 'block';
-  setTimeout(() => bar.style.opacity = '1', 10);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+        function applyGuestFilter(filter, event) {
+            activeGuestFilter = filter;
+            document.querySelectorAll('.filter-chip').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            curPage = 1;
+            renderUI();
+            if (tabCache.revenue) { tabCache.revenue.filter = filter; tabCache.revenue.page = 1; }
+        }
 
-function hideAlert() {
-  const bar = document.getElementById('alertBar');
-  bar.style.opacity = '0';
-  setTimeout(() => { if (bar.style.opacity === '0') bar.style.display = 'none'; }, 400);
-}
-</script>
+        function getFilteredData() {
+            if (currentTab !== 'revenue' || activeGuestFilter === 'all') return globalData;
+            return globalData.filter(item => {
+                if (activeGuestFilter === 'food') return item.totalFood > 0 && item.totalRoom === 0;
+                if (activeGuestFilter === 'room') return item.totalRoom > 0 && item.totalFood === 0;
+                if (activeGuestFilter === 'both') return item.totalFood > 0 && item.totalRoom > 0;
+                if (activeGuestFilter === 'zero') return item.grandTotal === 0;
+                return true;
+            });
+        }
 
+        function changePageSize() { let sizeVal = document.getElementById('pageSize').value; perPage = (sizeVal === 'all') ? (globalData.length || 1) : parseInt(sizeVal); curPage = 1; renderUI(); if (tabCache[currentTab]) { tabCache[currentTab].page = curPage; tabCache[currentTab].perPage = perPage; tabCache[currentTab].pageSizeVal = sizeVal; } }
+
+        function renderUI() {
+            if (!globalData || globalData.length === 0) { document.getElementById('pagin').style.display = 'none'; return; }
+            let filteredData = getFilteredData();
+            let mode = window.innerWidth < 600 ? 'card' : 'table';
+            let pag = document.getElementById('pagin');
+            pag.style.display = 'flex';
+            let sizeVal = document.getElementById('pageSize').value;
+            let totalPages = Math.ceil(filteredData.length / perPage) || 1;
+            let prevBtn = document.getElementById('prevB'); let nextBtn = document.getElementById('nextB'); let pageText = document.getElementById('pageTxt');
+
+            let rcEl = document.getElementById('recordCount');
+            if (rcEl) rcEl.innerHTML = `📋 Total Records: <span style="color:#2980b9; font-size:1.15em;">${filteredData.length}</span>`;
+
+            if (sizeVal === 'all') {
+                pageText.innerText = `Showing All ${filteredData.length} records`;
+                prevBtn.style.display = 'none'; nextBtn.style.display = 'none';
+            } else {
+                pageText.innerText = `Page ${curPage} of ${totalPages}`;
+                prevBtn.style.display = 'inline-block'; nextBtn.style.display = 'inline-block';
+                prevBtn.disabled = curPage === 1; nextBtn.disabled = curPage === totalPages;
+            }
+
+            let startIdx = (curPage - 1) * perPage;
+            let pageData = filteredData.slice(startIdx, startIdx + perPage);
+            document.getElementById('content').innerHTML = (mode === 'table') ? generateTable(pageData) : generateCards(pageData);
+        }
+
+        function generateTable(data) {
+            let html = ``;
+            if (currentTab === 'revenue') {
+                html += `<div class="table-res"><table><tr><th>Date</th><th>Guest Name</th><th>Food Breakdown</th><th>Total Food</th><th>Room Breakdown</th><th>Total Room</th><th>Grand Total</th></tr>`;
+                data.forEach(item => { let fStr = (item.foodBreakdown || []).map(b => `${b.method}: ${b.text}`).join('<br>'); let rStr = (item.roomBreakdown || []).map(b => `${b.method}: ${b.text}`).join('<br>'); html += `<tr><td>${item.date}</td><td><b>${item.name}</b></td><td>${fStr}</td><td style="color:#27ae60; font-weight:bold;">${item.totalFood ? '₹' + item.totalFood : ''}</td><td>${rStr}</td><td style="color:#27ae60; font-weight:bold;">${item.totalRoom ? '₹' + item.totalRoom : ''}</td><td><b>${item.grandTotal ? '₹' + item.grandTotal : ''}</b></td></tr>`; });
+                html += `</table></div>`;
+            } else if (currentTab === 'expenses') {
+                html += `<div class="table-res"><table><tr><th>Date</th><th>Expense Details</th><th>Daily Total</th></tr>`;
+                data.forEach(item => { let details = (item.sets || []).map(s => `• ${s.item} (${s.type}) | ${s.method}: <b>₹${s.amt}</b>`).join('<br>'); html += `<tr><td style="white-space:nowrap;">${item.date}</td><td>${details}</td><td style="color:#d35400; font-weight:bold;">${item.dayTotal ? '₹' + item.dayTotal : ''}</td></tr>`; });
+                html += `</table></div>`;
+            } else if (currentTab === 'search') {
+                let selMethod = document.getElementById('payMethod').value;
+                let tType = document.getElementById('transType').value;
+                let tableHead = `<tr><th style="width:105px;">Date</th>`;
+                if (tType === "All" || tType === "Revenue") tableHead += `<th>📥 Income Details (${selMethod})</th>`;
+                if (tType === "All" || tType === "Expense") tableHead += `<th>📤 Expense Details (${selMethod})</th>`;
+                tableHead += `</tr>`;
+                html += `<div class="table-res"><table>${tableHead}`;
+                data.forEach(item => {
+                    let rowHtml = `<tr><td style="white-space:nowrap; vertical-align:top;"><b>${item.displayDate}</b></td>`;
+                    if (tType === "All" || tType === "Revenue") {
+                        let incHtml = (item.incomes || []).map(inc => `<div style="margin-bottom:6px;"><b>${inc.name}</b><br><span style="color:#555; font-size:0.9em;">Food: ${inc.foodStr} | Room: ${inc.roomStr}</span><br><b style="color:#27ae60; font-size:1.1em;">₹${inc.total}</b></div>`).join('<hr style="margin:6px 0; border:0; border-top:1px dashed #ccc;">');
+                        if (!incHtml) incHtml = `<span style="color:#999; font-style:italic;">No Income</span>`;
+                        rowHtml += `<td style="vertical-align:top; border-right: 1px solid #eee;">${incHtml}</td>`;
+                    }
+                    if (tType === "All" || tType === "Expense") {
+                        let exps = item.expenses || [];
+                        let expHtml = exps.length > 0 ? `<div style="padding-top:2px;">${exps.join('')}</div>` : `<span style="color:#999; font-style:italic;">No Expenses</span>`;
+                        rowHtml += `<td style="vertical-align:top;">${expHtml}</td>`;
+                    }
+                    rowHtml += `</tr>`;
+                    html += rowHtml;
+                });
+                html += `</table></div>`;
+            }
+            return html;
+        }
+
+        function generateCards(data) {
+            let html = `<div class="card-grid">`;
+            data.forEach(item => {
+                html += `<div class="card">`;
+                if (currentTab === 'revenue') {
+                    html += `<h4>${item.date}</h4><div style="font-size:1.1em; margin-bottom:10px; color:#2980b9;"><b>${item.name}</b></div>`;
+                    if (item.totalFood > 0) html += `<b>🍴 Food:</b> <span style="font-size:0.9em;">${item.foodBreakdown.map(b => `${b.method}: ${b.text}`).join(' | ')}</span><br>`;
+                    if (item.totalRoom > 0) html += `<b>🛏️ Room:</b> <span style="font-size:0.9em;">${item.roomBreakdown.map(b => `${b.method}: ${b.text}`).join(' | ')}</span><br>`;
+                    if (item.grandTotal > 0) html += `<hr><div class="total-line">Grand Total: ₹${item.grandTotal}</div>`;
+                    else html += `<div class="empty-state">No billing data.</div>`;
+                } else if (currentTab === 'expenses') {
+                    html += `<h4>${item.date}</h4>`;
+                    if (item.sets && item.sets.length > 0) {
+                        html += `<ul style="margin:0; padding-left:15px; font-size:0.95em;">`;
+                        item.sets.forEach(s => { html += `<li style="margin-bottom:5px;">${s.item} (${s.type})<br><span style="color:#7f8c8d;">${s.method}:</span> <b>₹${s.amt}</b></li>`; });
+                        html += `</ul><hr><div class="total-line" style="color:#d35400;">Daily Total: ₹${item.dayTotal}</div>`;
+                    } else { html += `<div class="empty-state">No records.</div>`; }
+                } else if (currentTab === 'search') {
+                    let tType = document.getElementById('transType').value;
+                    html += `<h4 style="background:#2c3e50; color:white; padding:12px 18px; margin:-18px -18px 15px -18px; border-radius:10px 10px 0 0;">🗓️ ${item.displayDate}</h4>`;
+                    if (tType === "All" || tType === "Revenue") {
+                        if (item.incomes && item.incomes.length > 0) {
+                            item.incomes.forEach(inc => { html += `<div style="margin-bottom:8px;"><b style="color:#2980b9;">👤 ${inc.name}</b><br><span style="font-size:0.9em; color:#555;">Food: ${inc.foodStr} | Room: ${inc.roomStr}</span><br><b style="color:#27ae60; font-size:1.1em;">₹${inc.total}</b></div><hr style="margin:8px 0; border:0; border-top:1px dashed #ccc;">`; });
+                        } else { html += `<div class="empty-state">No Income</div>`; }
+                    }
+                    if (tType === "All") { html += `<div style="margin: 20px 0 15px 0; border-top: 3px solid #bdc3c7; position:relative; text-align:center;"><span style="background:white; padding:0 10px; position:relative; top:-12px; color:#7f8c8d; font-size:0.85em; font-weight:bold;">EXPENSES</span></div>`; }
+                    if (tType === "All" || tType === "Expense") {
+                        if (tType === "Expense") html += `<div style="margin-bottom:10px; font-weight:bold; color:#c0392b;">📤 Expenses</div>`;
+                        if (item.expenses && item.expenses.length > 0) { html += `<div style="padding-top:2px;">${item.expenses.join('')}</div>`; }
+                        else { html += `<div class="empty-state">No Expenses</div>`; }
+                    }
+                }
+                html += `</div>`;
+            });
+            html += `</div>`;
+            return html;
+        }
+
+        function changePage(dir) { curPage += dir; renderUI(); if (tabCache[currentTab]) tabCache[currentTab].page = curPage; window.scrollTo(0, document.getElementById('dashboard').offsetTop - 20); }
+    </script>
 </body>
+
 </html>
