@@ -680,11 +680,14 @@ function processAndCache(tab, config) {
     const revenueSource = { '🍴 Food': totalFood, '🛏️ Room': totalRoom };
     const revByMethod = {}, expByCategory = {}, expByMethod = {};
     guests.forEach(g => [...g.food.pairs, ...g.room.pairs].forEach(p => {
-      if (p.paymentMethod) revByMethod[p.paymentMethod] = (revByMethod[p.paymentMethod] || 0) + p.amount;
+      const pm = p.paymentMethod || 'Unspecified';
+      revByMethod[pm] = (revByMethod[pm] || 0) + p.amount;
     }));
     expenses.forEach(d => d.entries.forEach(e => {
-      expByCategory[e.type]        = (expByCategory[e.type] || 0) + e.amount;
-      expByMethod[e.paymentMethod] = (expByMethod[e.paymentMethod] || 0) + e.amount;
+      const et = e.type || 'Unspecified';
+      const em = e.paymentMethod || 'Unspecified';
+      expByCategory[et]            = (expByCategory[et] || 0) + e.amount;
+      expByMethod[em]              = (expByMethod[em] || 0) + e.amount;
     }));
     tabCache.analytics = { totalRev, totalExp, netProfit, revenueSource, revByMethod, expByCategory, expByMethod };
     return;
@@ -762,7 +765,8 @@ function computeRevenueDash(guests) {
     totalFood += g.food.total;
     totalRoom += g.room.total;
     [...g.food.pairs, ...g.room.pairs].forEach(p => {
-      if (p.paymentMethod) methods[p.paymentMethod] = (methods[p.paymentMethod] || 0) + p.amount;
+      const pm = p.paymentMethod || 'Unspecified';
+      methods[pm] = (methods[pm] || 0) + p.amount;
     });
   });
   return { totalFood, totalRoom, grandTotal: totalFood + totalRoom, methods };
@@ -773,9 +777,11 @@ function computeExpenseDash(expenses, category) {
   let grandTotal = 0;
   expenses.forEach(day => {
     day.entries.forEach(e => {
-      if (category !== 'All' && e.type !== category) return;
-      byCategory[e.type]          = (byCategory[e.type] || 0) + e.amount;
-      byMethod[e.paymentMethod]   = (byMethod[e.paymentMethod] || 0) + e.amount;
+      const et = e.type || 'Unspecified';
+      const em = e.paymentMethod || 'Unspecified';
+      if (category !== 'All' && et !== category) return;
+      byCategory[et]            = (byCategory[et] || 0) + e.amount;
+      byMethod[em]              = (byMethod[em] || 0) + e.amount;
       grandTotal += e.amount;
     });
   });
@@ -994,8 +1000,8 @@ function buildTable(data) {
     html += `<div class="table-res"><table>
       <tr><th>Date</th><th>Guest Name</th><th>Food Breakdown</th><th>Food Total</th><th>Room Breakdown</th><th>Room Total</th><th>Grand Total</th></tr>`;
     data.forEach(g => {
-      const fStr = g.food.pairs.map(p => `${p.paymentMethod}: ₹${fmt(p.amount)}`).join('<br>') || '-';
-      const rStr = g.room.pairs.map(p => `${p.paymentMethod}: ₹${fmt(p.amount)}`).join('<br>') || '-';
+      const fStr = g.food.pairs.map(p => `${p.paymentMethod || 'Unspecified'}: ₹${fmt(p.amount)}`).join('<br>') || '-';
+      const rStr = g.room.pairs.map(p => `${p.paymentMethod || 'Unspecified'}: ₹${fmt(p.amount)}`).join('<br>') || '-';
       html += `<tr>
         <td style="white-space:nowrap;">${fmtDate(g.checkOutDate)}</td>
         <td><b>${g.guestName || '-'}</b></td>
@@ -1013,7 +1019,7 @@ function buildTable(data) {
       <tr><th>Date</th><th>Expense Details</th><th>Daily Total</th></tr>`;
     data.forEach(day => {
       const details = day.entries.map(e =>
-        `• ${e.item} <span style="color:#7f8c8d;">(${e.type})</span> | ${e.paymentMethod}: <b>₹${fmt(e.amount)}</b>`
+        `• ${e.item} <span style="color:#7f8c8d;">(${e.type || 'Unspecified'})</span> | ${e.paymentMethod || 'Unspecified'}: <b>₹${fmt(e.amount)}</b>`
       ).join('<br>') || '<span style="color:#95a5a6;">No entries</span>';
       html += `<tr>
         <td style="white-space:nowrap;">${fmtDate(day.date)}</td>
@@ -1035,8 +1041,8 @@ function buildTable(data) {
       let r = `<tr><td style="white-space:nowrap;vertical-align:top;"><b>${fmtDate(row.date)}</b></td>`;
       if (transType !== 'Expense') {
         const inc = (row.incomes || []).map(i => {
-          const foodStr = (i.foodPairs||[]).map(p=>`${p.paymentMethod}: ${fmt(p.amount)}`).join(' + ') || '-';
-          const roomStr = (i.roomPairs||[]).map(p=>`${p.paymentMethod}: ${fmt(p.amount)}`).join(' + ') || '-';
+          const foodStr = (i.foodPairs||[]).map(p=>`${p.paymentMethod || 'Unspecified'}: ${fmt(p.amount)}`).join(' + ') || '-';
+          const roomStr = (i.roomPairs||[]).map(p=>`${p.paymentMethod || 'Unspecified'}: ${fmt(p.amount)}`).join(' + ') || '-';
           const total   = (i.foodTotal||0) + (i.roomTotal||0);
           return `<div style="margin-bottom:6px;">
             <b>${i.guestName}</b><br>
@@ -1048,7 +1054,7 @@ function buildTable(data) {
       }
       if (transType !== 'Revenue') {
         const exp = (row.expenseEntries || []).map(e =>
-          `<div style="margin-bottom:5px;overflow:hidden;">• ${e.item} <span style="color:#2980b9;font-weight:bold;">[${e.paymentMethod}]</span> <span style="color:#7f8c8d;">(${e.type})</span><b style="color:#c0392b;float:right;font-size:1.1em;">₹${fmt(e.amount)}</b></div>`
+          `<div style="margin-bottom:5px;overflow:hidden;">• ${e.item} <span style="color:#2980b9;font-weight:bold;">[${e.paymentMethod || 'Unspecified'}]</span> <span style="color:#7f8c8d;">(${e.type || 'Unspecified'})</span><b style="color:#c0392b;float:right;font-size:1.1em;">₹${fmt(e.amount)}</b></div>`
         ).join('') || `<span style="color:#999;font-style:italic;">No Expenses</span>`;
         r += `<td style="vertical-align:top;">${exp}</td>`;
       }
@@ -1067,8 +1073,8 @@ function buildCards(data) {
   data.forEach(item => {
     html += `<div class="card">`;
     if (currentTab === 'revenue') {
-      const fStr = item.food.pairs.map(p => `${p.paymentMethod}: ₹${fmt(p.amount)}`).join(' | ') || '-';
-      const rStr = item.room.pairs.map(p => `${p.paymentMethod}: ₹${fmt(p.amount)}`).join(' | ') || '-';
+      const fStr = item.food.pairs.map(p => `${p.paymentMethod || 'Unspecified'}: ₹${fmt(p.amount)}`).join(' | ') || '-';
+      const rStr = item.room.pairs.map(p => `${p.paymentMethod || 'Unspecified'}: ₹${fmt(p.amount)}`).join(' | ') || '-';
       html += `<h4 style="margin-top:0;">${fmtDate(item.checkOutDate)}</h4>
         <div style="font-size:1.1em;margin-bottom:10px;color:#2980b9;"><b>${item.guestName || '-'}</b></div>`;
       if (item.food.total) html += `<b>🍴 Food:</b> <span style="font-size:0.9em;">${fStr}</span><br>`;
