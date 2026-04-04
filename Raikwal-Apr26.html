@@ -1865,6 +1865,88 @@
             background: linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0, rgba(249, 243, 234, 0.9) 100%);
         }
 
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        .remarks-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(23, 18, 12, 0.52);
+            backdrop-filter: blur(6px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 22px;
+            z-index: 500;
+        }
+
+        .remarks-modal.show {
+            display: flex;
+            animation: fadeUp .18s ease;
+        }
+
+        .remarks-modal-panel {
+            width: min(980px, 100%);
+            max-height: min(88vh, 920px);
+            overflow: hidden;
+            border-radius: 24px;
+            border: 1px solid rgba(143, 100, 36, 0.16);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.99) 0, rgba(255, 249, 241, 0.98) 100%);
+            box-shadow: 0 24px 68px rgba(23, 18, 12, 0.28);
+        }
+
+        .remarks-modal-hd {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 18px 22px;
+            border-bottom: 1px solid rgba(143, 100, 36, 0.12);
+            background: linear-gradient(180deg, rgba(247, 239, 228, 0.96) 0, rgba(241, 231, 216, 0.96) 100%);
+        }
+
+        .remarks-modal-title {
+            font-size: 12px;
+            letter-spacing: 2.4px;
+            text-transform: uppercase;
+            color: var(--gold);
+            font-weight: 800;
+        }
+
+        .remarks-modal-close {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(143, 100, 36, 0.16);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.88);
+            color: var(--text);
+            font-size: 20px;
+            line-height: 1;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(37, 28, 17, 0.06);
+        }
+
+        .remarks-modal-close:hover {
+            background: rgba(249, 243, 234, 0.98);
+        }
+
+        .remarks-modal-body {
+            max-height: calc(88vh - 78px);
+            overflow: auto;
+            padding: 20px 22px 24px;
+        }
+
+        .remarks-modal-body .tbl-wrap {
+            margin-bottom: 0;
+        }
+
+        .remarks-modal-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
         .google-visualization-tooltip {
             pointer-events: none;
         }
@@ -1921,12 +2003,26 @@
                         <button class="btn-fetch" id="r-fetchBtn" onclick="handleRevenueFetch()">Fetch Data</button>
                     </div>
                     <div class="warning" id="r-warn"><span>!</span><span id="r-warnTxt"></span></div>
+                    <div class="inline-card">
+                        <div class="fg-2">
+                            <div class="field">
+                                <div class="inline-note">Press Get Remarks. The selected date range will be used.</div>
+                            </div>
+                            <button class="btn-fetch" id="rr-fetchBtn" onclick="handleRevenueRemarksFetch()">Get
+                                Remarks</button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="loading" id="r-loading">
                 <div class="spinner"></div>
                 <div class="loading-title">Fetching guest data...</div>
                 <div class="loading-sub">Retrieving guest records.</div>
+            </div>
+            <div class="loading" id="rr-loading">
+                <div class="spinner"></div>
+                <div class="loading-title">Fetching revenue remarks...</div>
+                <div class="loading-sub">Retrieving guest remarks.</div>
             </div>
             <div class="results" id="r-results">
                 <div class="section-eyebrow">Summary</div>
@@ -2157,6 +2253,15 @@
             </div>
         </div>
     </div>
+    <div class="remarks-modal" id="remarks-modal" onclick="handleRemarksModalOverlayClick(event)">
+        <div class="remarks-modal-panel">
+            <div class="remarks-modal-hd">
+                <div class="remarks-modal-title" id="remarks-modal-title">Remarks</div>
+                <button class="remarks-modal-close" type="button" onclick="closeRemarksModal_()">×</button>
+            </div>
+            <div class="remarks-modal-body" id="remarks-modal-body"></div>
+        </div>
+    </div>
     <script>
         var APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwjie0fWkUSdRTcKe266a9YCnz0NvrzN8kMpGK0aGpPV7xNpLrDIevEwQWaVrPaT4128Q/exec";
         function callBackend(action, params) {
@@ -2176,7 +2281,7 @@
                 return res.text();
             });
         }
-        var _guests = [], _rPg = 1, _rSz = 10, _revFilter = 'all';
+        var _guests = [], _rPg = 1, _rSz = 10, _revFilter = 'all', _revenueRemarks = [];
         var _expDays = [], _ePg = 1, _eSz = 10, _lastExpCat = 'all';
         var _expenseRemarks = [];
         var _pDays = [], _pPg = 1, _pSz = 10, _pType = 'all', _lastPayMethod = 'all', _lastPayType = 'all';
@@ -2195,9 +2300,33 @@
         function byId(id) { return document.getElementById(id); }
         function toSD(v) { var p = v.split('-'); return p[2] + '/' + p[1] + '/' + p[0]; }
         function fmtAmt(n) { return '₹' + Number(n).toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 2 }); }
-        function showWarn(p, m) { byId(p + '-warnTxt').textContent = m; byId(p + '-warn').classList.add('show'); }
-        function hideWarn(p) { byId(p + '-warn').classList.remove('show'); }
-        function setLoad(p, on) { var button = byId(p + '-fetchBtn'); if (p === 'e' || p === 'er') { byId('e-fetchBtn').disabled = on; byId('er-fetchBtn').disabled = on; } else { button.disabled = on; } button.textContent = on ? 'Fetching...' : (p === 'er' ? 'Get Remarks' : 'Fetch Data'); if (!on && (p === 'e' || p === 'er')) { byId('e-fetchBtn').textContent = 'Fetch Data'; byId('er-fetchBtn').textContent = 'Get Remarks'; } byId(p + '-loading').classList.toggle('show', on); if (on) byId(p + '-results').classList.remove('show'); }
+        function showWarn(p, m) { var warnText = byId(p + '-warnTxt'), warn = byId(p + '-warn'); if (!warnText || !warn) return; warnText.textContent = m; warn.classList.add('show'); }
+        function hideWarn(p) { var warn = byId(p + '-warn'); if (warn) warn.classList.remove('show'); }
+        function setLoad(p, on) {
+            var button = byId(p + '-fetchBtn');
+            if (p === 'e' || p === 'er') {
+                byId('e-fetchBtn').disabled = on;
+                byId('er-fetchBtn').disabled = on;
+            } else if (p === 'r' || p === 'rr') {
+                byId('r-fetchBtn').disabled = on;
+                byId('rr-fetchBtn').disabled = on;
+            } else if (button) {
+                button.disabled = on;
+            }
+            if (button) button.textContent = on ? 'Fetching...' : ((p === 'er' || p === 'rr') ? 'Get Remarks' : 'Fetch Data');
+            if (!on && (p === 'e' || p === 'er')) {
+                byId('e-fetchBtn').textContent = 'Fetch Data';
+                byId('er-fetchBtn').textContent = 'Get Remarks';
+            }
+            if (!on && (p === 'r' || p === 'rr')) {
+                byId('r-fetchBtn').textContent = 'Fetch Data';
+                byId('rr-fetchBtn').textContent = 'Get Remarks';
+            }
+            var loading = byId(p + '-loading');
+            if (loading) loading.classList.toggle('show', on);
+            var results = byId(p + '-results');
+            if (on && results) results.classList.remove('show');
+        }
         function parseBackendResponse(prefix, res) { var data; try { data = JSON.parse(res); } catch (e) { showWarn(prefix, 'Unable to read the server response.'); return null; } if (!data.success) { showWarn(prefix, data.error); return null; } return data; }
         function parseApiResponseOrThrow_(res) { var data; try { data = JSON.parse(res); } catch (e) { throw new Error('Unable to read the server response.'); } if (!data.success) throw new Error(data.error || 'Unable to fetch dashboard data.'); return data; }
         function setPagedEmptyState(prefix, summaryId, message) { byId(summaryId).classList.remove('filters-only'); byId(summaryId).innerHTML = '<div class="no-data">' + message + '</div>'; byId(prefix + '-cards').innerHTML = ''; byId(prefix + '-table').innerHTML = ''; byId(prefix + '-pgNav').innerHTML = ''; byId(prefix + '-pgInfo').textContent = ''; }
@@ -2211,6 +2340,10 @@
         function clonePayments_(payments) { return (payments || []).map(function (payment) { var amountValue = payment ? payment.amount : null; var copy = { type: payment.type, amount: amountValue === null || amountValue === undefined || amountValue === '' ? null : (Number.isFinite(Number(amountValue)) ? Number(amountValue) : null), amountText: payment && payment.amountText ? payment.amountText : '' }; if ('date' in payment) copy.date = payment.date || ''; if ('method' in payment) copy.method = payment.method || ''; return copy; }); }
         function clearStoredDashboardCache_() { try { localStorage.removeItem(DASHBOARD_CACHE_KEY); } catch (e) { } }
         function getStoredDashboardCache_() { try { var raw = localStorage.getItem(DASHBOARD_CACHE_KEY); if (!raw) return null; var parsed = JSON.parse(raw); if (!parsed || !parsed.data || !parsed.fetchedAt) return null; if (Date.now() - Number(parsed.fetchedAt) > DASHBOARD_CACHE_MS) return null; return parsed; } catch (e) { return null; } }
+        function openRemarksModal_(title, bodyHtml) { byId('remarks-modal-title').textContent = title; byId('remarks-modal-body').innerHTML = bodyHtml; byId('remarks-modal').classList.add('show'); document.body.classList.add('modal-open'); }
+        function closeRemarksModal_() { byId('remarks-modal').classList.remove('show'); document.body.classList.remove('modal-open'); }
+        function handleRemarksModalOverlayClick(event) { if (event.target === byId('remarks-modal')) closeRemarksModal_(); }
+        function buildRemarksModalContent_(items, options) { if (!items.length) return '<div class="no-data">' + options.emptyMessage + '</div>'; return '<div class="desk-only"><div class="tbl-wrap"><table class="data-tbl"><thead><tr>' + options.headHtml + '</tr></thead><tbody>' + items.map(options.tableRenderer).join('') + '</tbody></table></div></div><div class="mob-only remarks-modal-list">' + items.map(options.cardRenderer).join('') + '</div>'; }
         function syncSelectOptions_(selectId, baseCount, values, dedupe) { var select = byId(selectId); while (select.options.length > baseCount) select.remove(baseCount); appendOptions(select, values || [], dedupe); }
         function syncDashboardDropdowns_() { if (!_dashboardCacheData || !_dashboardCacheData.dropdowns) return; syncSelectOptions_('e-cat', 1, _dashboardCacheData.dropdowns.expenseCategories || [], false); syncSelectOptions_('p-method', 1, _dashboardCacheData.dropdowns.paymentMethods || [], true); }
         function storeDashboardCache_(data) { _dashboardCacheData = data; _dashboardCacheFetchedAt = Date.now(); try { localStorage.setItem(DASHBOARD_CACHE_KEY, JSON.stringify({ fetchedAt: _dashboardCacheFetchedAt, data: data })); } catch (e) { } syncDashboardDropdowns_(); return data; }
@@ -2247,12 +2380,12 @@
         function hasGuestRemarks(g) { return !!String(g.remarks || '').trim(); }
         function getGuestGrandTotal(g) { return (g.food || []).reduce(function (s, p) { return s + guestPaymentAmountForCalc_(p); }, 0) + (g.room || []).reduce(function (s, p) { return s + guestPaymentAmountForCalc_(p); }, 0); }
         function formatGuestGrandTotal(g) { return isZeroGuest(g) ? '-' : fmtAmt(getGuestGrandTotal(g)); }
-        function getFilteredGuests() { if (_revFilter === 'all') return _guests; if (_revFilter === 'food-only') return _guests.filter(function (g) { return (g.food || []).length > 0 && (g.room || []).length === 0; }); if (_revFilter === 'room-only') return _guests.filter(function (g) { return (g.room || []).length > 0 && (g.food || []).length === 0; }); if (_revFilter === 'both') return _guests.filter(function (g) { return (g.food || []).length > 0 && (g.room || []).length > 0; }); if (_revFilter === 'zero') return _guests.filter(isZeroGuest); if (_revFilter === 'remarks') return _guests.filter(hasGuestRemarks); return _guests; }
+        function getFilteredGuests() { if (_revFilter === 'all') return _guests; if (_revFilter === 'food-only') return _guests.filter(function (g) { return (g.food || []).length > 0 && (g.room || []).length === 0; }); if (_revFilter === 'room-only') return _guests.filter(function (g) { return (g.room || []).length > 0 && (g.food || []).length === 0; }); if (_revFilter === 'both') return _guests.filter(function (g) { return (g.food || []).length > 0 && (g.room || []).length > 0; }); if (_revFilter === 'zero') return _guests.filter(isZeroGuest); return _guests; }
         function setRevFilter(f) { _revFilter = f; _rPg = 1; rRender(); }
         function buildRevSum(filtered, allGuests) { allGuests = allGuests || filtered; var mt = {}, ft = 0, rt = 0; filtered.forEach(function (g) { (g.food || []).forEach(function (p) { var amount = guestPaymentAmountForCalc_(p); ft += amount; var k = displayGuestMethod_(p); mt[k] = (mt[k] || 0) + amount; }); (g.room || []).forEach(function (p) { var amount = guestPaymentAmountForCalc_(p); rt += amount; var k = displayGuestMethod_(p); mt[k] = (mt[k] || 0) + amount; }); }); var foodOnly = allGuests.filter(function (g) { return (g.food || []).length > 0 && (g.room || []).length === 0; }).length; var roomOnly = allGuests.filter(function (g) { return (g.room || []).length > 0 && (g.food || []).length === 0; }).length; var both = allGuests.filter(function (g) { return (g.food || []).length > 0 && (g.room || []).length > 0; }).length; var zero = allGuests.filter(isZeroGuest).length; var remarks = allGuests.filter(hasGuestRemarks).length; return { methods: Object.keys(mt).map(function (k) { return { label: k, amt: mt[k] }; }).sort(function (a, b) { return b.amt - a.amt; }), cats: [{ label: 'Food', amt: ft }, { label: 'Room', amt: rt }].sort(function (a, b) { return b.amt - a.amt; }), grand: ft + rt, total: allGuests.length, filteredTotal: filtered.length, foodOnly: foodOnly, roomOnly: roomOnly, both: both, zero: zero, remarks: remarks }; }
         function renderRevSummary(s) {
-            var LABELS = { 'all': 'All Guests', 'food-only': 'Food Only', 'room-only': 'Room Only', 'both': 'Food + Room', 'zero': 'No Payment', 'remarks': 'Remarks' };
-            var isSpecial = (_revFilter === 'zero' || _revFilter === 'remarks');
+            var LABELS = { 'all': 'All Guests', 'food-only': 'Food Only', 'room-only': 'Room Only', 'both': 'Food + Room', 'zero': 'No Payment' };
+            var isSpecial = (_revFilter === 'zero');
             var sumAmt = function (v) { return isSpecial && v === 0 ? '-' : fmtAmt(v); };
             var bannerSub = _revFilter === 'all' ? 'Selected period' : 'Filtered: ' + LABELS[_revFilter] + ' (' + s.filteredTotal + ' of ' + s.total + ')';
             function mkRows(rows, barCls) {
@@ -2267,11 +2400,10 @@
                 { f: 'food-only', lbl: 'Food Only', cnt: s.foodOnly },
                 { f: 'room-only', lbl: 'Room Only', cnt: s.roomOnly },
                 { f: 'both', lbl: 'Food + Room', cnt: s.both },
-                { f: 'zero', lbl: 'No Payment', cnt: s.zero },
-                { f: 'remarks', lbl: 'Remarks', cnt: s.remarks }
+                { f: 'zero', lbl: 'No Payment', cnt: s.zero }
             ];
             var pillsHtml = pills.map(function (p) {
-                var isAlert = (p.f === 'zero' || p.f === 'remarks');
+                var isAlert = (p.f === 'zero');
                 var isEmpty = (p.cnt === 0 && p.f !== 'all');
                 return '<button class="rev-stat-pill' + (_revFilter === p.f ? ' active' : '') + (isAlert ? ' zero' : '') + '" data-filter="' + p.f + '"' + (isEmpty ? ' disabled' : '') + (!isEmpty ? ' onclick="setRevFilter(\'' + p.f + '\')"' : '') + '><span class="rev-stat-num" style="' + (isAlert ? 'color:var(--exp)' : '') + '">' + p.cnt + '</span><span class="rev-stat-lbl">' + p.lbl + '</span></button>';
             }).join('');
@@ -2282,12 +2414,13 @@
         function renderGuestTableRow(g) { function mkCell(payments, cls) { if (!payments.length) return '<td><span class="tbl-nil">-</span></td>'; var grouped = groupPayments(payments), total = payments.reduce(function (s, p) { return s + guestPaymentAmountForCalc_(p); }, 0); var rows = grouped.map(function (gr) { var amts = gr.payments.map(function (payment, i) { return (i > 0 ? '<span class="tbl-br-plus">+</span>' : '') + displayGuestAmount_(payment); }).join(''); return '<div class="tbl-br-row"><span class="tbl-br-m">' + gr.method + '</span><span class="tbl-br-a">' + amts + '</span></div>'; }).join(''); return '<td><div class="tbl-br">' + rows + '<div class="tbl-br-total ' + cls + '">' + fmtAmt(total) + '</div></div></td>'; } var zero = isZeroGuest(g); var nameHtml = zero ? '<span style="color:var(--exp);font-weight:600">' + g.name + '</span> <span style="font-size:10px;font-weight:600;color:var(--exp-dark);background:var(--exp-bg);border:1px solid var(--exp-bdr);border-radius:999px;padding:1px 7px">No Payment</span>' : '<span class="tbl-name-bold">' + g.name + '</span>'; return '<tr><td class="tbl-date-cell">' + g.date + '</td><td>' + nameHtml + '</td>' + mkCell(g.food || [], 'green') + mkCell(g.room || [], 'green') + '<td class="right ' + (zero ? 'tbl-nil' : 'rev-amt') + '">' + formatGuestGrandTotal(g) + '</td></tr>'; }
         function renderGuestRemarkCard(g) { return '<div class="guest-card"><div class="guest-hd"><div style="display:flex;align-items:center;gap:4px;min-width:0;flex:1"><span class="guest-name">' + g.name + '</span></div><span class="guest-date-pill">' + g.date + '</span></div><div class="pay-section"><div class="pay-section-label room">Remarks</div><div style="font-size:13px;color:var(--text2);white-space:pre-wrap">' + g.remarks + '</div></div><div class="guest-total"><span class="guest-total-lbl">Grand Total</span><span class="guest-total-amt">' + formatGuestGrandTotal(g) + '</span></div></div>'; }
         function renderGuestRemarkTableRow(g) { return '<tr><td class="tbl-date-cell">' + g.date + '</td><td><span class="tbl-name-bold">' + g.name + '</span></td><td class="right ' + (isZeroGuest(g) ? 'tbl-nil' : 'rev-amt') + '">' + formatGuestGrandTotal(g) + '</td><td>' + g.remarks + '</td></tr>'; }
-        function updateRevenueTableHead() { var head = document.querySelector('#r-table').closest('table').querySelector('thead tr'); if (_revFilter === 'remarks') { head.innerHTML = '<th>Date</th><th>Guest</th><th class="right">Total</th><th>Remarks</th>'; } else { head.innerHTML = '<th>Date</th><th>Guest</th><th>Food</th><th>Room</th><th class="right">Total</th>'; } }
-        function rRenderList() { var filtered = getFilteredGuests(); _rPg = renderPagedPanel(filtered, _rSz, _rPg, { beforeRender: updateRevenueTableHead, infoId: 'r-pgInfo', cardsId: 'r-cards', tableId: 'r-table', navId: 'r-pgNav', cardRenderer: _revFilter === 'remarks' ? renderGuestRemarkCard : renderGuestCard, tableRenderer: _revFilter === 'remarks' ? renderGuestRemarkTableRow : renderGuestTableRow, navPrefix: 'r' }); }
+        function updateRevenueTableHead() { var head = document.querySelector('#r-table').closest('table').querySelector('thead tr'); head.innerHTML = '<th>Date</th><th>Guest</th><th>Food</th><th>Room</th><th class="right">Total</th>'; }
+        function rRenderList() { var filtered = getFilteredGuests(); _rPg = renderPagedPanel(filtered, _rSz, _rPg, { beforeRender: updateRevenueTableHead, infoId: 'r-pgInfo', cardsId: 'r-cards', tableId: 'r-table', navId: 'r-pgNav', cardRenderer: renderGuestCard, tableRenderer: renderGuestTableRow, navPrefix: 'r' }); }
         function rRender() { var f = getFilteredGuests(); renderRevSummary(buildRevSum(f, _guests)); rRenderList(); }
         function rPgSzChange() { var v = byId('r-pgSz').value; _rSz = v === 'all' ? 'all' : parseInt(v, 10); _rPg = 1; rRenderList(); }
         function rGoPage(p) { _rPg = p; rRenderList(); byId('r-results').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
         function handleRevenueFetch() { hideWarn('r'); var d = validateDates('r'); if (!d) return; setLoad('r', true); ensureDashboardCache_().then(function () { _guests = getCachedGuestsForRange_(d.start, d.end); _rSz = 10; _rPg = 1; _revFilter = 'all'; byId('r-pgSz').value = '10'; if (!_guests.length) { setPagedEmptyState('r', 'r-sum', 'No guest records found.'); } else rRender(); byId('r-results').classList.add('show'); setLoad('r', false); }).catch(function (err) { setLoad('r', false); showWarn('r', 'Error: ' + err.message); }); }
+        function handleRevenueRemarksFetch() { hideWarn('r'); var d = validateDates('r'); if (!d) return; setLoad('rr', true); ensureDashboardCache_().then(function () { _revenueRemarks = getCachedGuestsForRange_(d.start, d.end).filter(hasGuestRemarks); openRemarksModal_('Revenue Remarks', buildRemarksModalContent_(_revenueRemarks, { emptyMessage: 'No remarks found for the selected date range.', headHtml: '<th>Date</th><th>Guest</th><th class="right">Total</th><th>Remarks</th>', tableRenderer: renderGuestRemarkTableRow, cardRenderer: renderGuestRemarkCard })); setLoad('rr', false); }).catch(function (err) { setLoad('rr', false); showWarn('r', 'Error: ' + err.message); }); }
         function buildExpSum(days) { var ct = {}, mt = {}, grand = 0; days.forEach(function (d) { (d.entries || []).forEach(function (e) { if (!hasExpenseAmount_(e.amount)) return; var amount = expenseAmountValue_(e.amount); ct[displayExpenseText_(e.category, '-')] = (ct[displayExpenseText_(e.category, '-')] || 0) + amount; mt[displayExpenseText_(e.method, '-')] = (mt[displayExpenseText_(e.method, '-')] || 0) + amount; grand += amount; }); }); return { cats: Object.keys(ct).map(function (k) { return { label: k, amt: ct[k] }; }).sort(function (a, b) { return b.amt - a.amt; }), meths: Object.keys(mt).map(function (k) { return { label: k, amt: mt[k] }; }).sort(function (a, b) { return b.amt - a.amt; }), grand: grand }; }
         function renderExpSummary(s) { var sub = _lastExpCat === 'all' ? 'All Categories' : 'Category: ' + _lastExpCat; function mkRows(rows, barCls) { if (!rows.length) return '<div style="font-size:12px;color:var(--muted2)">No data available.</div>'; var max = rows[0].amt || 1; return rows.map(function (r) { return '<div class="sum-row"><div class="sum-row-left"><div class="sum-bar-wrap"><div class="sum-bar ' + barCls + '" style="width:' + Math.round(r.amt / max * 100) + '%"></div></div><span class="sum-name">' + r.label + '</span></div><span class="sum-amt">' + fmtAmt(r.amt) + '</span></div>'; }).join(''); } byId('e-sum').innerHTML = '<div class="rev-banner red-bg"><div><span class="rev-eyebrow">Total Expenses</span><span class="rev-title">' + sub + '</span></div><div class="rev-amount red">' + fmtAmt(s.grand) + '</div></div><div class="summary-grids"><div class="summary-col"><div class="sum-col-title">By Category</div>' + mkRows(s.cats, 'red') + '<div class="sum-total-row"><span class="sum-total-label">Total</span><span class="sum-total-amt red">' + fmtAmt(s.grand) + '</span></div></div><div class="summary-col"><div class="sum-col-title">By Payment Method</div>' + mkRows(s.meths, 'red') + '<div class="sum-total-row"><span class="sum-total-label">Total</span><span class="sum-total-amt red">' + fmtAmt(s.grand) + '</span></div></div></div>'; }
         function renderExpDayCard(day) { var entries = day.entries || []; var rows = entries.length ? entries.map(function (e) { return '<div class="exp-entry"><div class="exp-name-wrap"><span class="exp-name">' + displayExpenseText_(e.name, '-') + '</span><span class="exp-cat-pill">' + displayExpenseText_(e.category, '-') + '</span></div><span class="exp-cell">' + displayExpenseText_(e.method, '-') + '</span><span class="exp-cell amt">' + displayExpenseAmount_(e) + '</span></div>'; }).join('') : '<div style="padding:14px 18px;font-size:13px;color:var(--muted2)">' + (normalizeClientString_(day.remarks) ? 'Remarks only. No expense entries recorded.' : 'No expense entries recorded.') + '</div>'; var remarksHtml = normalizeClientString_(day.remarks) ? '<div style="padding:0 18px 14px;font-size:13px;color:var(--text2);white-space:pre-wrap"><strong style="color:var(--text)">Remarks:</strong> ' + day.remarks + '</div>' : ''; return '<div class="exp-day-card"><div class="exp-day-hd"><span class="exp-day-date">' + day.date + '</span><span class="exp-day-count">' + entries.length + ' item' + (entries.length !== 1 ? 's' : '') + '</span></div><div class="exp-tbl-head"><span class="exp-th">Name / Category</span><span class="exp-th">Method</span><span class="exp-th">Amount</span></div>' + rows + remarksHtml + '</div>'; }
@@ -2299,7 +2432,7 @@
         function handleExpFetch() { hideWarn('e'); var d = validateDates('e'); if (!d) return; _lastExpCat = byId('e-cat').value; showExpenseSection('none'); setLoad('e', true); ensureDashboardCache_().then(function () { _expDays = getCachedExpenseDaysForRange_(d.start, d.end, _lastExpCat); _eSz = 10; _ePg = 1; byId('e-pgSz').value = '10'; if (!_expDays.length) { setPagedEmptyState('e', 'e-sum', 'No expense records found.'); } else eRender(); showExpenseSection('data'); setLoad('e', false); }).catch(function (err) { setLoad('e', false); showWarn('e', 'Error: ' + err.message); }); }
         function renderExpenseRemarkCard(item) { return '<div class="exp-day-card"><div class="exp-day-hd"><span class="exp-day-date">' + item.date + '</span><span class="exp-day-count">Remark</span></div><div style="padding:14px 16px;font-size:13px;color:var(--text2);white-space:pre-wrap">' + item.remarks + '</div></div>'; }
         function renderExpenseRemarkTableRow(item) { return '<tr><td class="tbl-date-cell">' + item.date + '</td><td>' + item.remarks + '</td></tr>'; }
-        function handleExpenseRemarksFetch() { hideWarn('er'); showExpenseSection('none'); setLoad('er', true); ensureDashboardCache_().then(function () { _expenseRemarks = getCachedExpenseRemarks_(); var desk = byId('er-desk'); var mobile = byId('er-mobile'); if (!_expenseRemarks.length) { desk.innerHTML = '<div class=\"no-data\">No remarks found.</div>'; mobile.innerHTML = '<div class=\"no-data\">No remarks found.</div>'; showExpenseSection('remarks'); setLoad('er', false); return; } desk.innerHTML = '<div class=\"tbl-wrap\"><table class=\"data-tbl\"><thead><tr><th>Date</th><th>Remarks</th></tr></thead><tbody id=\"er-table\"></tbody></table></div>'; mobile.innerHTML = '<div id=\"er-cards\"></div>'; byId('er-table').innerHTML = _expenseRemarks.map(renderExpenseRemarkTableRow).join(''); byId('er-cards').innerHTML = _expenseRemarks.map(renderExpenseRemarkCard).join(''); showExpenseSection('remarks'); setLoad('er', false); }).catch(function (err) { setLoad('er', false); showWarn('er', 'Error: ' + err.message); }); }
+        function handleExpenseRemarksFetch() { hideWarn('er'); setLoad('er', true); ensureDashboardCache_().then(function () { _expenseRemarks = getCachedExpenseRemarks_(); openRemarksModal_('Expense Remarks', buildRemarksModalContent_(_expenseRemarks, { emptyMessage: 'No remarks found.', headHtml: '<th>Date</th><th>Remarks</th>', tableRenderer: renderExpenseRemarkTableRow, cardRenderer: renderExpenseRemarkCard })); setLoad('er', false); }).catch(function (err) { setLoad('er', false); showWarn('er', 'Error: ' + err.message); }); }
         function buildPaySum(days) { var rmt = {}, rt = 0, ect = {}, et = 0; (days || []).forEach(function (d) { (d.guests || []).forEach(function (g) { (g.food || []).forEach(function (p) { var amount = guestPaymentAmountForCalc_(p); rt += amount; var k = displayGuestMethod_(p); rmt[k] = (rmt[k] || 0) + amount; }); (g.room || []).forEach(function (p) { var amount = guestPaymentAmountForCalc_(p); rt += amount; var k = displayGuestMethod_(p); rmt[k] = (rmt[k] || 0) + amount; }); }); (d.expenses || []).forEach(function (e) { if (!hasExpenseAmount_(e.amount)) return; var amount = expenseAmountValue_(e.amount); et += amount; ect[displayExpenseText_(e.category, '-')] = (ect[displayExpenseText_(e.category, '-')] || 0) + amount; }); }); return { revMethods: Object.keys(rmt).map(function (k) { return { label: k, amt: rmt[k] }; }).sort(function (a, b) { return b.amt - a.amt; }), expCats: Object.keys(ect).map(function (k) { return { label: k, amt: ect[k] }; }).sort(function (a, b) { return b.amt - a.amt; }), revTotal: rt, expTotal: et }; }
         function renderPaySummary(days) { var s = buildPaySum(days); var showRev = _pType !== 'expense', showExp = _pType !== 'revenue'; var mLabel = _lastPayMethod === 'all' ? 'All Methods' : _lastPayMethod; var tLabel = _lastPayType === 'all' ? 'All Types' : (_lastPayType === 'revenue' ? 'Revenue Only' : 'Expense Only'); var sub = mLabel + ' | ' + tLabel; var bannerCls = showRev && showExp ? 'neutral-bg' : (showRev ? 'green-bg' : 'red-bg'); var bannerHtml; if (showRev && showExp) { bannerHtml = '<div style="display:flex;flex-direction:column;gap:2px"><span class="rev-eyebrow">Summary</span><span class="rev-title">' + sub + '</span><div style="margin-top:6px"><div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--rev-dark);font-weight:600;margin-bottom:2px">Revenue</div><div style="font-size:34px;font-weight:600;color:var(--rev);line-height:1;letter-spacing:-0.5px">' + fmtAmt(s.revTotal) + '</div></div></div><div style="text-align:right"><div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--exp-dark);font-weight:600;margin-bottom:2px">Expense</div><div style="font-size:34px;font-weight:600;color:var(--exp);line-height:1;letter-spacing:-0.5px">' + fmtAmt(s.expTotal) + '</div></div>'; } else if (showRev) { bannerHtml = '<div><span class="rev-eyebrow">Total Revenue</span><span class="rev-title">' + sub + '</span></div><div class="rev-amount green">' + fmtAmt(s.revTotal) + '</div>'; } else { bannerHtml = '<div><span class="rev-eyebrow">Total Expense</span><span class="rev-title">' + sub + '</span></div><div class="rev-amount red">' + fmtAmt(s.expTotal) + '</div>'; } byId('p-sum').innerHTML = '<div class="rev-banner ' + bannerCls + '">' + bannerHtml + '</div>'; }
         function renderPdayCard(day) { var showRev = _pType !== 'expense', showExp = _pType !== 'revenue'; var guests = day.guests || [], expenses = day.expenses || []; function renderGuestBlock(g) { function renderSecLine(payments, secLabel) { payments = payments || []; if (!payments.length) return ''; var grouped = groupPayments(payments); var parts = grouped.map(function (gr) { var amts = gr.payments.map(function (payment, i) { return (i > 0 ? '<span class="pay-plus">+</span>' : '') + displayGuestAmount_(payment); }).join(''); return '<span><span class="pday-g-line-lbl">' + gr.method + '</span>' + amts + '</span>'; }).join('<span class="pday-g-sep">|</span>'); return '<div class="pday-g-line"><span class="pday-g-line-lbl">' + secLabel + '</span>' + parts + '</div>'; } var gt = (g.food || []).reduce(function (s, p) { return s + guestPaymentAmountForCalc_(p); }, 0) + (g.room || []).reduce(function (s, p) { return s + guestPaymentAmountForCalc_(p); }, 0); return '<div class="pday-g-block"><div class="pday-g-name">' + g.name + '</div>' + renderSecLine(g.food || [], 'Food') + renderSecLine(g.room || [], 'Room') + '<div class="pday-g-total">' + fmtAmt(gt) + '</div></div>'; } function renderExpBlock() { if (!expenses.length) return '<div style="font-size:12px;color:var(--muted2)">No expense records for this date.</div>'; return expenses.map(function (e) { return '<div class="pday-g-block"><div class="pday-g-name">' + displayExpenseText_(e.name, '-') + '</div><div class="pday-g-line"><span class="pday-g-line-lbl">' + displayExpenseText_(e.category, '-') + '</span><span class="pday-g-sep">|</span><span class="pday-g-line-lbl">' + displayExpenseText_(e.method, '-') + '</span><span style="font-weight:600;color:var(--exp)">' + displayExpenseAmount_(e) + '</span></div></div>'; }).join(''); } var html = '<div class="pday-card"><div class="pday-hd"><span class="pday-date">' + day.date + '</span>'; if (showRev && guests.length) html += '<span class="pday-badge rev">Revenue</span>'; if (showExp && expenses.length) html += '<span class="pday-badge exp" style="margin-left:6px">Expense</span>'; html += '</div>'; if (showRev && showExp) { html += '<div class="pday-split"><div class="pday-split-col"><span class="pday-split-label rev">Revenue</span>' + (guests.length ? guests.map(renderGuestBlock).join('') : '<div style="font-size:12px;color:var(--muted2)">No revenue records for this date.</div>') + '</div><div class="pday-split-col"><span class="pday-split-label exp">Expenses</span>' + renderExpBlock() + '</div></div>'; } else if (showRev) { html += '<div style="padding:12px 14px">' + (guests.length ? guests.map(renderGuestBlock).join('') : '<div style="font-size:12px;color:var(--muted2)">No revenue records for this date.</div>') + '</div>'; } else if (showExp) { html += '<div style="padding:12px 14px">' + renderExpBlock() + '</div>'; } return html + '</div>'; }
@@ -2315,6 +2448,7 @@
         function renderChartCards(charts) { _chartDefs = [{ id: 'ac-net', title: 'Net Income vs Expense', items: charts.netVsExp, palette: ['#16a34a', '#dc2626'] }, { id: 'ac-revsrc', title: 'Revenue Source', items: charts.revSource, palette: REV_PALETTE }, { id: 'ac-rmod', title: 'Revenue Mode', items: charts.revMode, palette: REV_PALETTE }, { id: 'ac-ecat', title: 'Expense Category', items: charts.expCat, palette: EXP_PALETTE }, { id: 'ac-emod', title: 'Expense Mode', items: charts.expMode, palette: EXP_PALETTE }]; byId('a-grid').innerHTML = _chartDefs.map(function (def) { var total = def.items.reduce(function (s, x) { return s + x.amount; }, 0); var bodyRows = def.items.map(function (item, i) { var pct = total > 0 ? ((item.amount / total) * 100).toFixed(1) : '0.0', c = def.palette[i % def.palette.length]; return '<tr><td><div class="a-name-cell"><span class="a-dot" style="background:' + c + '"></span>' + item.label + '</div></td><td>' + fmtAmt(item.amount) + '</td><td>' + pct + '%</td></tr>'; }).join(''); var chartArea = def.items.length ? '<div class="a-chart-canvas"><div id="' + def.id + '" class="a-chart-slot"></div></div>' : '<div class="a-no-chart">No data available.</div>'; return '<div class="a-chart-card"><div class="a-chart-hd"><div class="a-chart-title">' + def.title + '</div></div>' + chartArea + '<table class="a-tbl"><thead><tr><th>Name</th><th>Amount</th><th>%</th></tr></thead><tbody>' + bodyRows + '</tbody><tfoot><tr><td>Total</td><td>' + fmtAmt(total) + '</td><td>100%</td></tr></tfoot></table></div>'; }).join(''); if (_chartsReady) setTimeout(function () { drawAllCharts(_chartDefs); }, 150); else _pendingDraw = _chartDefs; }
         function drawAllCharts(defs) { defs.forEach(function (def) { if (!def.items.length) return; var el = document.getElementById(def.id); if (!el) return; var w = el.offsetWidth || el.parentElement.offsetWidth || 320; el.style.width = w + 'px'; el.style.height = '220px'; var total = def.items.reduce(function (s, x) { return s + x.amount; }, 0); var dt = new google.visualization.DataTable(); dt.addColumn('string', 'Label'); dt.addColumn('number', 'Amount'); dt.addColumn({ type: 'string', role: 'tooltip', p: { html: true } }); def.items.forEach(function (item, i) { var pct = total > 0 ? ((item.amount / total) * 100).toFixed(1) : '0.0', c = def.palette[i % def.palette.length]; var tip = '<div style="padding:10px 14px;font-family:Inter,sans-serif;font-size:13px;background:#fff;color:#111;border:1.5px solid #e5e5e5;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.08);min-width:150px"><div style="display:flex;align-items:center;gap:7px;margin-bottom:5px"><span style="width:8px;height:8px;border-radius:50%;background:' + c + ';display:inline-block;flex-shrink:0"></span><strong style="color:#111">' + item.label + '</strong></div><div style="font-weight:600;color:' + c + '">' + fmtAmt(item.amount) + '</div><div style="color:#666;margin-top:2px">' + pct + '%</div></div>'; dt.addRow([item.label, item.amount, tip]); }); new google.visualization.PieChart(el).draw(dt, { pieHole: 0.42, backgroundColor: { fill: 'transparent' }, legend: 'none', pieSliceBorderColor: '#ffffff', chartArea: { left: '8%', top: 12, width: '84%', height: '84%' }, colors: def.palette, tooltip: { isHtml: true, trigger: 'focus' }, pieSliceText: 'none', enableInteractivity: true, width: w, height: 220 }); }); }
         ['e-cat', 'p-method'].forEach(function (id) { var element = byId(id); if (!element) return; element.addEventListener('focus', primeDashboardCache_); element.addEventListener('pointerdown', primeDashboardCache_); });
+        document.addEventListener('keydown', function (event) { if (event.key === 'Escape') closeRemarksModal_(); });
         bindWarnReset('r', ['r-sd', 'r-ed']); bindWarnReset('e', ['e-sd', 'e-ed']); bindWarnReset('p', ['p-sd', 'p-ed']); bindWarnReset('a', ['a-sd', 'a-ed']);
     </script>
 </body>
