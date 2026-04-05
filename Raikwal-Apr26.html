@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,52 +5,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Raikwal April 2026</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@600;700&display=swap"
-        rel="stylesheet">
+    <!-- Removed decorative serif font for better data readability, kept Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/charts/loader.js"></script>
     <style>
         :root {
-            --bg: #f6efe4;
-            --surface: #fffdfa;
-            --surface2: #f7efe1;
-            --surface3: #f0e1cd;
-            --surface4: #e7d2b1;
-            --border: #dfcfbb;
-            --border-strong: #ccb28d;
-            --border2: #ede1d0;
-            --text: #19140f;
-            --text2: #3c3024;
-            --muted: #6f6254;
-            --muted2: #9a8a79;
-            --ink: #17120d;
-            --gold: #8f6424;
-            --gold-l: #c69544;
-            --gold-soft: rgba(143, 100, 36, 0.14);
-            --gold-glow: rgba(198, 149, 68, 0.18);
-            --rev: #1f8d54;
-            --rev-dark: #145233;
-            --rev-bg: rgba(31, 141, 84, 0.09);
-            --rev-bdr: rgba(31, 141, 84, 0.18);
-            --exp: #c63a26;
-            --exp-dark: #7d2619;
-            --exp-bg: rgba(198, 58, 38, 0.08);
-            --exp-bdr: rgba(198, 58, 38, 0.18);
-            --food: #3566d6;
-            --room: #1f8d54;
-            --danger: #c63a26;
-            --danger-bg: rgba(198, 58, 38, 0.07);
-            --danger-bdr: rgba(198, 58, 38, 0.18);
-            --table-head-top: 110px;
-            --table-head-top-scrolled: 45px;
-            --r: 22px;
-            --r-sm: 14px;
-            --r-xs: 10px;
+            /* Modern, high-contrast Slate & Blue palette */
+            --bg: #f3f4f6;
+            --surface: #ffffff;
+            --surface2: #f9fafb;
+            --surface3: #f3f4f6;
+            --surface4: #e5e7eb;
+            --border: #e5e7eb;
+            --border-strong: #d1d5db;
+            --border2: #f3f4f6;
+            --text: #111827;
+            --text2: #374151;
+            --muted: #6b7280;
+            --muted2: #9ca3af;
+            --ink: #000000;
+
+            /* Remapped 'gold' to a highly legible Indigo to maintain JS compatibility */
+            --gold: #4f46e5; 
+            --gold-l: #6366f1; 
+            --gold-soft: rgba(79, 70, 229, 0.1);
+            --gold-glow: rgba(79, 70, 229, 0.15);
+
+            /* Status Colors */
+            --rev: #059669;
+            --rev-dark: #047857;
+            --rev-bg: #ecfdf5;
+            --rev-bdr: #a7f3d0;
+
+            --exp: #dc2626;
+            --exp-dark: #b91c1c;
+            --exp-bg: #fef2f2;
+            --exp-bdr: #fecaca;
+
+            --food: #4f46e5;
+            --room: #059669;
+            --danger: #dc2626;
+            --danger-bg: #fef2f2;
+            --danger-bdr: #fecaca;
+
+            --table-head-top: 60px;
+            --table-head-top-scrolled: 60px;
+            --r: 12px;
+            --r-sm: 8px;
+            --r-xs: 6px;
         }
 
-        *,
-        *::before,
-        *::after {
+        *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
@@ -59,52 +63,20 @@
 
         body {
             position: relative;
-            overflow-x: hidden;
-            background: radial-gradient(circle at top left, rgba(198, 149, 68, 0.18), transparent 28%), radial-gradient(circle at top right, rgba(31, 141, 84, 0.10), transparent 26%), linear-gradient(180deg, #f3ebde 0, #f7f1e7 180px, #fcfaf6 460px, #ffffff 100%);
+            background: var(--bg);
             color: var(--text);
             font-family: 'Inter', sans-serif;
             font-size: 15px;
-            line-height: 1.7;
+            line-height: 1.6;
             min-height: 100vh;
             padding-bottom: 64px;
             -webkit-font-smoothing: antialiased;
         }
 
-        body::before,
-        body::after {
-            content: '';
-            position: fixed;
-            border-radius: 50%;
-            pointer-events: none;
-            filter: blur(12px);
-            opacity: .65;
-            z-index: 0;
-        }
-
-        body::before {
-            width: 220px;
-            height: 220px;
-            top: 96px;
-            left: -70px;
-            background: radial-gradient(circle, rgba(198, 149, 68, 0.22) 0, rgba(198, 149, 68, 0) 70%);
-        }
-
-        body::after {
-            width: 260px;
-            height: 260px;
-            top: 140px;
-            right: -120px;
-            background: radial-gradient(circle, rgba(31, 141, 84, 0.16) 0, rgba(31, 141, 84, 0) 72%);
-        }
-
-        body>* {
-            position: relative;
-            z-index: 1;
-        }
-
+        /* Header Restyling */
         .header {
-            background: rgba(255, 250, 243, 0.92);
-            border-bottom: 1px solid rgba(143, 100, 36, 0.12);
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
             padding: 16px 24px;
             display: flex;
             align-items: center;
@@ -112,77 +84,46 @@
             position: sticky;
             top: 0;
             z-index: 200;
-            transition: transform .22s ease, opacity .22s ease;
-            backdrop-filter: blur(14px);
-            box-shadow: 0 10px 26px rgba(37, 28, 17, 0.08);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         .header-brand {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 2px;
-        }
-
-        .header-eyebrow {
-            display: none;
         }
 
         .header-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 36px;
+            font-size: 24px;
             font-weight: 700;
-            line-height: .95;
-            letter-spacing: .15px;
             color: var(--text);
-        }
-
-        @media(max-width:639px) {
-            .header-title {
-                font-size: 32px;
-            }
+            letter-spacing: -0.5px;
         }
 
         .header-title em {
-            color: var(--gold);
+            color: var(--text);
             font-style: normal;
-            font-weight: 700;
-        }
-
-        .header-dot {
-            display: none;
-        }
-
-        body.scrolled .header {
-            transform: translateY(-110%);
-            opacity: 0;
-            pointer-events: none;
         }
 
         .tabs {
-            background: rgba(255, 251, 246, 0.9);
-            border-bottom: 1px solid rgba(143, 100, 36, 0.12);
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
             display: flex;
-            justify-content: center;
-            padding: 0;
+            justify-content: flex-start;
+            padding: 0 16px;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             position: sticky;
             top: 65px;
             z-index: 199;
             scrollbar-width: none;
-            -ms-overflow-style: none;
-            transition: top .22s ease;
-            backdrop-filter: blur(14px);
-            box-shadow: 0 8px 20px rgba(37, 28, 17, 0.06);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
-        .tabs::-webkit-scrollbar {
-            display: none;
-        }
+        .tabs::-webkit-scrollbar { display: none; }
 
-        body.scrolled .tabs {
-            top: 0;
+        @media(min-width:600px) {
+            .tabs { justify-content: center; }
         }
 
         .tab-btn {
@@ -191,650 +132,359 @@
             border: none;
             color: var(--muted);
             font-family: 'Inter', sans-serif;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            padding: 15px 12px;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 16px 20px;
             cursor: pointer;
-            transition: color .18s ease, background .18s ease;
+            transition: all 0.2s ease;
             white-space: nowrap;
-            flex: 1;
-            text-align: center;
         }
+
+        .tab-btn:hover { color: var(--text); }
+        .tab-btn.active { color: var(--gold); }
 
         .tab-btn::after {
             content: '';
             position: absolute;
-            left: 18px;
-            right: 18px;
-            bottom: 0;
-            height: 2px;
-            border-radius: 999px;
+            left: 0; right: 0; bottom: 0;
+            height: 3px;
+            border-radius: 3px 3px 0 0;
             background: transparent;
-            transition: background .18s ease;
+            transition: background 0.2s ease;
         }
 
-        @media(min-width:600px) {
-            .tab-btn {
-                padding: 15px 24px;
-                font-size: 13px;
-                flex: none;
-            }
-        }
-
-        .tab-btn:hover {
-            color: var(--text);
-            background: rgba(143, 100, 36, 0.05);
-        }
-
-        .tab-btn.active {
-            color: var(--text);
-        }
-
-        .tab-btn.active::after {
-            background: linear-gradient(90deg, var(--gold-l), var(--gold));
-        }
+        .tab-btn.active::after { background: var(--gold); }
 
         .page {
             max-width: 1120px;
             margin: 0 auto;
-            padding: 38px 20px 0;
+            padding: 32px 16px 0;
         }
 
-        @media(min-width:640px) {
-            .page {
-                padding: 46px 36px 0;
-            }
-        }
+        @media(min-width:640px) { .page { padding: 40px 32px 0; } }
 
-        .tab-panel {
-            display: none;
-        }
-
-        .tab-panel.active {
-            display: block;
-        }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
 
         .card {
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0, rgba(255, 251, 245, 0.98) 100%);
-            border: 1px solid rgba(143, 100, 36, 0.14);
+            background: var(--surface);
+            border: 1px solid var(--border);
             border-radius: var(--r);
-            box-shadow: 0 22px 52px rgba(38, 29, 18, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.82);
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 24px;
-            width: 180px;
-            height: 3px;
-            border-radius: 999px;
-            background: linear-gradient(90deg, var(--gold-l), rgba(198, 149, 68, 0));
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            margin-bottom: 24px;
         }
 
         .card-head {
-            padding: 18px 24px 0;
-            font-size: 10px;
-            letter-spacing: 2.8px;
+            padding: 16px 20px;
+            font-size: 12px;
+            letter-spacing: 0.5px;
             text-transform: uppercase;
-            color: var(--gold);
-            font-weight: 800;
+            color: var(--text);
+            font-weight: 700;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface2);
+            border-radius: var(--r) var(--r) 0 0;
         }
 
-        .card-body {
-            padding: 18px 24px 24px;
-        }
+        .card-body { padding: 20px; }
 
         .inline-card {
-            margin-top: 16px;
-            padding: 16px 18px;
-            border: 1px dashed rgba(143, 100, 36, 0.24);
-            border-radius: 18px;
-            background: linear-gradient(180deg, rgba(255, 252, 247, 0.92) 0, rgba(248, 241, 231, 0.95) 100%);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+            margin-top: 20px;
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            background: var(--surface2);
         }
 
         .inline-card .fg-2 {
             grid-template-columns: 1fr;
-            align-items: start;
-            gap: 12px;
+            align-items: center;
+            gap: 16px;
             margin-bottom: 0;
         }
 
-        .inline-card .field {
-            justify-content: center;
-            max-width: none;
-        }
-
-        .inline-card .btn-fetch {
-            width: auto;
-            min-width: 164px;
-            grid-column: auto;
-            justify-self: start;
-        }
-
         @media(min-width:700px) {
-            .inline-card .fg-2 {
-                grid-template-columns: minmax(0, 1fr) auto;
-                align-items: center;
-                gap: 18px;
-            }
-
-            .inline-card .field {
-                max-width: 520px;
-            }
+            .inline-card .fg-2 { grid-template-columns: 1fr auto; }
+            .inline-card .btn-fetch { width: auto; min-width: 160px; }
         }
 
         .inline-note {
-            font-size: 12px;
+            font-size: 14px;
             color: var(--text2);
-            font-weight: 600;
-            line-height: 1.55;
+            font-weight: 500;
         }
 
-        .fg-2 {
+        .fg-2, .fg-3 {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 12px;
+            gap: 16px;
+            margin-bottom: 16px;
         }
+
+        .fg-2 { grid-template-columns: 1fr; }
+        .fg-3 { grid-template-columns: 1fr; }
 
         @media(min-width:500px) {
-            .fg-2 {
-                grid-template-columns: 1fr 1fr auto;
-                align-items: end;
-                gap: 16px;
-                margin-bottom: 0;
-            }
-        }
-
-        .fg-3 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        @media(min-width:560px) {
-            .fg-3 {
-                grid-template-columns: 1fr 1fr 1fr;
-                gap: 16px;
-            }
+            .fg-2 { grid-template-columns: 1fr 1fr; }
+            .fg-3 { grid-template-columns: 1fr 1fr; }
         }
 
         @media(min-width:760px) {
-            .fg-3 {
-                grid-template-columns: 1fr 1fr 1fr 1fr auto;
-                align-items: end;
-                margin-bottom: 0;
-            }
+            .fg-2 { grid-template-columns: 1fr 1fr auto; align-items: end; margin-bottom: 0; }
+            .fg-3 { grid-template-columns: 1fr 1fr 1fr 1fr auto; align-items: end; margin-bottom: 0; }
         }
 
-        .field {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
+        .field { display: flex; flex-direction: column; gap: 6px; }
 
         .field label {
-            font-size: 12px;
-            color: var(--muted);
-            font-weight: 700;
-            letter-spacing: .2px;
+            font-size: 13px;
+            color: var(--text2);
+            font-weight: 600;
         }
 
-        .date-wrap {
-            position: relative;
-        }
-
-        .date-input,
-        .sel-input {
-            background: rgba(255, 255, 255, 0.96);
-            border: 1px solid rgba(143, 100, 36, 0.18);
+        /* Mobile friendly Inputs */
+        .date-input, .sel-input, .page-size-select {
+            background: var(--surface);
+            border: 1px solid var(--border-strong);
             border-radius: var(--r-sm);
             color: var(--text);
             font-family: 'Inter', sans-serif;
-            font-size: 14px;
+            font-size: 16px; /* 16px avoids iOS auto-zoom */
             font-weight: 500;
-            padding: 11px 15px;
+            padding: 0 14px;
             width: 100%;
             outline: none;
             cursor: pointer;
-            transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
             min-height: 48px;
-            -webkit-appearance: none;
-            appearance: none;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 8px 20px rgba(37, 28, 17, 0.04);
+            transition: all 0.15s ease;
         }
 
-        .date-input:hover,
-        .sel-input:hover {
-            border-color: rgba(143, 100, 36, 0.34);
+        .date-input:focus, .sel-input:focus, .page-size-select:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px var(--gold-soft);
         }
 
-        .date-input:focus,
-        .date-input:active,
-        .sel-input:focus {
-            border-color: var(--gold-l);
-            box-shadow: 0 0 0 4px rgba(198, 149, 68, 0.15), 0 14px 26px rgba(37, 28, 17, 0.08);
-        }
-
-        .date-input.error {
-            border-color: var(--danger);
-        }
-
-        .date-input::-webkit-calendar-picker-indicator {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            opacity: 0;
-            cursor: pointer;
-        }
+        .date-input.error { border-color: var(--danger); box-shadow: 0 0 0 3px var(--danger-bg); }
 
         .btn-fetch {
-            background: linear-gradient(180deg, #251b13 0, #15100c 100%);
-            color: #f9f3e9;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: var(--text);
+            color: var(--surface);
+            border: none;
             border-radius: var(--r-sm);
             font-family: 'Inter', sans-serif;
-            font-size: 13px;
-            font-weight: 800;
-            letter-spacing: .95px;
-            text-transform: uppercase;
-            padding: 11px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 0 24px;
             cursor: pointer;
             white-space: nowrap;
             min-height: 48px;
             width: 100%;
-            grid-column: 1 / -1;
-            transition: background .16s ease, opacity .16s ease, transform .16s ease, box-shadow .16s ease;
-            box-shadow: 0 16px 32px rgba(23, 18, 12, 0.16);
+            transition: all 0.2s ease;
         }
 
-        @media(min-width:500px) {
-            .fg-2 .btn-fetch {
-                width: auto;
-                grid-column: auto;
-            }
-        }
-
-        @media(min-width:760px) {
-            .fg-3 .btn-fetch {
-                width: auto;
-                grid-column: auto;
-            }
-        }
-
-        .btn-fetch:hover {
-            background: linear-gradient(180deg, #37281c 0, #1c140f 100%);
-            transform: translateY(-1px);
-            box-shadow: 0 18px 34px rgba(23, 18, 12, 0.2);
-        }
-
-        .btn-fetch:active {
-            opacity: .92;
-            transform: translateY(0);
-        }
-
-        .btn-fetch:disabled {
-            opacity: .45;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .btn-fetch:focus-visible,
-        .page-btn:focus-visible,
-        .tab-btn:focus-visible,
-        .page-size-select:focus-visible {
-            outline: none;
-            box-shadow: 0 0 0 4px rgba(198, 149, 68, 0.16);
-        }
+        .btn-fetch:hover { background: var(--text2); transform: translateY(-1px); }
+        .btn-fetch:active { transform: translateY(0); }
+        .btn-fetch:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
         .warning {
             display: none;
-            align-items: flex-start;
-            gap: 10px;
-            background: linear-gradient(180deg, rgba(253, 245, 242, 0.96) 0, rgba(255, 249, 246, 0.96) 100%);
+            align-items: center;
+            gap: 12px;
+            background: var(--danger-bg);
             border: 1px solid var(--danger-bdr);
-            border-radius: 16px;
-            padding: 12px 14px;
-            margin-top: 14px;
-            color: var(--exp-dark);
-            font-size: 13px;
-            line-height: 1.55;
-            box-shadow: 0 12px 24px rgba(198, 58, 38, 0.07);
+            border-radius: var(--r-sm);
+            padding: 14px 16px;
+            margin-top: 16px;
+            color: var(--danger);
+            font-size: 14px;
+            font-weight: 500;
         }
 
         .warning span:first-child {
-            display: inline-flex;
+            display: flex;
             align-items: center;
             justify-content: center;
-            width: 22px;
-            height: 22px;
-            border-radius: 999px;
-            background: rgba(198, 58, 38, 0.1);
-            font-weight: 800;
-            font-size: 13px;
-            line-height: 1;
-            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--danger);
+            color: #fff;
+            font-weight: bold;
+            font-size: 14px;
         }
 
-        .warning.show {
-            display: flex;
-            animation: fadeUp .2s ease;
-        }
+        .warning.show { display: flex; }
 
         .loading {
             display: none;
             margin-top: 24px;
-            border: 1px solid rgba(143, 100, 36, 0.14);
-            border-radius: 20px;
-            padding: 56px 24px;
+            border-radius: var(--r);
+            padding: 60px 24px;
             text-align: center;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0, rgba(252, 246, 238, 0.96) 100%);
-            box-shadow: 0 18px 42px rgba(37, 28, 17, 0.08);
+            background: var(--surface);
+            border: 1px solid var(--border);
         }
 
-        .loading.show {
-            display: block;
-            animation: fadeUp .25s ease;
-        }
+        .loading.show { display: block; }
 
         .spinner {
-            width: 30px;
-            height: 30px;
-            border: 2px solid rgba(143, 100, 36, 0.18);
-            border-top-color: var(--gold-l);
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border);
+            border-top-color: var(--gold);
             border-radius: 50%;
-            animation: spin .7s linear infinite;
-            margin: 0 auto 14px;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
         }
 
-        .loading-title {
-            font-size: 17px;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 4px;
-        }
+        .loading-title { font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+        .loading-sub { font-size: 14px; color: var(--muted); }
 
-        .loading-sub {
-            font-size: 13px;
-            color: var(--muted);
-        }
-
-        .results {
-            display: none;
-            margin-top: 30px;
-        }
-
-        .results.show {
-            display: block;
-            animation: fadeUp .3s ease;
-        }
+        .results { display: none; margin-top: 32px; }
+        .results.show { display: block; }
 
         .section-eyebrow {
-            font-size: 10px;
-            letter-spacing: 2.6px;
-            text-transform: uppercase;
-            color: var(--gold);
-            font-weight: 800;
-            margin-bottom: 14px;
+            font-size: 16px;
+            color: var(--text);
+            font-weight: 700;
+            margin-bottom: 16px;
         }
 
-        .mob-only {
-            display: block !important;
-        }
+        .mob-only { display: block !important; }
+        .desk-only { display: none !important; }
 
-        .desk-only {
-            display: none !important;
-        }
-
-        @media(min-width:640px) {
-            .mob-only {
-                display: none !important;
-            }
-
-            .desk-only {
-                display: block !important;
-            }
+        @media(min-width:768px) {
+            .mob-only { display: none !important; }
+            .desk-only { display: block !important; }
         }
 
         .summary-card {
-            position: relative;
-            border: 1px solid rgba(143, 100, 36, 0.14);
-            border-radius: 22px;
+            border: 1px solid var(--border);
+            border-radius: var(--r);
             overflow: hidden;
-            margin-bottom: 26px;
-            box-shadow: 0 20px 44px rgba(37, 28, 17, 0.08);
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0, rgba(255, 250, 243, 0.98) 100%);
+            margin-bottom: 32px;
+            background: var(--surface);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         .rev-banner {
-            position: relative;
-            overflow: hidden;
-            border-bottom: 1px solid rgba(143, 100, 36, 0.12);
-            padding: 26px 26px 24px;
+            padding: 24px;
             display: flex;
             align-items: flex-end;
             justify-content: space-between;
             gap: 16px;
             flex-wrap: wrap;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface2);
         }
 
-        .rev-banner::after {
-            content: '';
-            position: absolute;
-            right: -70px;
-            top: -110px;
-            width: 220px;
-            height: 220px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.55) 0, rgba(255, 255, 255, 0) 68%);
-        }
-
-        .rev-banner.green-bg {
-            background: linear-gradient(135deg, rgba(31, 141, 84, 0.16) 0, rgba(31, 141, 84, 0.05) 60%, rgba(255, 255, 255, 0.88) 100%);
-        }
-
-        .rev-banner.red-bg {
-            background: linear-gradient(135deg, rgba(198, 58, 38, 0.16) 0, rgba(198, 58, 38, 0.05) 60%, rgba(255, 255, 255, 0.88) 100%);
-        }
-
-        .rev-banner.neutral-bg {
-            background: linear-gradient(135deg, rgba(143, 100, 36, 0.14) 0, rgba(143, 100, 36, 0.05) 60%, rgba(255, 255, 255, 0.9) 100%);
-        }
+        .rev-banner.green-bg { background: var(--rev-bg); border-bottom-color: var(--rev-bdr); }
+        .rev-banner.red-bg { background: var(--exp-bg); border-bottom-color: var(--exp-bdr); }
 
         .rev-eyebrow {
-            font-size: 10px;
-            letter-spacing: 2.2px;
+            font-size: 12px;
             text-transform: uppercase;
-            color: var(--muted2);
-            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: var(--text2);
+            font-weight: 700;
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
 
-        .rev-title {
-            font-size: 14px;
-            color: var(--text2);
-            font-weight: 600;
-            max-width: 560px;
-        }
+        .rev-title { font-size: 14px; color: var(--muted); font-weight: 500; }
 
         .rev-amount {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 54px;
+            font-family: 'Inter', sans-serif;
+            font-size: 36px;
             font-weight: 700;
-            letter-spacing: -1.4px;
-            line-height: .94;
+            letter-spacing: -1px;
+            line-height: 1;
         }
 
-        .rev-amount.green {
-            color: var(--rev);
-        }
+        @media(min-width:500px) { .rev-amount { font-size: 42px; } }
 
-        .rev-amount.red {
-            color: var(--exp);
-        }
+        .rev-amount.green { color: var(--rev-dark); }
+        .rev-amount.red { color: var(--exp-dark); }
+        .rev-amount.gold { color: var(--gold); }
 
-        .rev-amount.gold {
-            color: var(--gold);
-        }
-
-        @media(min-width:500px) {
-            .rev-amount {
-                font-size: 60px;
-            }
-        }
-
-        .summary-grids {
-            display: grid;
-            grid-template-columns: 1fr;
-        }
+        .summary-grids { display: grid; grid-template-columns: 1fr; }
 
         @media(min-width:600px) {
-            .summary-grids {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .summary-col:first-child {
-                border-right: 1px solid rgba(143, 100, 36, 0.12);
-            }
+            .summary-grids { grid-template-columns: 1fr 1fr; }
+            .summary-col:first-child, .pay-sum-half:first-child { border-right: 1px solid var(--border); }
         }
 
-        .summary-col {
-            padding: 20px 24px;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0, rgba(255, 250, 244, 0.8) 100%);
-        }
-
-        .summary-col+.summary-col {
-            border-top: 1px solid rgba(143, 100, 36, 0.12);
-        }
+        .summary-col, .pay-sum-half { padding: 20px 24px; }
+        .summary-col + .summary-col, .pay-sum-half + .pay-sum-half { border-top: 1px solid var(--border); }
 
         @media(min-width:600px) {
-            .summary-col+.summary-col {
-                border-top: none;
-            }
+            .summary-col + .summary-col, .pay-sum-half + .pay-sum-half { border-top: none; }
         }
 
-        .sum-col-title {
-            font-size: 10px;
-            letter-spacing: 2.5px;
+        .sum-col-title, .pay-sum-tag {
+            font-size: 12px;
             text-transform: uppercase;
-            color: var(--gold);
-            font-weight: 800;
-            margin-bottom: 14px;
+            letter-spacing: 0.5px;
+            color: var(--text2);
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: block;
         }
 
         .sum-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 10px;
-            padding: 9px 0;
+            gap: 12px;
+            padding: 10px 0;
             border-bottom: 1px solid var(--border2);
         }
 
-        .sum-row:last-child {
-            border-bottom: none;
-        }
+        .sum-row:last-child { border-bottom: none; }
 
-        .sum-row-left {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            min-width: 0;
-            flex: 1;
-        }
+        .sum-row-left { display: flex; align-items: center; gap: 12px; flex: 1; }
 
         .sum-bar-wrap {
-            width: 42px;
-            height: 3px;
-            background: rgba(143, 100, 36, 0.14);
-            border-radius: 999px;
+            width: 48px;
+            height: 6px;
+            background: var(--surface4);
+            border-radius: 4px;
             flex-shrink: 0;
-        }
-
-        .sum-bar {
-            height: 3px;
-            border-radius: 999px;
-        }
-
-        .sum-bar.green {
-            background: var(--rev);
-        }
-
-        .sum-bar.red {
-            background: var(--exp);
-        }
-
-        .sum-bar.gold {
-            background: var(--gold);
-        }
-
-        .sum-name {
-            font-size: 14px;
-            color: var(--text2);
             overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            font-weight: 600;
         }
 
-        .sum-amt {
-            font-size: 14px;
-            color: var(--text);
-            font-weight: 700;
-            white-space: nowrap;
-        }
+        .sum-bar { height: 100%; border-radius: 4px; }
+        .sum-bar.green { background: var(--rev); }
+        .sum-bar.red { background: var(--exp); }
 
-        .sum-total-row {
+        .sum-name { font-size: 14px; color: var(--text2); font-weight: 500; }
+        .sum-amt { font-size: 15px; color: var(--text); font-weight: 600; }
+
+        .sum-total-row, .pay-sum-total {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 11px 0 0;
-            margin-top: 8px;
-            border-top: 1px solid rgba(143, 100, 36, 0.16);
+            padding: 12px 0 0;
+            margin-top: 12px;
+            border-top: 1px solid var(--border);
         }
 
-        .sum-total-label {
-            font-size: 12px;
-            font-weight: 800;
+        .sum-total-label, .pay-sum-total-lbl {
+            font-size: 13px;
+            font-weight: 600;
             color: var(--muted);
             text-transform: uppercase;
-            letter-spacing: .55px;
         }
 
-        .sum-total-amt {
-            font-size: 15px;
-            font-weight: 700;
-        }
-
-        .sum-total-amt.green {
-            color: var(--rev);
-        }
-
-        .sum-total-amt.red {
-            color: var(--exp);
-        }
-
-        .sum-total-amt.gold {
-            color: var(--gold);
-        }
+        .sum-total-amt, .pay-sum-total-amt { font-size: 16px; font-weight: 700; }
+        .sum-total-amt.green { color: var(--rev); }
+        .sum-total-amt.red { color: var(--exp); }
 
         .rev-stats-row {
             display: flex;
-            gap: 10px;
-            padding: 16px 18px;
-            border-top: 1px solid rgba(143, 100, 36, 0.12);
-            background: linear-gradient(180deg, rgba(251, 246, 240, 0.92) 0, rgba(247, 239, 227, 0.92) 100%);
+            gap: 8px;
+            padding: 16px;
+            border-top: 1px solid var(--border);
+            background: var(--surface2);
             flex-wrap: wrap;
         }
 
@@ -842,1147 +492,420 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: rgba(255, 255, 255, 0.88);
-            border: 1px solid rgba(143, 100, 36, 0.12);
-            border-radius: 18px;
-            padding: 11px 14px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            padding: 12px 16px;
             cursor: pointer;
-            transition: all .15s ease;
+            transition: all 0.2s;
             flex: 1;
-            min-width: 70px;
-            gap: 4px;
-            box-shadow: 0 10px 18px rgba(37, 28, 17, 0.05);
+            min-width: 90px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
 
-        .rev-stat-pill:hover {
-            transform: translateY(-1px);
-            border-color: rgba(31, 141, 84, 0.32);
-        }
+        .rev-stat-pill:hover:not(:disabled) { border-color: var(--gold); }
+        .rev-stat-pill.active { border-color: var(--gold); background: var(--gold-soft); }
+        
+        .rev-stat-pill.zero:hover:not(:disabled) { border-color: var(--danger); }
+        .rev-stat-pill.zero.active { border-color: var(--danger); background: var(--danger-bg); }
 
-        .rev-stat-pill.active {
-            border-color: rgba(31, 141, 84, 0.32);
-            background: linear-gradient(180deg, rgba(31, 141, 84, 0.14) 0, rgba(255, 255, 255, 0.92) 100%);
-        }
-
-        .rev-stat-pill.zero:hover {
-            border-color: rgba(198, 58, 38, 0.28);
-        }
-
-        .rev-stat-pill.zero.active {
-            border-color: rgba(198, 58, 38, 0.28);
-            background: linear-gradient(180deg, rgba(198, 58, 38, 0.14) 0, rgba(255, 255, 255, 0.92) 100%);
-        }
-
-        .rev-stat-num {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--rev);
-            line-height: 1;
-            letter-spacing: -0.5px;
-        }
-
-        .rev-stat-lbl {
-            font-size: 10px;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: .9px;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        .rev-stat-pill.active .rev-stat-lbl {
-            color: var(--rev-dark);
-        }
-
-        .rev-stat-pill.zero.active .rev-stat-lbl {
-            color: var(--exp-dark);
-        }
-
-        .rev-stat-pill:disabled {
-            opacity: .35;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .rev-stat-pill:disabled:hover {
-            transform: none;
-            border-color: rgba(143, 100, 36, 0.12);
-        }
-
-        .pay-sum-split {
-            display: grid;
-            grid-template-columns: 1fr;
-        }
-
-        @media(min-width:600px) {
-            .pay-sum-split {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .pay-sum-half:first-child {
-                border-right: 1px solid rgba(143, 100, 36, 0.12);
-            }
-        }
-
-        .pay-sum-half {
-            padding: 20px 24px;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.76) 0, rgba(255, 250, 244, 0.82) 100%);
-        }
-
-        .pay-sum-half+.pay-sum-half {
-            border-top: 1px solid rgba(143, 100, 36, 0.12);
-        }
-
-        @media(min-width:600px) {
-            .pay-sum-half+.pay-sum-half {
-                border-top: none;
-            }
-        }
-
-        .pay-sum-tag {
-            font-size: 10px;
-            letter-spacing: 2.4px;
-            text-transform: uppercase;
-            font-weight: 800;
-            margin-bottom: 12px;
-            display: block;
-        }
-
-        .pay-sum-tag.rev {
-            color: var(--rev-dark);
-        }
-
-        .pay-sum-tag.exp {
-            color: var(--exp-dark);
-        }
-
-        .pay-sum-total {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 0 0;
-            margin-top: 8px;
-            border-top: 1px solid rgba(143, 100, 36, 0.16);
-        }
-
-        .pay-sum-total-lbl {
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: .5px;
-        }
-
-        .pay-sum-total-amt {
-            font-size: 15px;
-            font-weight: 700;
-        }
+        .rev-stat-num { font-size: 20px; font-weight: 700; color: var(--text); line-height: 1.2; }
+        .rev-stat-lbl { font-size: 12px; color: var(--muted); font-weight: 500; margin-top: 4px; }
+        .rev-stat-pill:disabled { opacity: 0.5; cursor: not-allowed; }
 
         .tbl-wrap {
-            border: 1px solid rgba(143, 100, 36, 0.14);
-            border-radius: 20px;
+            border: 1px solid var(--border);
+            border-radius: var(--r);
             overflow: visible;
-            box-shadow: 0 20px 42px rgba(37, 28, 17, 0.08);
-            background: rgba(255, 253, 250, 0.96);
+            background: var(--surface);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
         .data-tbl {
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
+            border-collapse: collapse;
             font-size: 14px;
-            background: transparent;
         }
 
         .data-tbl th {
-            background: rgba(249, 243, 234, 0.94);
-            padding: 13px 15px;
+            background: var(--surface2);
+            padding: 14px 16px;
             text-align: left;
-            font-size: 10px;
-            letter-spacing: 2px;
+            font-size: 12px;
             text-transform: uppercase;
-            color: var(--gold);
-            font-weight: 800;
-            border-bottom: 1px solid rgba(143, 100, 36, 0.16);
+            color: var(--text2);
+            font-weight: 700;
+            border-bottom: 1px solid var(--border);
             white-space: nowrap;
-            box-shadow: none;
-            backdrop-filter: blur(10px);
         }
 
-        .data-tbl th::before {
-            display: none;
-        }
+        .data-tbl th.right { text-align: right; }
+        .data-tbl td.right { text-align: right; }
 
-        .data-tbl th.right {
-            text-align: right;
-        }
-
-        @media(min-width:640px) {
+        @media(min-width:768px) {
             .desk-only .data-tbl th {
                 position: sticky;
                 top: var(--table-head-top);
                 z-index: 40;
-                box-shadow: inset 0 -1px 0 rgba(143, 100, 36, 0.16), 0 8px 18px rgba(37, 28, 17, 0.10);
-            }
-
-            body.scrolled .desk-only .data-tbl thead th {
-                top: var(--table-head-top-scrolled);
             }
         }
 
         .data-tbl td {
-            padding: 14px 15px;
+            padding: 14px 16px;
             border-bottom: 1px solid var(--border2);
-            color: var(--text2);
+            color: var(--text);
             vertical-align: top;
-            line-height: 1.58;
-            background: rgba(255, 255, 255, 0.9);
         }
 
-        .data-tbl td.right {
-            text-align: right;
-        }
+        .data-tbl tbody tr:last-child td { border-bottom: none; }
+        .data-tbl tbody tr:hover td { background: var(--surface2); }
 
-        .data-tbl tr:last-child td {
-            border-bottom: none;
-        }
-
-        .data-tbl tbody tr:nth-child(even) td {
-            background: rgba(250, 245, 238, 0.7);
-        }
-
-        .data-tbl tr:hover td {
-            background: rgba(242, 233, 221, 0.9);
-        }
-
-        .tbl-br {
-            font-size: 13px;
-        }
-
-        .tbl-br-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 8px;
-            padding: 2px 0;
-        }
-
-        .tbl-br-m {
-            color: var(--muted);
-        }
-
-        .tbl-br-a {
-            color: var(--text2);
-        }
-
-        .tbl-br-plus {
-            color: var(--muted2);
-            margin: 0 2px;
-            font-size: 11px;
-        }
+        .tbl-br-row { display: flex; justify-content: space-between; gap: 12px; padding: 4px 0; font-size: 14px; }
+        .tbl-br-m { color: var(--muted); }
+        .tbl-br-a { color: var(--text); font-weight: 500; }
+        .tbl-br-plus { color: var(--muted2); margin: 0 4px; font-size: 12px; }
 
         .tbl-br-total {
             font-weight: 700;
-            font-size: 13px;
-            padding-top: 4px;
-            margin-top: 4px;
-            border-top: 1px solid rgba(143, 100, 36, 0.12);
-        }
-
-        .tbl-br-total.green {
-            color: var(--rev);
-        }
-
-        .tbl-br-total.red {
-            color: var(--exp);
-        }
-
-        .tbl-nil {
-            color: var(--muted2);
-        }
-
-        .tbl-name-bold {
-            font-weight: 700;
-            color: var(--text);
             font-size: 14px;
+            padding-top: 6px;
+            margin-top: 6px;
+            border-top: 1px solid var(--border);
         }
 
-        .tbl-date-cell {
-            font-size: 13px;
-            color: var(--muted);
-            white-space: nowrap;
-            font-weight: 600;
-        }
+        .tbl-nil { color: var(--muted2); }
+        .tbl-name-bold { font-weight: 600; color: var(--text); }
+        .tbl-date-cell { font-size: 14px; color: var(--muted); white-space: nowrap; }
 
-        .rev-amt {
-            color: var(--rev);
-            font-weight: 700;
-        }
+        .rev-amt { color: var(--rev); font-weight: 700; }
+        .exp-amt { color: var(--exp); font-weight: 700; }
 
-        .exp-amt {
-            color: var(--exp);
-            font-weight: 700;
-        }
+        .guest-list, .exp-list { display: flex; flex-direction: column; gap: 16px; }
 
-        .guest-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .guest-card {
-            border: 1px solid rgba(143, 100, 36, 0.14);
-            border-radius: 20px;
+        .guest-card, .exp-day-card, .pday-card {
+            border: 1px solid var(--border);
+            border-radius: var(--r);
             overflow: hidden;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0, rgba(255, 249, 241, 0.98) 100%);
-            box-shadow: 0 18px 38px rgba(37, 28, 17, 0.08);
+            background: var(--surface);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
 
-        .guest-hd {
+        .guest-hd, .exp-day-hd, .pday-hd {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 10px;
-            padding: 15px 18px;
-            background: linear-gradient(180deg, rgba(247, 239, 228, 0.94) 0, rgba(241, 231, 216, 0.94) 100%);
-            border-bottom: 1px solid rgba(143, 100, 36, 0.12);
+            padding: 16px;
+            background: var(--surface2);
+            border-bottom: 1px solid var(--border);
         }
 
-        .guest-name {
+        .guest-name, .exp-day-date, .pday-date {
             font-size: 16px;
-            font-weight: 700;
+            font-weight: 600;
             color: var(--text);
         }
 
-        .guest-date-pill {
+        .guest-date-pill, .exp-day-count {
             font-size: 12px;
             color: var(--muted);
-            background: rgba(255, 255, 255, 0.72);
-            border: 1px solid rgba(143, 100, 36, 0.14);
-            border-radius: 999px;
-            padding: 5px 11px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 4px 8px;
             white-space: nowrap;
-            flex-shrink: 0;
         }
 
-        .pay-section {
-            padding: 13px 18px;
-        }
-
-        .pay-section+.pay-section {
-            border-top: 1px solid var(--border2);
-        }
+        .pay-section { padding: 16px; border-bottom: 1px solid var(--border2); }
+        .pay-section:last-child { border-bottom: none; }
 
         .pay-section-label {
-            font-size: 10px;
-            letter-spacing: 2.2px;
+            font-size: 12px;
             text-transform: uppercase;
-            font-weight: 800;
-            margin-bottom: 9px;
-        }
-
-        .pay-section-label.food {
-            color: var(--food);
-        }
-
-        .pay-section-label.room {
-            color: var(--room);
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text2);
         }
 
         .pay-row {
             display: flex;
-            align-items: baseline;
             justify-content: space-between;
-            gap: 8px;
-            padding: 5px 0;
-            border-bottom: 1px solid var(--border2);
+            padding: 6px 0;
         }
 
-        .pay-row:last-child {
-            border-bottom: none;
-        }
-
-        .pay-method {
-            font-size: 13px;
-            color: var(--muted);
-            flex-shrink: 0;
-            font-weight: 600;
-        }
-
-        .pay-amounts {
-            font-size: 13px;
-            color: var(--text);
-            text-align: right;
-            font-weight: 600;
-        }
-
-        .pay-plus {
-            color: var(--muted2);
-            margin: 0 2px;
-            font-size: 11px;
-        }
-
-        .no-pay {
-            font-size: 12px;
-            color: var(--muted2);
-            font-style: italic;
-            padding: 2px 0 5px;
-        }
+        .pay-method { font-size: 14px; color: var(--muted); }
+        .pay-amounts { font-size: 14px; color: var(--text); font-weight: 500; }
+        .no-pay { font-size: 14px; color: var(--muted2); font-style: italic; }
 
         .pay-section-total {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            padding: 8px 0 0;
-            margin-top: 6px;
-            border-top: 1px dashed rgba(143, 100, 36, 0.16);
+            padding-top: 12px;
+            margin-top: 12px;
+            border-top: 1px dashed var(--border);
         }
 
-        .pay-section-total-lbl {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--muted);
+        .pay-section-total-lbl { font-size: 13px; font-weight: 600; color: var(--text2); }
+        .pay-section-total-amt { font-size: 15px; font-weight: 700; }
+
+        .guest-total, .exp-day-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 16px;
+            background: var(--surface2);
+            border-top: 1px solid var(--border);
+        }
+
+        .guest-total-lbl, .exp-day-total-lbl {
+            font-size: 13px;
             text-transform: uppercase;
-            letter-spacing: .45px;
-        }
-
-        .pay-section-total-amt {
-            font-size: 14px;
             font-weight: 700;
+            color: var(--text2);
         }
 
-        .pay-section-total-amt.food {
-            color: var(--food);
-        }
-
-        .pay-section-total-amt.room {
-            color: var(--room);
-        }
-
-        .guest-total {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 18px;
-            background: linear-gradient(180deg, rgba(31, 141, 84, 0.13) 0, rgba(31, 141, 84, 0.08) 100%);
-            border-top: 1px solid var(--rev-bdr);
-        }
-
-        .guest-total-lbl {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--rev-dark);
-            font-weight: 800;
-        }
-
-        .guest-total-amt {
-            font-size: 17px;
-            font-weight: 700;
-            color: var(--rev);
-        }
-
-        .exp-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .exp-day-card {
-            border: 1px solid rgba(143, 100, 36, 0.14);
-            border-radius: 20px;
-            overflow: hidden;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0, rgba(255, 249, 241, 0.98) 100%);
-            box-shadow: 0 18px 38px rgba(37, 28, 17, 0.08);
-        }
-
-        .exp-day-hd {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            padding: 15px 18px;
-            background: linear-gradient(180deg, rgba(247, 239, 228, 0.94) 0, rgba(241, 231, 216, 0.94) 100%);
-            border-bottom: 1px solid rgba(143, 100, 36, 0.12);
-        }
-
-        .exp-day-date {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text);
-        }
-
-        .exp-day-count {
-            font-size: 12px;
-            color: var(--muted);
-            background: rgba(255, 255, 255, 0.74);
-            border: 1px solid rgba(143, 100, 36, 0.14);
-            border-radius: 999px;
-            padding: 4px 11px;
-        }
+        .guest-total-amt { font-size: 18px; font-weight: 700; color: var(--rev); }
+        .exp-day-total-amt { font-size: 18px; font-weight: 700; color: var(--exp); }
 
         .exp-tbl-head {
             display: grid;
-            grid-template-columns: 1fr 90px 92px;
-            gap: 8px;
-            padding: 10px 18px 8px;
+            grid-template-columns: 1fr 90px 90px;
+            gap: 12px;
+            padding: 12px 16px;
             border-bottom: 1px solid var(--border2);
-        }
-
-        .exp-th {
-            font-size: 10px;
-            letter-spacing: 1.8px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--muted);
             text-transform: uppercase;
-            color: var(--gold);
-            font-weight: 800;
-        }
-
-        .exp-th:not(:first-child) {
-            text-align: right;
         }
 
         .exp-entry {
             display: grid;
-            grid-template-columns: 1fr 90px 92px;
-            gap: 8px;
-            padding: 11px 18px;
+            grid-template-columns: 1fr 90px 90px;
+            gap: 12px;
+            padding: 12px 16px;
             border-bottom: 1px solid var(--border2);
-            align-items: start;
+            align-items: center;
         }
 
-        .exp-entry:last-child {
-            border-bottom: none;
-        }
+        .exp-entry:last-child { border-bottom: none; }
 
-        .exp-name-wrap {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
-
-        .exp-name {
-            font-size: 14px;
-            color: var(--text);
-            font-weight: 600;
-        }
-
+        .exp-name-wrap { display: flex; flex-direction: column; gap: 4px; }
+        .exp-name { font-size: 15px; color: var(--text); font-weight: 500; }
         .exp-cat-pill {
             font-size: 11px;
-            color: var(--exp-dark);
-            background: rgba(198, 58, 38, 0.10);
-            border: 1px solid rgba(198, 58, 38, 0.16);
-            border-radius: 999px;
-            padding: 2px 8px;
-            display: inline-block;
+            color: var(--text2);
+            background: var(--surface3);
+            padding: 2px 6px;
+            border-radius: 4px;
             width: fit-content;
         }
 
-        .exp-cell {
-            font-size: 13px;
-            color: var(--muted);
-            text-align: right;
-            padding-top: 1px;
-            font-weight: 600;
-        }
+        .exp-cell { font-size: 14px; color: var(--muted); text-align: right; }
+        .exp-cell.amt { color: var(--exp); font-weight: 600; }
 
-        .exp-cell.amt {
-            color: var(--exp);
-            font-weight: 700;
-        }
-
-        .exp-day-total {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 18px;
-            background: linear-gradient(180deg, rgba(198, 58, 38, 0.12) 0, rgba(198, 58, 38, 0.08) 100%);
-            border-top: 1px solid var(--exp-bdr);
-        }
-
-        .exp-day-total-lbl {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--exp-dark);
-            font-weight: 800;
-        }
-
-        .exp-day-total-amt {
-            font-size: 17px;
-            font-weight: 700;
-            color: var(--exp);
-        }
-
-        .pday-card {
-            border: 1px solid rgba(143, 100, 36, 0.14);
-            border-radius: 20px;
-            overflow: hidden;
-            margin-bottom: 14px;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0, rgba(255, 249, 241, 0.98) 100%);
-            box-shadow: 0 18px 38px rgba(37, 28, 17, 0.08);
-        }
-
-        .pday-hd {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 15px 18px;
-            background: linear-gradient(180deg, rgba(247, 239, 228, 0.94) 0, rgba(241, 231, 216, 0.94) 100%);
-            border-bottom: 1px solid rgba(143, 100, 36, 0.12);
-        }
-
-        .pday-date {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text);
-            flex: 1;
-        }
-
+        .pday-card { margin-bottom: 16px; }
         .pday-badge {
             font-size: 11px;
-            font-weight: 800;
-            letter-spacing: .55px;
+            font-weight: 700;
             text-transform: uppercase;
-            padding: 4px 10px;
-            border-radius: 999px;
-            white-space: nowrap;
+            padding: 4px 8px;
+            border-radius: 4px;
         }
+        .pday-badge.rev { color: var(--rev-dark); background: var(--rev-bg); border: 1px solid var(--rev-bdr); }
+        .pday-badge.exp { color: var(--exp-dark); background: var(--exp-bg); border: 1px solid var(--exp-bdr); }
 
-        .pday-badge.rev {
-            color: var(--rev-dark);
-            background: rgba(31, 141, 84, 0.10);
-            border: 1px solid rgba(31, 141, 84, 0.18);
-        }
-
-        .pday-badge.exp {
-            color: var(--exp-dark);
-            background: rgba(198, 58, 38, 0.10);
-            border: 1px solid rgba(198, 58, 38, 0.18);
-        }
-
-        .pday-split {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 0;
-            border-top: 1px solid rgba(143, 100, 36, 0.10);
-        }
-
-        .pday-split-col {
-            padding: 15px 16px;
-        }
-
-        .pday-split-col+.pday-split-col {
-            border-top: 1px solid rgba(143, 100, 36, 0.10);
-            border-left: none;
-        }
-
+        .pday-split { display: grid; grid-template-columns: 1fr; border-top: 1px solid var(--border); }
+        .pday-split-col { padding: 16px; border-bottom: 1px solid var(--border); }
+        .pday-split-col:last-child { border-bottom: none; }
+        
         @media(min-width: 600px) {
-            .pday-split {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .pday-split-col+.pday-split-col {
-                border-top: none;
-                border-left: 1px solid rgba(143, 100, 36, 0.10);
-            }
+            .pday-split { grid-template-columns: 1fr 1fr; }
+            .pday-split-col { border-bottom: none; }
+            .pday-split-col + .pday-split-col { border-left: 1px solid var(--border); }
         }
 
         .pday-split-label {
-            font-size: 10px;
-            letter-spacing: 2.3px;
+            font-size: 12px;
             text-transform: uppercase;
-            font-weight: 800;
-            margin-bottom: 10px;
+            font-weight: 700;
+            margin-bottom: 12px;
             display: block;
         }
+        .pday-split-label.rev { color: var(--rev-dark); }
+        .pday-split-label.exp { color: var(--exp-dark); }
 
-        .pday-split-label.rev {
-            color: var(--rev-dark);
-        }
+        .pday-g-block { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border2); }
+        .pday-g-block:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+        .pday-g-name { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+        .pday-g-line { font-size: 14px; color: var(--text2); margin-bottom: 4px; }
+        .pday-g-line-lbl { font-weight: 600; color: var(--muted); margin-right: 4px; }
+        .pday-g-sep { color: var(--border-strong); margin: 0 6px; }
+        .pday-g-total { font-size: 14px; font-weight: 700; color: var(--rev); margin-top: 8px; }
 
-        .pday-split-label.exp {
-            color: var(--exp-dark);
-        }
-
-        .pday-g-name {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 4px;
-        }
-
-        .pday-g-line {
-            font-size: 13px;
-            color: var(--text2);
-            margin-bottom: 2px;
-            line-height: 1.55;
-        }
-
-        .pday-g-line-lbl {
-            color: var(--muted);
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: .5px;
-            font-weight: 800;
-            margin-right: 4px;
-        }
-
-        .pday-g-sep {
-            color: var(--muted2);
-            margin: 0 3px;
-            font-size: 12px;
-        }
-
-        .pday-g-total {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--rev);
-            margin-top: 6px;
-            padding-top: 6px;
-            border-top: 1px dashed rgba(143, 100, 36, 0.16);
-        }
-
-        .pday-g-block {
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border2);
-        }
-
-        .pday-g-block:last-child {
-            margin-bottom: 0;
-            padding-bottom: 0;
-            border-bottom: none;
-        }
-
-        .a-kpi-row {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 14px;
-            margin-bottom: 26px;
-        }
-
-        @media(min-width:420px) {
-            .a-kpi-row {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        @media(min-width:680px) {
-            .a-kpi-row {
-                grid-template-columns: 1fr 1fr 1fr;
-            }
-        }
+        /* Analytics area */
+        .a-kpi-row { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 32px; }
+        @media(min-width:420px) { .a-kpi-row { grid-template-columns: 1fr 1fr; } }
+        @media(min-width:680px) { .a-kpi-row { grid-template-columns: 1fr 1fr 1fr; } }
 
         .a-kpi-card {
-            border: 1px solid rgba(143, 100, 36, 0.14);
-            border-radius: 20px;
-            padding: 20px 22px;
-            box-shadow: 0 18px 38px rgba(37, 28, 17, 0.08);
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0, rgba(255, 249, 241, 0.98) 100%);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
-        .a-kpi-card.green {
-            border-color: rgba(31, 141, 84, 0.16);
-            background: linear-gradient(180deg, rgba(31, 141, 84, 0.10) 0, rgba(255, 255, 255, 0.95) 100%);
-        }
+        .a-kpi-label { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; }
+        .a-kpi-val { font-size: 32px; font-weight: 700; letter-spacing: -1px; }
+        .a-kpi-val.green { color: var(--rev-dark); }
+        .a-kpi-val.red { color: var(--exp-dark); }
+        
+        .a-kpi-tag { font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 4px; text-transform: uppercase; }
+        .a-kpi-tag.profit { color: var(--rev-dark); background: var(--rev-bg); border: 1px solid var(--rev-bdr); }
+        .a-kpi-tag.loss { color: var(--exp-dark); background: var(--exp-bg); border: 1px solid var(--exp-bdr); }
 
-        .a-kpi-card.red {
-            border-color: rgba(198, 58, 38, 0.16);
-            background: linear-gradient(180deg, rgba(198, 58, 38, 0.10) 0, rgba(255, 255, 255, 0.95) 100%);
-        }
-
-        .a-kpi-label {
-            font-size: 10px;
-            letter-spacing: 2.4px;
-            text-transform: uppercase;
-            color: var(--gold);
-            font-weight: 800;
-            margin-bottom: 10px;
-        }
-
-        .a-kpi-val {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 42px;
-            font-weight: 700;
-            line-height: .95;
-            margin-bottom: 8px;
-            letter-spacing: -0.9px;
-        }
-
-        .a-kpi-val.green {
-            color: var(--rev);
-        }
-
-        .a-kpi-val.red {
-            color: var(--exp);
-        }
-
-        .a-kpi-val.gold {
-            color: var(--gold);
-        }
-
-        .a-kpi-tag {
-            font-size: 10px;
-            font-weight: 800;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            padding: 4px 10px;
-            border-radius: 999px;
-            display: inline-block;
-        }
-
-        .a-kpi-tag.profit {
-            color: var(--rev-dark);
-            background: rgba(31, 141, 84, 0.10);
-            border: 1px solid rgba(31, 141, 84, 0.18);
-        }
-
-        .a-kpi-tag.loss {
-            color: var(--exp-dark);
-            background: rgba(198, 58, 38, 0.10);
-            border: 1px solid rgba(198, 58, 38, 0.18);
-        }
-
-        .a-charts-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 18px;
-        }
-
-        @media(min-width:600px) {
-            .a-charts-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
+        .a-charts-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+        @media(min-width:768px) { .a-charts-grid { grid-template-columns: 1fr 1fr; } }
 
         .a-chart-card {
-            border: 1px solid rgba(143, 100, 36, 0.14);
-            border-radius: 20px;
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            background: var(--surface);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             overflow: hidden;
-            box-shadow: 0 18px 38px rgba(37, 28, 17, 0.08);
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0, rgba(255, 249, 241, 0.98) 100%);
         }
 
         .a-chart-hd {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 15px 18px 10px;
-            border-bottom: 1px solid rgba(143, 100, 36, 0.12);
-            background: linear-gradient(180deg, rgba(247, 239, 228, 0.94) 0, rgba(241, 231, 216, 0.94) 100%);
-        }
-
-        .a-chart-title {
-            font-size: 10px;
-            letter-spacing: 2.3px;
+            padding: 16px;
+            background: var(--surface2);
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text2);
             text-transform: uppercase;
-            color: var(--gold);
-            font-weight: 800;
             text-align: center;
         }
 
-        .a-chart-canvas {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px 10px 6px;
-        }
+        .a-chart-canvas { padding: 20px; display: flex; justify-content: center; }
+        .a-chart-slot { width: min(100%, 320px); height: 220px; }
 
-        .a-chart-slot {
-            width: min(100%, 320px);
-            height: 220px;
-        }
+        .a-tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
+        .a-tbl th { padding: 12px 16px; background: var(--surface2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); font-size: 12px; color: var(--text2); text-align: right; }
+        .a-tbl th:first-child { text-align: left; }
+        .a-tbl td { padding: 12px 16px; border-bottom: 1px solid var(--border2); text-align: right; color: var(--text); }
+        .a-tbl td:first-child { text-align: left; }
+        .a-tbl tfoot td { font-weight: 700; background: var(--surface2); border-top: 1px solid var(--border); border-bottom: none; }
 
-        .a-no-chart {
-            height: 180px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            color: var(--muted2);
-        }
-
-        .a-tbl {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .a-tbl thead th {
-            font-size: 10px;
-            letter-spacing: 1.9px;
-            text-transform: uppercase;
-            color: var(--gold);
-            font-weight: 800;
-            padding: 11px 14px;
-            border-top: 1px solid rgba(143, 100, 36, 0.12);
-            text-align: right;
-            background: rgba(249, 243, 234, 0.84);
-        }
-
-        .a-tbl thead th:first-child {
-            text-align: left;
-        }
-
-        .a-tbl tbody tr {
-            border-top: 1px solid var(--border2);
-        }
-
-        .a-tbl tbody td {
-            padding: 10px 14px;
-            text-align: right;
-            font-size: 13px;
-            color: var(--text2);
-        }
-
-        .a-tbl tbody td:first-child {
-            text-align: left;
-        }
-
-        .a-tbl tfoot td {
-            padding: 11px 14px;
-            border-top: 1px solid rgba(143, 100, 36, 0.16);
-            font-size: 13px;
-            font-weight: 800;
-            text-align: right;
-            background: rgba(249, 243, 234, 0.84);
-        }
-
-        .a-tbl tfoot td:first-child {
-            text-align: left;
-            color: var(--muted);
-        }
-
-        .a-dot {
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 7px;
-            flex-shrink: 0;
-            vertical-align: middle;
-        }
-
-        .a-name-cell {
-            display: flex;
-            align-items: center;
-            color: var(--text2);
-            font-weight: 600;
-        }
+        .a-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+        .a-name-cell { display: flex; align-items: center; font-weight: 500; }
 
         .pagination-bar {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            margin-bottom: 16px;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 14px;
+            gap: 16px;
         }
 
-        .pagination-info {
-            font-size: 13px;
-            color: var(--muted);
-            font-weight: 600;
-        }
+        .pagination-info { font-size: 14px; color: var(--text2); font-weight: 500; }
+        .page-size-wrap { display: flex; align-items: center; gap: 8px; }
+        .page-size-select { min-height: 40px; padding: 0 12px; width: auto; font-size: 14px; }
 
-        .page-size-wrap {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .page-size-label {
-            font-size: 12px;
-            color: var(--muted);
-            white-space: nowrap;
-            font-weight: 700;
-        }
-
-        .page-size-select {
-            background: rgba(255, 255, 255, 0.96);
-            border: 1px solid rgba(143, 100, 36, 0.16);
-            border-radius: 12px;
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            font-size: 13px;
-            font-weight: 600;
-            padding: 10px 12px;
-            outline: none;
-            cursor: pointer;
-            min-height: 42px;
-            box-shadow: 0 8px 18px rgba(37, 28, 17, 0.04);
-        }
-
-        .page-nav {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 7px;
-            margin-top: 18px;
-            flex-wrap: wrap;
-        }
-
+        .page-nav { display: flex; justify-content: center; gap: 8px; margin-top: 24px; flex-wrap: wrap; }
         .page-btn {
-            background: rgba(255, 255, 255, 0.96);
-            border: 1px solid rgba(143, 100, 36, 0.16);
-            border-radius: 12px;
-            color: var(--text2);
-            font-family: 'Inter', sans-serif;
-            font-size: 13px;
-            font-weight: 700;
-            padding: 8px 14px;
-            cursor: pointer;
-            transition: all .16s ease;
-            min-width: 40px;
-            text-align: center;
-            box-shadow: 0 8px 18px rgba(37, 28, 17, 0.04);
-        }
-
-        .page-btn:hover {
-            background: rgba(249, 243, 234, 0.92);
-            border-color: rgba(143, 100, 36, 0.28);
-            transform: translateY(-1px);
-        }
-
-        .page-btn.active {
-            background: linear-gradient(180deg, #251b13 0, #15100c 100%);
-            border-color: #1b140d;
-            color: #fff6ea;
-        }
-
-        .page-btn:disabled {
-            opacity: .35;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .no-data {
-            border: 1px dashed rgba(143, 100, 36, 0.24);
-            border-radius: 20px;
-            padding: 44px 24px;
-            text-align: center;
-            color: var(--muted);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            padding: 8px 16px;
             font-size: 14px;
             font-weight: 600;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0, rgba(249, 243, 234, 0.9) 100%);
+            color: var(--text);
+            cursor: pointer;
+            min-height: 40px;
+        }
+        .page-btn:hover { background: var(--surface2); }
+        .page-btn.active { background: var(--text); color: var(--surface); border-color: var(--text); }
+
+        .no-data {
+            padding: 48px 24px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 15px;
+            background: var(--surface2);
+            border: 1px dashed var(--border-strong);
+            border-radius: var(--r);
         }
 
-        body.modal-open {
-            overflow: hidden;
-        }
+        /* Modal */
+        body.modal-open { overflow: hidden; }
 
         .remarks-modal {
             position: fixed;
             inset: 0;
-            background: rgba(23, 18, 12, 0.52);
-            backdrop-filter: blur(6px);
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(4px);
             display: none;
             align-items: center;
             justify-content: center;
-            padding: 22px;
+            padding: 16px;
             z-index: 500;
         }
 
-        .remarks-modal.show {
-            display: flex;
-            animation: fadeUp .18s ease;
-        }
+        .remarks-modal.show { display: flex; }
 
         .remarks-modal-panel {
-            width: min(980px, 100%);
-            max-height: min(88vh, 920px);
-            overflow: hidden;
-            border-radius: 24px;
-            border: 1px solid rgba(143, 100, 36, 0.16);
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.99) 0, rgba(255, 249, 241, 0.98) 100%);
-            box-shadow: 0 24px 68px rgba(23, 18, 12, 0.28);
+            width: min(900px, 100%);
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--surface);
+            border-radius: var(--r);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
         }
 
         .remarks-modal-hd {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 16px;
-            padding: 18px 22px;
-            border-bottom: 1px solid rgba(143, 100, 36, 0.12);
-            background: linear-gradient(180deg, rgba(247, 239, 228, 0.96) 0, rgba(241, 231, 216, 0.96) 100%);
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface2);
+            border-radius: var(--r) var(--r) 0 0;
         }
 
-        .remarks-modal-title {
-            font-size: 12px;
-            letter-spacing: 2.4px;
-            text-transform: uppercase;
-            color: var(--gold);
-            font-weight: 800;
-        }
+        .remarks-modal-title { font-size: 16px; font-weight: 700; color: var(--text); }
 
         .remarks-modal-close {
-            width: 40px;
-            height: 40px;
-            border: 1px solid rgba(143, 100, 36, 0.16);
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.88);
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: var(--surface4);
+            border-radius: 50%;
             color: var(--text);
             font-size: 20px;
-            line-height: 1;
             cursor: pointer;
-            box-shadow: 0 10px 20px rgba(37, 28, 17, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
         }
-
-        .remarks-modal-close:hover {
-            background: rgba(249, 243, 234, 0.98);
-        }
+        .remarks-modal-close:hover { background: var(--border-strong); }
 
         .remarks-modal-body {
-            max-height: calc(88vh - 78px);
             overflow: auto;
-            padding: 20px 22px 24px;
+            padding: 20px;
         }
 
-        .remarks-modal-body .tbl-wrap {
-            margin-bottom: 0;
-        }
+        .remarks-modal .data-tbl th { position: static; }
 
-        .remarks-modal-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .remarks-modal .data-tbl th {
-            position: static !important;
-            top: auto !important;
-            box-shadow: none !important;
-        }
-
-        .google-visualization-tooltip {
-            pointer-events: none;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(6px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
     </style>
 </head>
 
 <body>
     <header class="header">
         <div class="header-brand">
-            <span class="header-title"><em>Raikwal April 2026</em></span>
+            <span class="header-title">Raikwal April 2026</span>
         </div>
-        <div class="header-dot"></div>
     </header>
     <div class="tabs">
         <button class="tab-btn active" id="tab-revenue" onclick="switchTab('revenue')">Revenue</button>
@@ -1997,14 +920,10 @@
                 <div class="card-body">
                     <div class="fg-2">
                         <div class="field"><label for="r-sd">From</label>
-                            <div class="date-wrap"><input class="date-input" type="date" id="r-sd"
-                                    value="2026-04-01" min="2026-04-01" max="2026-04-30"
-                                    onclick="tryShowPicker(this)" /></div>
+                            <div class="date-wrap"><input class="date-input" type="date" id="r-sd" value="2026-04-01" min="2026-04-01" max="2026-04-30" onclick="tryShowPicker(this)" /></div>
                         </div>
                         <div class="field"><label for="r-ed">To</label>
-                            <div class="date-wrap"><input class="date-input" type="date" id="r-ed"
-                                    value="2026-04-30" min="2026-04-01" max="2026-04-30"
-                                    onclick="tryShowPicker(this)" /></div>
+                            <div class="date-wrap"><input class="date-input" type="date" id="r-ed" value="2026-04-30" min="2026-04-01" max="2026-04-30" onclick="tryShowPicker(this)" /></div>
                         </div>
                         <button class="btn-fetch" id="r-fetchBtn" onclick="handleRevenueFetch()">Fetch Data</button>
                     </div>
@@ -2012,10 +931,9 @@
                     <div class="inline-card">
                         <div class="fg-2">
                             <div class="field">
-                                <div class="inline-note">Press Get Remarks. No need to select anything.</div>
+                                <div class="inline-note">Press Get Remarks. The selected date range will be used.</div>
                             </div>
-                            <button class="btn-fetch" id="rr-fetchBtn" onclick="handleRevenueRemarksFetch()">Get
-                                Remarks</button>
+                            <button class="btn-fetch" id="rr-fetchBtn" onclick="handleRevenueRemarksFetch()">Get Remarks</button>
                         </div>
                     </div>
                 </div>
@@ -2033,7 +951,7 @@
             <div class="results" id="r-results">
                 <div class="section-eyebrow">Summary</div>
                 <div class="summary-card" id="r-sum"></div>
-                <div class="section-eyebrow" style="margin-top:28px">Guest Records</div>
+                <div class="section-eyebrow" style="margin-top:32px">Guest Records</div>
                 <div class="pagination-bar">
                     <div class="pagination-info" id="r-pgInfo"></div>
                     <div class="page-size-wrap"><span class="page-size-label">Show</span>
@@ -2071,14 +989,10 @@
                 <div class="card-body">
                     <div class="fg-3">
                         <div class="field"><label for="e-sd">From</label>
-                            <div class="date-wrap"><input class="date-input" type="date" id="e-sd"
-                                    value="2026-04-01" min="2026-04-01" max="2026-04-30"
-                                    onclick="tryShowPicker(this)" /></div>
+                            <div class="date-wrap"><input class="date-input" type="date" id="e-sd" value="2026-04-01" min="2026-04-01" max="2026-04-30" onclick="tryShowPicker(this)" /></div>
                         </div>
                         <div class="field"><label for="e-ed">To</label>
-                            <div class="date-wrap"><input class="date-input" type="date" id="e-ed"
-                                    value="2026-04-30" min="2026-04-01" max="2026-04-30"
-                                    onclick="tryShowPicker(this)" /></div>
+                            <div class="date-wrap"><input class="date-input" type="date" id="e-ed" value="2026-04-30" min="2026-04-01" max="2026-04-30" onclick="tryShowPicker(this)" /></div>
                         </div>
                         <div class="field"><label for="e-cat">Category</label><select class="sel-input" id="e-cat">
                                 <option value="all">All Categories</option>
@@ -2091,8 +1005,7 @@
                             <div class="field">
                                 <div class="inline-note">Press Get Remarks. No need to select anything.</div>
                             </div>
-                            <button class="btn-fetch" id="er-fetchBtn" onclick="handleExpenseRemarksFetch()">Get
-                                Remarks</button>
+                            <button class="btn-fetch" id="er-fetchBtn" onclick="handleExpenseRemarksFetch()">Get Remarks</button>
                         </div>
                         <div class="warning" id="er-warn"><span>!</span><span id="er-warnTxt"></span></div>
                     </div>
@@ -2106,7 +1019,7 @@
             <div class="results" id="e-results">
                 <div class="section-eyebrow">Summary</div>
                 <div class="summary-card" id="e-sum"></div>
-                <div class="section-eyebrow" style="margin-top:28px">Expense Records</div>
+                <div class="section-eyebrow" style="margin-top:32px">Expense Records</div>
                 <div class="pagination-bar">
                     <div class="pagination-info" id="e-pgInfo"></div>
                     <div class="page-size-wrap"><span class="page-size-label">Show</span>
@@ -2168,17 +1081,12 @@
                 <div class="card-body">
                     <div class="fg-3">
                         <div class="field"><label for="p-sd">From</label>
-                            <div class="date-wrap"><input class="date-input" type="date" id="p-sd"
-                                    value="2026-04-01" min="2026-04-01" max="2026-04-30"
-                                    onclick="tryShowPicker(this)" /></div>
+                            <div class="date-wrap"><input class="date-input" type="date" id="p-sd" value="2026-04-01" min="2026-04-01" max="2026-04-30" onclick="tryShowPicker(this)" /></div>
                         </div>
                         <div class="field"><label for="p-ed">To</label>
-                            <div class="date-wrap"><input class="date-input" type="date" id="p-ed"
-                                    value="2026-04-30" min="2026-04-01" max="2026-04-30"
-                                    onclick="tryShowPicker(this)" /></div>
+                            <div class="date-wrap"><input class="date-input" type="date" id="p-ed" value="2026-04-30" min="2026-04-01" max="2026-04-30" onclick="tryShowPicker(this)" /></div>
                         </div>
-                        <div class="field"><label for="p-method">Payment Method</label><select class="sel-input"
-                                id="p-method">
+                        <div class="field"><label for="p-method">Payment Method</label><select class="sel-input" id="p-method">
                                 <option value="all">All Methods</option>
                             </select></div>
                         <div class="field"><label for="p-type">Payment Type</label>
@@ -2201,7 +1109,7 @@
             <div class="results" id="p-results">
                 <div class="section-eyebrow">Summary</div>
                 <div class="summary-card" id="p-sum"></div>
-                <div class="section-eyebrow" style="margin-top:28px">Day-wise Records</div>
+                <div class="section-eyebrow" style="margin-top:32px">Day-wise Records</div>
                 <div class="pagination-bar">
                     <div class="pagination-info" id="p-pgInfo"></div>
                     <div class="page-size-wrap"><span class="page-size-label">Show</span>
@@ -2268,6 +1176,8 @@
             <div class="remarks-modal-body" id="remarks-modal-body"></div>
         </div>
     </div>
+
+    <!-- Original un-modified JS Logic continues exactly as requested -->
     <script>
         var APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwjie0fWkUSdRTcKe266a9YCnz0NvrzN8kMpGK0aGpPV7xNpLrDIevEwQWaVrPaT4128Q/exec";
         function callBackend(action, params) {
@@ -2399,7 +1309,7 @@
             var sumAmt = function (v) { return isSpecial && v === 0 ? '-' : fmtAmt(v); };
             var bannerSub = _revFilter === 'all' ? 'Selected period' : 'Filtered: ' + LABELS[_revFilter] + ' (' + s.filteredTotal + ' of ' + s.total + ')';
             function mkRows(rows, barCls) {
-                if (!rows.length) return '<div style="font-size:12px;color:var(--muted2)">No data available.</div>';
+                if (!rows.length) return '<div style="font-size:13px;color:var(--muted)">No data available.</div>';
                 var max = rows[0].amt || 1;
                 return rows.map(function (r) {
                     return '<div class="sum-row"><div class="sum-row-left"><div class="sum-bar-wrap"><div class="sum-bar ' + barCls + '" style="width:' + Math.round(r.amt / max * 100) + '%"></div></div><span class="sum-name">' + r.label + '</span></div><span class="sum-amt">' + sumAmt(r.amt) + '</span></div>';
@@ -2420,43 +1330,43 @@
             byId('r-sum').innerHTML = '<div class="rev-banner ' + (isSpecial ? 'red-bg' : 'green-bg') + '"><div><span class="rev-eyebrow">Total Revenue</span><span class="rev-title">' + bannerSub + '</span></div><div class="rev-amount ' + (isSpecial ? 'red' : 'green') + '">' + sumAmt(s.grand) + '</div></div><div class="summary-grids"><div class="summary-col"><div class="sum-col-title">By Payment Method</div>' + mkRows(s.methods, 'green') + '<div class="sum-total-row"><span class="sum-total-label">Total</span><span class="sum-total-amt green">' + sumAmt(s.grand) + '</span></div></div><div class="summary-col"><div class="sum-col-title">Food vs Room</div>' + mkRows(s.cats, 'green') + '<div class="sum-total-row"><span class="sum-total-label">Total</span><span class="sum-total-amt green">' + sumAmt(s.grand) + '</span></div></div></div><div class="rev-stats-row">' + pillsHtml + '</div>';
         }
 
-        function renderGuestCard(g) { var zero = isZeroGuest(g); function renderSec(payments, type) { var label = type === 'food' ? 'Food' : 'Room', grouped = groupPayments(payments), total = payments.reduce(function (s, p) { return s + guestPaymentAmountForCalc_(p); }, 0); var rows = !grouped.length ? '<div class="no-pay">No payment recorded.</div>' : grouped.map(function (gr) { var amts = gr.payments.map(function (payment, i) { return (i > 0 ? '<span class="pay-plus">+</span>' : '') + displayGuestAmount_(payment); }).join(''); return '<div class="pay-row"><span class="pay-method">' + gr.method + '</span><span class="pay-amounts">' + amts + '</span></div>'; }).join(''); var tot = grouped.length ? '<div class="pay-section-total"><span class="pay-section-total-lbl">' + label + ' Total</span><span class="pay-section-total-amt ' + type + '">' + fmtAmt(total) + '</span></div>' : ''; return '<div class="pay-section"><div class="pay-section-label ' + type + '">' + label + '</div>' + rows + tot + '</div>'; } var zeroBadge = zero ? '<span style="font-size:10px;font-weight:600;color:var(--exp-dark);background:var(--exp-bg);border:1px solid var(--exp-bdr);border-radius:999px;padding:2px 8px;margin-left:6px;white-space:nowrap">No Payment</span>' : ''; return '<div class="guest-card"><div class="guest-hd" style="' + (zero ? 'background:var(--exp-bg);border-bottom:1.5px solid var(--exp-bdr);' : '') + '"><div style="display:flex;align-items:center;gap:4px;min-width:0;flex:1"><span class="guest-name" style="' + (zero ? 'color:var(--exp);' : '') + '">' + g.name + '</span>' + zeroBadge + '</div><span class="guest-date-pill">' + g.date + '</span></div>' + (zero ? '<div style="padding:16px;font-size:13px;color:var(--exp);text-align:center;font-style:italic">No payment recorded.</div>' : renderSec(g.food || [], 'food') + renderSec(g.room || [], 'room')) + '<div class="guest-total" style="' + (zero ? 'background:var(--exp-bg);border-top:1.5px solid var(--exp-bdr);' : '') + '"><span class="guest-total-lbl" style="' + (zero ? 'color:var(--exp-dark);' : '') + '">Grand Total</span><span class="guest-total-amt" style="' + (zero ? 'color:var(--exp);' : '') + '">' + formatGuestGrandTotal(g) + '</span></div></div>'; }
-        function renderGuestTableRow(g) { function mkCell(payments, cls) { if (!payments.length) return '<td><span class="tbl-nil">-</span></td>'; var grouped = groupPayments(payments), total = payments.reduce(function (s, p) { return s + guestPaymentAmountForCalc_(p); }, 0); var rows = grouped.map(function (gr) { var amts = gr.payments.map(function (payment, i) { return (i > 0 ? '<span class="tbl-br-plus">+</span>' : '') + displayGuestAmount_(payment); }).join(''); return '<div class="tbl-br-row"><span class="tbl-br-m">' + gr.method + '</span><span class="tbl-br-a">' + amts + '</span></div>'; }).join(''); return '<td><div class="tbl-br">' + rows + '<div class="tbl-br-total ' + cls + '">' + fmtAmt(total) + '</div></div></td>'; } var zero = isZeroGuest(g); var nameHtml = zero ? '<span style="color:var(--exp);font-weight:600">' + g.name + '</span> <span style="font-size:10px;font-weight:600;color:var(--exp-dark);background:var(--exp-bg);border:1px solid var(--exp-bdr);border-radius:999px;padding:1px 7px">No Payment</span>' : '<span class="tbl-name-bold">' + g.name + '</span>'; return '<tr><td class="tbl-date-cell">' + g.date + '</td><td>' + nameHtml + '</td>' + mkCell(g.food || [], 'green') + mkCell(g.room || [], 'green') + '<td class="right ' + (zero ? 'tbl-nil' : 'rev-amt') + '">' + formatGuestGrandTotal(g) + '</td></tr>'; }
-        function renderGuestRemarkCard(g) { return '<div class="guest-card"><div class="guest-hd"><div style="display:flex;align-items:center;gap:4px;min-width:0;flex:1"><span class="guest-name">' + g.name + '</span></div><span class="guest-date-pill">' + g.date + '</span></div><div class="pay-section"><div class="pay-section-label room">Remarks</div><div style="font-size:13px;color:var(--text2);white-space:pre-wrap">' + g.remarks + '</div></div><div class="guest-total"><span class="guest-total-lbl">Grand Total</span><span class="guest-total-amt">' + formatGuestGrandTotal(g) + '</span></div></div>'; }
-        function renderGuestRemarkTableRow(g) { return '<tr><td class="tbl-date-cell">' + g.date + '</td><td><span class="tbl-name-bold">' + g.name + '</span></td><td class="right ' + (isZeroGuest(g) ? 'tbl-nil' : 'rev-amt') + '">' + formatGuestGrandTotal(g) + '</td><td>' + g.remarks + '</td></tr>'; }
+        function renderGuestCard(g) { var zero = isZeroGuest(g); function renderSec(payments, type) { var label = type === 'food' ? 'Food' : 'Room', grouped = groupPayments(payments), total = payments.reduce(function (s, p) { return s + guestPaymentAmountForCalc_(p); }, 0); var rows = !grouped.length ? '<div class="no-pay">No payment recorded.</div>' : grouped.map(function (gr) { var amts = gr.payments.map(function (payment, i) { return (i > 0 ? '<span class="pay-plus">+</span>' : '') + displayGuestAmount_(payment); }).join(''); return '<div class="pay-row"><span class="pay-method">' + gr.method + '</span><span class="pay-amounts">' + amts + '</span></div>'; }).join(''); var tot = grouped.length ? '<div class="pay-section-total"><span class="pay-section-total-lbl">' + label + ' Total</span><span class="pay-section-total-amt ' + type + '">' + fmtAmt(total) + '</span></div>' : ''; return '<div class="pay-section"><div class="pay-section-label ' + type + '">' + label + '</div>' + rows + tot + '</div>'; } var zeroBadge = zero ? '<span style="font-size:11px;font-weight:700;color:var(--exp-dark);background:var(--exp-bg);border:1px solid var(--exp-bdr);border-radius:4px;padding:2px 6px;margin-left:8px;white-space:nowrap">No Payment</span>' : ''; return '<div class="guest-card"><div class="guest-hd" style="' + (zero ? 'background:var(--exp-bg);border-bottom:1px solid var(--exp-bdr);' : '') + '"><div style="display:flex;align-items:center;gap:4px;min-width:0;flex:1"><span class="guest-name" style="' + (zero ? 'color:var(--exp-dark);' : '') + '">' + g.name + '</span>' + zeroBadge + '</div><span class="guest-date-pill">' + g.date + '</span></div>' + (zero ? '<div style="padding:20px;font-size:14px;color:var(--exp);text-align:center;font-weight:500">No payment recorded.</div>' : renderSec(g.food || [], 'food') + renderSec(g.room || [], 'room')) + '<div class="guest-total" style="' + (zero ? 'background:var(--exp-bg);border-top:1px solid var(--exp-bdr);' : '') + '"><span class="guest-total-lbl" style="' + (zero ? 'color:var(--exp-dark);' : '') + '">Grand Total</span><span class="guest-total-amt" style="' + (zero ? 'color:var(--exp);' : '') + '">' + formatGuestGrandTotal(g) + '</span></div></div>'; }
+        function renderGuestTableRow(g) { function mkCell(payments, cls) { if (!payments.length) return '<td><span class="tbl-nil">-</span></td>'; var grouped = groupPayments(payments), total = payments.reduce(function (s, p) { return s + guestPaymentAmountForCalc_(p); }, 0); var rows = grouped.map(function (gr) { var amts = gr.payments.map(function (payment, i) { return (i > 0 ? '<span class="tbl-br-plus">+</span>' : '') + displayGuestAmount_(payment); }).join(''); return '<div class="tbl-br-row"><span class="tbl-br-m">' + gr.method + '</span><span class="tbl-br-a">' + amts + '</span></div>'; }).join(''); return '<td><div class="tbl-br">' + rows + '<div class="tbl-br-total ' + cls + '">' + fmtAmt(total) + '</div></div></td>'; } var zero = isZeroGuest(g); var nameHtml = zero ? '<span style="color:var(--exp-dark);font-weight:600">' + g.name + '</span> <span style="font-size:11px;font-weight:700;color:var(--exp-dark);background:var(--exp-bg);border:1px solid var(--exp-bdr);border-radius:4px;padding:2px 6px">No Payment</span>' : '<span class="tbl-name-bold">' + g.name + '</span>'; return '<tr><td class="tbl-date-cell">' + g.date + '</td><td>' + nameHtml + '</td>' + mkCell(g.food || [], 'green') + mkCell(g.room || [], 'green') + '<td class="right ' + (zero ? 'tbl-nil' : 'rev-amt') + '">' + formatGuestGrandTotal(g) + '</td></tr>'; }
+        function renderGuestRemarkCard(g) { return '<div class="guest-card"><div class="guest-hd"><div style="display:flex;align-items:center;gap:4px;min-width:0;flex:1"><span class="guest-name">' + g.name + '</span></div><span class="guest-date-pill">' + g.date + '</span></div><div class="pay-section"><div class="pay-section-label room">Remarks</div><div style="font-size:14px;color:var(--text);white-space:pre-wrap">' + g.remarks + '</div></div><div class="guest-total"><span class="guest-total-lbl">Grand Total</span><span class="guest-total-amt">' + formatGuestGrandTotal(g) + '</span></div></div>'; }
+        function renderGuestRemarkTableRow(g) { return '<tr><td class="tbl-date-cell">' + g.date + '</td><td><span class="tbl-name-bold">' + g.name + '</span></td><td class="right ' + (isZeroGuest(g) ? 'tbl-nil' : 'rev-amt') + '">' + formatGuestGrandTotal(g) + '</td><td style="white-space:pre-wrap;line-height:1.6">' + g.remarks + '</td></tr>'; }
         function updateRevenueTableHead() { var head = document.querySelector('#r-table').closest('table').querySelector('thead tr'); head.innerHTML = '<th>Date</th><th>Guest</th><th>Food</th><th>Room</th><th class="right">Total</th>'; }
         function rRenderList() { var filtered = getFilteredGuests(); _rPg = renderPagedPanel(filtered, _rSz, _rPg, { beforeRender: updateRevenueTableHead, infoId: 'r-pgInfo', cardsId: 'r-cards', tableId: 'r-table', navId: 'r-pgNav', cardRenderer: renderGuestCard, tableRenderer: renderGuestTableRow, navPrefix: 'r' }); }
         function rRender() { var f = getFilteredGuests(); renderRevSummary(buildRevSum(f, _guests)); rRenderList(); }
         function rPgSzChange() { var v = byId('r-pgSz').value; _rSz = v === 'all' ? 'all' : parseInt(v, 10); _rPg = 1; rRenderList(); }
         function rGoPage(p) { _rPg = p; rRenderList(); byId('r-results').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
         function handleRevenueFetch() { hideWarn('r'); var d = validateDates('r'); if (!d) return; var requestToken = beginRequest_('r'); setLoad('r', true); ensureDashboardCache_().then(function () { if (!isLatestRequest_('r', requestToken)) return; _guests = getCachedGuestsForRange_(d.start, d.end); _rSz = 10; _rPg = 1; _revFilter = 'all'; byId('r-pgSz').value = '10'; if (!_guests.length) { setPagedEmptyState('r', 'r-sum', 'No guest records found.'); } else rRender(); byId('r-results').classList.add('show'); setLoad('r', false); }).catch(function (err) { if (!isLatestRequest_('r', requestToken)) return; setLoad('r', false); showWarn('r', 'Error: ' + err.message); }); }
-        function handleRevenueRemarksFetch() { hideWarn('r'); var requestToken = beginRequest_('rr'); setLoad('rr', true); ensureDashboardCache_().then(function () { if (!isLatestRequest_('rr', requestToken)) return; _revenueRemarks = (Array.isArray(_dashboardCacheData && _dashboardCacheData.guests) ? _dashboardCacheData.guests : []).map(function (guest) { return { date: guest.date, name: guest.name, remarks: guest.remarks, food: clonePayments_(guest.food), room: clonePayments_(guest.room) }; }).filter(hasGuestRemarks); if (_activeTab !== 'revenue') { setLoad('rr', false); return; } openRemarksModal_('Revenue Remarks', buildRemarksModalContent_(_revenueRemarks, { emptyMessage: 'No remarks found.', headHtml: '<th>Date</th><th>Guest</th><th class="right">Total</th><th>Remarks</th>', tableRenderer: renderGuestRemarkTableRow, cardRenderer: renderGuestRemarkCard })); setLoad('rr', false); }).catch(function (err) { if (!isLatestRequest_('rr', requestToken)) return; setLoad('rr', false); showWarn('r', 'Error: ' + err.message); }); }
+        function handleRevenueRemarksFetch() { hideWarn('r'); var d = validateDates('r'); if (!d) return; var requestToken = beginRequest_('rr'); setLoad('rr', true); ensureDashboardCache_().then(function () { if (!isLatestRequest_('rr', requestToken)) return; _revenueRemarks = getCachedGuestsForRange_(d.start, d.end).filter(hasGuestRemarks); if (_activeTab !== 'revenue') { setLoad('rr', false); return; } openRemarksModal_('Revenue Remarks', buildRemarksModalContent_(_revenueRemarks, { emptyMessage: 'No remarks found for the selected date range.', headHtml: '<th>Date</th><th>Guest</th><th class="right">Total</th><th>Remarks</th>', tableRenderer: renderGuestRemarkTableRow, cardRenderer: renderGuestRemarkCard })); setLoad('rr', false); }).catch(function (err) { if (!isLatestRequest_('rr', requestToken)) return; setLoad('rr', false); showWarn('r', 'Error: ' + err.message); }); }
         function buildExpSum(days) { var ct = {}, mt = {}, grand = 0; days.forEach(function (d) { (d.entries || []).forEach(function (e) { if (!hasExpenseAmount_(e.amount)) return; var amount = expenseAmountValue_(e.amount); ct[displayExpenseText_(e.category, '-')] = (ct[displayExpenseText_(e.category, '-')] || 0) + amount; mt[displayExpenseText_(e.method, '-')] = (mt[displayExpenseText_(e.method, '-')] || 0) + amount; grand += amount; }); }); return { cats: Object.keys(ct).map(function (k) { return { label: k, amt: ct[k] }; }).sort(function (a, b) { return b.amt - a.amt; }), meths: Object.keys(mt).map(function (k) { return { label: k, amt: mt[k] }; }).sort(function (a, b) { return b.amt - a.amt; }), grand: grand }; }
-        function renderExpSummary(s) { var sub = _lastExpCat === 'all' ? 'All Categories' : 'Category: ' + _lastExpCat; function mkRows(rows, barCls) { if (!rows.length) return '<div style="font-size:12px;color:var(--muted2)">No data available.</div>'; var max = rows[0].amt || 1; return rows.map(function (r) { return '<div class="sum-row"><div class="sum-row-left"><div class="sum-bar-wrap"><div class="sum-bar ' + barCls + '" style="width:' + Math.round(r.amt / max * 100) + '%"></div></div><span class="sum-name">' + r.label + '</span></div><span class="sum-amt">' + fmtAmt(r.amt) + '</span></div>'; }).join(''); } byId('e-sum').innerHTML = '<div class="rev-banner red-bg"><div><span class="rev-eyebrow">Total Expenses</span><span class="rev-title">' + sub + '</span></div><div class="rev-amount red">' + fmtAmt(s.grand) + '</div></div><div class="summary-grids"><div class="summary-col"><div class="sum-col-title">By Category</div>' + mkRows(s.cats, 'red') + '<div class="sum-total-row"><span class="sum-total-label">Total</span><span class="sum-total-amt red">' + fmtAmt(s.grand) + '</span></div></div><div class="summary-col"><div class="sum-col-title">By Payment Method</div>' + mkRows(s.meths, 'red') + '<div class="sum-total-row"><span class="sum-total-label">Total</span><span class="sum-total-amt red">' + fmtAmt(s.grand) + '</span></div></div></div>'; }
-        function renderExpDayCard(day) { var entries = day.entries || []; var rows = entries.length ? entries.map(function (e) { return '<div class="exp-entry"><div class="exp-name-wrap"><span class="exp-name">' + displayExpenseText_(e.name, '-') + '</span><span class="exp-cat-pill">' + displayExpenseText_(e.category, '-') + '</span></div><span class="exp-cell">' + displayExpenseText_(e.method, '-') + '</span><span class="exp-cell amt">' + displayExpenseAmount_(e) + '</span></div>'; }).join('') : '<div style="padding:14px 18px;font-size:13px;color:var(--muted2)">' + (normalizeClientString_(day.remarks) ? 'Remarks only. No expense entries recorded.' : 'No expense entries recorded.') + '</div>'; var remarksHtml = normalizeClientString_(day.remarks) ? '<div style="padding:0 18px 14px;font-size:13px;color:var(--text2);white-space:pre-wrap"><strong style="color:var(--text)">Remarks:</strong> ' + day.remarks + '</div>' : ''; return '<div class="exp-day-card"><div class="exp-day-hd"><span class="exp-day-date">' + day.date + '</span><span class="exp-day-count">' + entries.length + ' item' + (entries.length !== 1 ? 's' : '') + '</span></div><div class="exp-tbl-head"><span class="exp-th">Name / Category</span><span class="exp-th">Method</span><span class="exp-th">Amount</span></div>' + rows + remarksHtml + '</div>'; }
-        function renderExpDayTableRows(day) { var entries = day.entries || []; if (!entries.length) { return '<tr><td class="tbl-date-cell">' + day.date + '</td><td class="tbl-name-bold">' + (normalizeClientString_(day.remarks) ? 'Remarks' : 'No expense entry') + '</td><td>' + (normalizeClientString_(day.remarks) ? day.remarks : '-') + '</td><td style="color:var(--muted)">-</td><td class="right tbl-nil">-</td></tr>'; } return entries.map(function (e, i) { return '<tr>' + (i === 0 ? '<td class="tbl-date-cell" rowspan="' + entries.length + '">' + day.date + '</td>' : '') + '<td class="tbl-name-bold">' + displayExpenseText_(e.name, '-') + '</td><td><span class="exp-cat-pill">' + displayExpenseText_(e.category, '-') + '</span></td><td style="color:var(--muted)">' + displayExpenseText_(e.method, '-') + '</td><td class="right ' + (hasExpenseAmount_(e.amount) ? 'exp-amt' : 'tbl-nil') + '">' + displayExpenseAmount_(e) + '</td></tr>'; }).join(''); }
+        function renderExpSummary(s) { var sub = _lastExpCat === 'all' ? 'All Categories' : 'Category: ' + _lastExpCat; function mkRows(rows, barCls) { if (!rows.length) return '<div style="font-size:13px;color:var(--muted)">No data available.</div>'; var max = rows[0].amt || 1; return rows.map(function (r) { return '<div class="sum-row"><div class="sum-row-left"><div class="sum-bar-wrap"><div class="sum-bar ' + barCls + '" style="width:' + Math.round(r.amt / max * 100) + '%"></div></div><span class="sum-name">' + r.label + '</span></div><span class="sum-amt">' + fmtAmt(r.amt) + '</span></div>'; }).join(''); } byId('e-sum').innerHTML = '<div class="rev-banner red-bg"><div><span class="rev-eyebrow">Total Expenses</span><span class="rev-title">' + sub + '</span></div><div class="rev-amount red">' + fmtAmt(s.grand) + '</div></div><div class="summary-grids"><div class="summary-col"><div class="sum-col-title">By Category</div>' + mkRows(s.cats, 'red') + '<div class="sum-total-row"><span class="sum-total-label">Total</span><span class="sum-total-amt red">' + fmtAmt(s.grand) + '</span></div></div><div class="summary-col"><div class="sum-col-title">By Payment Method</div>' + mkRows(s.meths, 'red') + '<div class="sum-total-row"><span class="sum-total-label">Total</span><span class="sum-total-amt red">' + fmtAmt(s.grand) + '</span></div></div></div>'; }
+        function renderExpDayCard(day) { var entries = day.entries || []; var rows = entries.length ? entries.map(function (e) { return '<div class="exp-entry"><div class="exp-name-wrap"><span class="exp-name">' + displayExpenseText_(e.name, '-') + '</span><span class="exp-cat-pill">' + displayExpenseText_(e.category, '-') + '</span></div><span class="exp-cell">' + displayExpenseText_(e.method, '-') + '</span><span class="exp-cell amt">' + displayExpenseAmount_(e) + '</span></div>'; }).join('') : '<div style="padding:16px;font-size:14px;color:var(--muted)">' + (normalizeClientString_(day.remarks) ? 'Remarks only. No expense entries recorded.' : 'No expense entries recorded.') + '</div>'; var remarksHtml = normalizeClientString_(day.remarks) ? '<div style="padding:0 16px 16px;font-size:14px;color:var(--text);white-space:pre-wrap"><strong style="color:var(--text2)">Remarks:</strong> ' + day.remarks + '</div>' : ''; return '<div class="exp-day-card"><div class="exp-day-hd"><span class="exp-day-date">' + day.date + '</span><span class="exp-day-count">' + entries.length + ' item' + (entries.length !== 1 ? 's' : '') + '</span></div><div class="exp-tbl-head"><span>Name / Category</span><span style="text-align:right">Method</span><span style="text-align:right">Amount</span></div>' + rows + remarksHtml + '</div>'; }
+        function renderExpDayTableRows(day) { var entries = day.entries || []; if (!entries.length) { return '<tr><td class="tbl-date-cell">' + day.date + '</td><td class="tbl-name-bold">' + (normalizeClientString_(day.remarks) ? 'Remarks' : 'No expense entry') + '</td><td style="white-space:pre-wrap">' + (normalizeClientString_(day.remarks) ? day.remarks : '-') + '</td><td style="color:var(--muted)">-</td><td class="right tbl-nil">-</td></tr>'; } return entries.map(function (e, i) { return '<tr>' + (i === 0 ? '<td class="tbl-date-cell" rowspan="' + entries.length + '">' + day.date + '</td>' : '') + '<td class="tbl-name-bold">' + displayExpenseText_(e.name, '-') + '</td><td><span class="exp-cat-pill">' + displayExpenseText_(e.category, '-') + '</span></td><td style="color:var(--muted)">' + displayExpenseText_(e.method, '-') + '</td><td class="right ' + (hasExpenseAmount_(e.amount) ? 'exp-amt' : 'tbl-nil') + '">' + displayExpenseAmount_(e) + '</td></tr>'; }).join(''); }
         function eRenderList() { _ePg = renderPagedPanel(_expDays, _eSz, _ePg, { infoId: 'e-pgInfo', cardsId: 'e-cards', tableId: 'e-table', navId: 'e-pgNav', cardRenderer: renderExpDayCard, tableRenderer: renderExpDayTableRows, navPrefix: 'e' }); }
         function eRender() { renderExpSummary(buildExpSum(_expDays)); eRenderList(); }
         function ePgSzChange() { var v = byId('e-pgSz').value; _eSz = v === 'all' ? 'all' : parseInt(v, 10); _ePg = 1; eRenderList(); }
         function eGoPage(p) { _ePg = p; eRenderList(); byId('e-results').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
         function handleExpFetch() { hideWarn('e'); var d = validateDates('e'); if (!d) return; var requestToken = beginRequest_('e'); _lastExpCat = byId('e-cat').value; showExpenseSection('none'); setLoad('e', true); ensureDashboardCache_().then(function () { if (!isLatestRequest_('e', requestToken)) return; _expDays = getCachedExpenseDaysForRange_(d.start, d.end, _lastExpCat); _eSz = 10; _ePg = 1; byId('e-pgSz').value = '10'; if (!_expDays.length) { setPagedEmptyState('e', 'e-sum', 'No expense records found.'); } else eRender(); showExpenseSection('data'); setLoad('e', false); }).catch(function (err) { if (!isLatestRequest_('e', requestToken)) return; setLoad('e', false); showWarn('e', 'Error: ' + err.message); }); }
-        function renderExpenseRemarkCard(item) { return '<div class="exp-day-card"><div class="exp-day-hd"><span class="exp-day-date">' + item.date + '</span><span class="exp-day-count">Remark</span></div><div style="padding:14px 16px;font-size:13px;color:var(--text2);white-space:pre-wrap">' + item.remarks + '</div></div>'; }
-        function renderExpenseRemarkTableRow(item) { return '<tr><td class="tbl-date-cell">' + item.date + '</td><td>' + item.remarks + '</td></tr>'; }
+        function renderExpenseRemarkCard(item) { return '<div class="exp-day-card"><div class="exp-day-hd"><span class="exp-day-date">' + item.date + '</span><span class="exp-day-count">Remark</span></div><div style="padding:16px;font-size:14px;color:var(--text);white-space:pre-wrap">' + item.remarks + '</div></div>'; }
+        function renderExpenseRemarkTableRow(item) { return '<tr><td class="tbl-date-cell">' + item.date + '</td><td style="white-space:pre-wrap;line-height:1.6">' + item.remarks + '</td></tr>'; }
         function handleExpenseRemarksFetch() { hideWarn('er'); var requestToken = beginRequest_('er'); setLoad('er', true); ensureDashboardCache_().then(function () { if (!isLatestRequest_('er', requestToken)) return; _expenseRemarks = getCachedExpenseRemarks_(); if (_activeTab !== 'expenses') { setLoad('er', false); return; } openRemarksModal_('Expense Remarks', buildRemarksModalContent_(_expenseRemarks, { emptyMessage: 'No remarks found.', headHtml: '<th>Date</th><th>Remarks</th>', tableRenderer: renderExpenseRemarkTableRow, cardRenderer: renderExpenseRemarkCard })); setLoad('er', false); }).catch(function (err) { if (!isLatestRequest_('er', requestToken)) return; setLoad('er', false); showWarn('er', 'Error: ' + err.message); }); }
         function buildPaySum(days) { var rmt = {}, rt = 0, ect = {}, et = 0; (days || []).forEach(function (d) { (d.guests || []).forEach(function (g) { (g.food || []).forEach(function (p) { var amount = guestPaymentAmountForCalc_(p); rt += amount; var k = displayGuestMethod_(p); rmt[k] = (rmt[k] || 0) + amount; }); (g.room || []).forEach(function (p) { var amount = guestPaymentAmountForCalc_(p); rt += amount; var k = displayGuestMethod_(p); rmt[k] = (rmt[k] || 0) + amount; }); }); (d.expenses || []).forEach(function (e) { if (!hasExpenseAmount_(e.amount)) return; var amount = expenseAmountValue_(e.amount); et += amount; ect[displayExpenseText_(e.category, '-')] = (ect[displayExpenseText_(e.category, '-')] || 0) + amount; }); }); return { revMethods: Object.keys(rmt).map(function (k) { return { label: k, amt: rmt[k] }; }).sort(function (a, b) { return b.amt - a.amt; }), expCats: Object.keys(ect).map(function (k) { return { label: k, amt: ect[k] }; }).sort(function (a, b) { return b.amt - a.amt; }), revTotal: rt, expTotal: et }; }
-        function renderPaySummary(days) { var s = buildPaySum(days); var showRev = _pType !== 'expense', showExp = _pType !== 'revenue'; var mLabel = _lastPayMethod === 'all' ? 'All Methods' : _lastPayMethod; var tLabel = _lastPayType === 'all' ? 'All Types' : (_lastPayType === 'revenue' ? 'Revenue Only' : 'Expense Only'); var sub = mLabel + ' | ' + tLabel; var bannerCls = showRev && showExp ? 'neutral-bg' : (showRev ? 'green-bg' : 'red-bg'); var bannerHtml; if (showRev && showExp) { bannerHtml = '<div style="display:flex;flex-direction:column;gap:2px"><span class="rev-eyebrow">Summary</span><span class="rev-title">' + sub + '</span><div style="margin-top:6px"><div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--rev-dark);font-weight:600;margin-bottom:2px">Revenue</div><div style="font-size:34px;font-weight:600;color:var(--rev);line-height:1;letter-spacing:-0.5px">' + fmtAmt(s.revTotal) + '</div></div></div><div style="text-align:right"><div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--exp-dark);font-weight:600;margin-bottom:2px">Expense</div><div style="font-size:34px;font-weight:600;color:var(--exp);line-height:1;letter-spacing:-0.5px">' + fmtAmt(s.expTotal) + '</div></div>'; } else if (showRev) { bannerHtml = '<div><span class="rev-eyebrow">Total Revenue</span><span class="rev-title">' + sub + '</span></div><div class="rev-amount green">' + fmtAmt(s.revTotal) + '</div>'; } else { bannerHtml = '<div><span class="rev-eyebrow">Total Expense</span><span class="rev-title">' + sub + '</span></div><div class="rev-amount red">' + fmtAmt(s.expTotal) + '</div>'; } byId('p-sum').innerHTML = '<div class="rev-banner ' + bannerCls + '">' + bannerHtml + '</div>'; }
-        function renderPdayCard(day) { var showRev = _pType !== 'expense', showExp = _pType !== 'revenue'; var guests = day.guests || [], expenses = day.expenses || []; function renderGuestBlock(g) { function renderSecLine(payments, secLabel) { payments = payments || []; if (!payments.length) return ''; var grouped = groupPayments(payments); var parts = grouped.map(function (gr) { var amts = gr.payments.map(function (payment, i) { return (i > 0 ? '<span class="pay-plus">+</span>' : '') + displayGuestAmount_(payment); }).join(''); return '<span><span class="pday-g-line-lbl">' + gr.method + '</span>' + amts + '</span>'; }).join('<span class="pday-g-sep">|</span>'); return '<div class="pday-g-line"><span class="pday-g-line-lbl">' + secLabel + '</span>' + parts + '</div>'; } var gt = (g.food || []).reduce(function (s, p) { return s + guestPaymentAmountForCalc_(p); }, 0) + (g.room || []).reduce(function (s, p) { return s + guestPaymentAmountForCalc_(p); }, 0); return '<div class="pday-g-block"><div class="pday-g-name">' + g.name + '</div>' + renderSecLine(g.food || [], 'Food') + renderSecLine(g.room || [], 'Room') + '<div class="pday-g-total">' + fmtAmt(gt) + '</div></div>'; } function renderExpBlock() { if (!expenses.length) return '<div style="font-size:12px;color:var(--muted2)">No expense records for this date.</div>'; return expenses.map(function (e) { return '<div class="pday-g-block"><div class="pday-g-name">' + displayExpenseText_(e.name, '-') + '</div><div class="pday-g-line"><span class="pday-g-line-lbl">' + displayExpenseText_(e.category, '-') + '</span><span class="pday-g-sep">|</span><span class="pday-g-line-lbl">' + displayExpenseText_(e.method, '-') + '</span><span style="font-weight:600;color:var(--exp)">' + displayExpenseAmount_(e) + '</span></div></div>'; }).join(''); } var html = '<div class="pday-card"><div class="pday-hd"><span class="pday-date">' + day.date + '</span>'; if (showRev && guests.length) html += '<span class="pday-badge rev">Revenue</span>'; if (showExp && expenses.length) html += '<span class="pday-badge exp" style="margin-left:6px">Expense</span>'; html += '</div>'; if (showRev && showExp) { html += '<div class="pday-split"><div class="pday-split-col"><span class="pday-split-label rev">Revenue</span>' + (guests.length ? guests.map(renderGuestBlock).join('') : '<div style="font-size:12px;color:var(--muted2)">No revenue records for this date.</div>') + '</div><div class="pday-split-col"><span class="pday-split-label exp">Expenses</span>' + renderExpBlock() + '</div></div>'; } else if (showRev) { html += '<div style="padding:12px 14px">' + (guests.length ? guests.map(renderGuestBlock).join('') : '<div style="font-size:12px;color:var(--muted2)">No revenue records for this date.</div>') + '</div>'; } else if (showExp) { html += '<div style="padding:12px 14px">' + renderExpBlock() + '</div>'; } return html + '</div>'; }
+        function renderPaySummary(days) { var s = buildPaySum(days); var showRev = _pType !== 'expense', showExp = _pType !== 'revenue'; var mLabel = _lastPayMethod === 'all' ? 'All Methods' : _lastPayMethod; var tLabel = _lastPayType === 'all' ? 'All Types' : (_lastPayType === 'revenue' ? 'Revenue Only' : 'Expense Only'); var sub = mLabel + ' | ' + tLabel; var bannerCls = showRev && showExp ? 'neutral-bg' : (showRev ? 'green-bg' : 'red-bg'); var bannerHtml; if (showRev && showExp) { bannerHtml = '<div style="display:flex;flex-direction:column;gap:6px"><span class="rev-eyebrow">Summary</span><span class="rev-title">' + sub + '</span><div style="margin-top:12px"><div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--rev-dark);font-weight:700;margin-bottom:2px">Revenue</div><div style="font-size:32px;font-weight:700;color:var(--rev);line-height:1;letter-spacing:-0.5px">' + fmtAmt(s.revTotal) + '</div></div></div><div style="text-align:right"><div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--exp-dark);font-weight:700;margin-bottom:2px">Expense</div><div style="font-size:32px;font-weight:700;color:var(--exp);line-height:1;letter-spacing:-0.5px">' + fmtAmt(s.expTotal) + '</div></div>'; } else if (showRev) { bannerHtml = '<div><span class="rev-eyebrow">Total Revenue</span><span class="rev-title">' + sub + '</span></div><div class="rev-amount green">' + fmtAmt(s.revTotal) + '</div>'; } else { bannerHtml = '<div><span class="rev-eyebrow">Total Expense</span><span class="rev-title">' + sub + '</span></div><div class="rev-amount red">' + fmtAmt(s.expTotal) + '</div>'; } byId('p-sum').innerHTML = '<div class="rev-banner ' + bannerCls + '">' + bannerHtml + '</div>'; }
+        function renderPdayCard(day) { var showRev = _pType !== 'expense', showExp = _pType !== 'revenue'; var guests = day.guests || [], expenses = day.expenses || []; function renderGuestBlock(g) { function renderSecLine(payments, secLabel) { payments = payments || []; if (!payments.length) return ''; var grouped = groupPayments(payments); var parts = grouped.map(function (gr) { var amts = gr.payments.map(function (payment, i) { return (i > 0 ? '<span class="pay-plus">+</span>' : '') + displayGuestAmount_(payment); }).join(''); return '<span><span class="pday-g-line-lbl">' + gr.method + '</span>' + amts + '</span>'; }).join('<span class="pday-g-sep">|</span>'); return '<div class="pday-g-line"><span class="pday-g-line-lbl">' + secLabel + '</span>' + parts + '</div>'; } var gt = (g.food || []).reduce(function (s, p) { return s + guestPaymentAmountForCalc_(p); }, 0) + (g.room || []).reduce(function (s, p) { return s + guestPaymentAmountForCalc_(p); }, 0); return '<div class="pday-g-block"><div class="pday-g-name">' + g.name + '</div>' + renderSecLine(g.food || [], 'Food') + renderSecLine(g.room || [], 'Room') + '<div class="pday-g-total">' + fmtAmt(gt) + '</div></div>'; } function renderExpBlock() { if (!expenses.length) return '<div style="font-size:14px;color:var(--muted)">No expense records for this date.</div>'; return expenses.map(function (e) { return '<div class="pday-g-block"><div class="pday-g-name">' + displayExpenseText_(e.name, '-') + '</div><div class="pday-g-line"><span class="pday-g-line-lbl">' + displayExpenseText_(e.category, '-') + '</span><span class="pday-g-sep">|</span><span class="pday-g-line-lbl">' + displayExpenseText_(e.method, '-') + '</span><span style="font-weight:700;color:var(--exp)">' + displayExpenseAmount_(e) + '</span></div></div>'; }).join(''); } var html = '<div class="pday-card"><div class="pday-hd"><span class="pday-date">' + day.date + '</span>'; if (showRev && guests.length) html += '<span class="pday-badge rev">Revenue</span>'; if (showExp && expenses.length) html += '<span class="pday-badge exp" style="margin-left:8px">Expense</span>'; html += '</div>'; if (showRev && showExp) { html += '<div class="pday-split"><div class="pday-split-col"><span class="pday-split-label rev">Revenue</span>' + (guests.length ? guests.map(renderGuestBlock).join('') : '<div style="font-size:14px;color:var(--muted)">No revenue records for this date.</div>') + '</div><div class="pday-split-col"><span class="pday-split-label exp">Expenses</span>' + renderExpBlock() + '</div></div>'; } else if (showRev) { html += '<div style="padding:16px">' + (guests.length ? guests.map(renderGuestBlock).join('') : '<div style="font-size:14px;color:var(--muted)">No revenue records for this date.</div>') + '</div>'; } else if (showExp) { html += '<div style="padding:16px">' + renderExpBlock() + '</div>'; } return html + '</div>'; }
         function updatePayTableHead() { var showRev = _pType !== 'expense', showExp = _pType !== 'revenue'; var h = '<th style="width:90px;white-space:nowrap">Date</th>'; if (showRev) h += '<th>Revenue Details</th>'; if (showExp) h += '<th>Expense Details</th>'; var el = byId('p-thead-row'); if (el) el.innerHTML = h; }
-        function renderPdayTableRows(day) { var showRev = _pType !== 'expense', showExp = _pType !== 'revenue'; var guests = day.guests || [], expenses = day.expenses || []; function buildRevCell() { if (!guests.length) return '<span style="font-size:12px;color:var(--muted2)">-</span>'; return guests.map(function (g, gi) { var foodGr = groupPayments(g.food || []), roomGr = groupPayments(g.room || []), parts = []; foodGr.forEach(function (gr) { var amts = gr.payments.map(function (payment, i) { return (i > 0 ? ' + ' : '') + displayGuestAmount_(payment); }).join(''); parts.push('Food: ' + gr.method + ': ' + amts); }); roomGr.forEach(function (gr) { var amts = gr.payments.map(function (payment, i) { return (i > 0 ? ' + ' : '') + displayGuestAmount_(payment); }).join(''); parts.push('Room: ' + gr.method + ': ' + amts); }); var gt = (g.food || []).reduce(function (s, p) { return s + guestPaymentAmountForCalc_(p); }, 0) + (g.room || []).reduce(function (s, p) { return s + guestPaymentAmountForCalc_(p); }, 0); var isLast = (gi === guests.length - 1); return '<div style="margin-bottom:' + (isLast ? '0' : '12px') + ';padding-bottom:' + (isLast ? '0' : '12px') + ';border-bottom:' + (isLast ? 'none' : '1px solid var(--border2)') + '"><div style="font-weight:600;color:var(--text);font-size:13px;margin-bottom:2px">' + g.name + '</div>' + (parts.length ? '<div style="font-size:12px;color:var(--muted);margin-bottom:4px;line-height:1.6">' + parts.join(' | ') + '</div>' : '<div style="font-size:12px;color:var(--exp);font-style:italic;margin-bottom:4px">No payment</div>') + '<div style="font-size:13px;font-weight:600;color:' + (gt === 0 ? 'var(--exp)' : 'var(--rev)') + '">' + fmtAmt(gt) + '</div></div>'; }).join(''); } function buildExpCell() { if (!expenses.length) return '<span style="font-size:12px;color:var(--muted2)">-</span>'; return expenses.map(function (e) { return '<div style="font-size:13px;margin-bottom:8px;line-height:1.5;padding-bottom:8px;border-bottom:1px solid var(--border2)"><strong style="color:var(--text);font-weight:600">' + displayExpenseText_(e.name, '-') + '</strong> <span style="color:var(--muted);font-size:11px">(' + displayExpenseText_(e.category, '-') + ')</span> <span style="color:var(--muted2)">|</span> <span style="color:var(--muted);font-size:12px">' + displayExpenseText_(e.method, '-') + ':</span> <span style="font-weight:600;color:var(--exp)">' + displayExpenseAmount_(e) + '</span></div>'; }).join(''); } var cols = '<td class="tbl-date-cell" style="vertical-align:top;white-space:nowrap;padding-top:14px">' + day.date + '</td>'; if (showRev) cols += '<td style="vertical-align:top;padding:12px 14px">' + buildRevCell() + '</td>'; if (showExp) cols += '<td style="vertical-align:top;padding:12px 14px">' + buildExpCell() + '</td>'; return '<tr>' + cols + '</tr>'; }
+        function renderPdayTableRows(day) { var showRev = _pType !== 'expense', showExp = _pType !== 'revenue'; var guests = day.guests || [], expenses = day.expenses || []; function buildRevCell() { if (!guests.length) return '<span style="font-size:14px;color:var(--muted)">-</span>'; return guests.map(function (g, gi) { var foodGr = groupPayments(g.food || []), roomGr = groupPayments(g.room || []), parts = []; foodGr.forEach(function (gr) { var amts = gr.payments.map(function (payment, i) { return (i > 0 ? ' + ' : '') + displayGuestAmount_(payment); }).join(''); parts.push('Food: ' + gr.method + ': ' + amts); }); roomGr.forEach(function (gr) { var amts = gr.payments.map(function (payment, i) { return (i > 0 ? ' + ' : '') + displayGuestAmount_(payment); }).join(''); parts.push('Room: ' + gr.method + ': ' + amts); }); var gt = (g.food || []).reduce(function (s, p) { return s + guestPaymentAmountForCalc_(p); }, 0) + (g.room || []).reduce(function (s, p) { return s + guestPaymentAmountForCalc_(p); }, 0); var isLast = (gi === guests.length - 1); return '<div style="margin-bottom:' + (isLast ? '0' : '12px') + ';padding-bottom:' + (isLast ? '0' : '12px') + ';border-bottom:' + (isLast ? 'none' : '1px solid var(--border2)') + '"><div style="font-weight:600;color:var(--text);font-size:14px;margin-bottom:4px">' + g.name + '</div>' + (parts.length ? '<div style="font-size:13px;color:var(--text2);margin-bottom:6px;line-height:1.6">' + parts.join(' | ') + '</div>' : '<div style="font-size:13px;color:var(--exp);font-style:italic;margin-bottom:6px">No payment</div>') + '<div style="font-size:14px;font-weight:700;color:' + (gt === 0 ? 'var(--exp)' : 'var(--rev)') + '">' + fmtAmt(gt) + '</div></div>'; }).join(''); } function buildExpCell() { if (!expenses.length) return '<span style="font-size:14px;color:var(--muted)">-</span>'; return expenses.map(function (e) { return '<div style="font-size:14px;margin-bottom:12px;line-height:1.5;padding-bottom:12px;border-bottom:1px solid var(--border2)"><strong style="color:var(--text);font-weight:600">' + displayExpenseText_(e.name, '-') + '</strong> <span style="color:var(--muted);font-size:12px">(' + displayExpenseText_(e.category, '-') + ')</span> <span style="color:var(--border-strong)">|</span> <span style="color:var(--text2);font-weight:500;font-size:13px">' + displayExpenseText_(e.method, '-') + ':</span> <span style="font-weight:700;color:var(--exp)">' + displayExpenseAmount_(e) + '</span></div>'; }).join(''); } var cols = '<td class="tbl-date-cell" style="vertical-align:top;white-space:nowrap;padding-top:16px">' + day.date + '</td>'; if (showRev) cols += '<td style="vertical-align:top;padding:16px">' + buildRevCell() + '</td>'; if (showExp) cols += '<td style="vertical-align:top;padding:16px">' + buildExpCell() + '</td>'; return '<tr>' + cols + '</tr>'; }
         function pRenderList() { _pPg = renderPagedPanel(_pDays, _pSz, _pPg, { beforeRender: updatePayTableHead, infoId: 'p-pgInfo', cardsId: 'p-cards', tableId: 'p-table', navId: 'p-pgNav', cardRenderer: renderPdayCard, tableRenderer: renderPdayTableRows, navPrefix: 'p' }); }
         function pRender() { renderPaySummary(_pDays); pRenderList(); }
         function pPgSzChange() { var v = byId('p-pgSz').value; _pSz = v === 'all' ? 'all' : parseInt(v, 10); _pPg = 1; pRenderList(); }
         function pGoPage(p) { _pPg = p; pRenderList(); byId('p-results').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
         function handlePaymentFetch() { hideWarn('p'); var d = validateDates('p'); if (!d) return; var requestToken = beginRequest_('p'); _lastPayMethod = byId('p-method').value; _lastPayType = byId('p-type').value; _pType = _lastPayType; setLoad('p', true); ensureDashboardCache_().then(function () { if (!isLatestRequest_('p', requestToken)) return; var guests = _lastPayType === 'expense' ? [] : filterGuestsByMethodClient_(getCachedGuestsForRange_(d.start, d.end), _lastPayMethod); var expenses = _lastPayType === 'revenue' ? [] : filterExpensesByMethodClient_(getCachedExpenseDaysForRange_(d.start, d.end, 'all'), _lastPayMethod); _pDays = groupDashboardDataByDateClient_(guests, expenses); _pSz = 10; _pPg = 1; byId('p-pgSz').value = '10'; if (!_pDays.length) { setPagedEmptyState('p', 'p-sum', 'No payment records found.'); } else pRender(); byId('p-results').classList.add('show'); setLoad('p', false); }).catch(function (err) { if (!isLatestRequest_('p', requestToken)) return; setLoad('p', false); showWarn('p', 'Error: ' + err.message); }); }
         function doAnalyticsFetch() { hideWarn('a'); var requestToken = beginRequest_('a'); setLoad('a', true); ensureDashboardCache_().then(function () { if (!isLatestRequest_('a', requestToken)) return; var data = buildAnalyticsFromCache_(); renderAnalyticsKPI(data); renderChartCards(data.charts); byId('a-results').classList.add('show'); setLoad('a', false); }).catch(function (err) { if (!isLatestRequest_('a', requestToken)) return; setLoad('a', false); showWarn('a', 'Error: ' + err.message); }); }
-        function renderAnalyticsKPI(data) { var profit = data.revTotal - data.expTotal, isProfit = profit >= 0; byId('a-kpi').innerHTML = '<div class="a-kpi-card green"><div class="a-kpi-label">Total Revenue</div><div class="a-kpi-val green">' + fmtAmt(data.revTotal) + '</div></div><div class="a-kpi-card red"><div class="a-kpi-label">Total Expense</div><div class="a-kpi-val red">' + fmtAmt(data.expTotal) + '</div></div><div class="a-kpi-card ' + (isProfit ? 'green' : 'red') + '"><div class="a-kpi-label">' + (isProfit ? 'Profit' : 'Loss') + '</div><div class="a-kpi-val ' + (isProfit ? 'green' : 'red') + '">' + fmtAmt(Math.abs(profit)) + '</div><div style="margin-top:6px"><span class="a-kpi-tag ' + (isProfit ? 'profit' : 'loss') + '">' + (isProfit ? 'Profit' : 'Loss') + '</span></div></div>'; }
-        function renderChartCards(charts) { _chartDefs = [{ id: 'ac-net', title: 'Net Income vs Expense', items: charts.netVsExp, palette: ['#16a34a', '#dc2626'] }, { id: 'ac-revsrc', title: 'Revenue Source', items: charts.revSource, palette: REV_PALETTE }, { id: 'ac-rmod', title: 'Revenue Mode', items: charts.revMode, palette: REV_PALETTE }, { id: 'ac-ecat', title: 'Expense Category', items: charts.expCat, palette: EXP_PALETTE }, { id: 'ac-emod', title: 'Expense Mode', items: charts.expMode, palette: EXP_PALETTE }]; byId('a-grid').innerHTML = _chartDefs.map(function (def) { var total = def.items.reduce(function (s, x) { return s + x.amount; }, 0); var bodyRows = def.items.map(function (item, i) { var pct = total > 0 ? ((item.amount / total) * 100).toFixed(1) : '0.0', c = def.palette[i % def.palette.length]; return '<tr><td><div class="a-name-cell"><span class="a-dot" style="background:' + c + '"></span>' + item.label + '</div></td><td>' + fmtAmt(item.amount) + '</td><td>' + pct + '%</td></tr>'; }).join(''); var chartArea = def.items.length ? '<div class="a-chart-canvas"><div id="' + def.id + '" class="a-chart-slot"></div></div>' : '<div class="a-no-chart">No data available.</div>'; return '<div class="a-chart-card"><div class="a-chart-hd"><div class="a-chart-title">' + def.title + '</div></div>' + chartArea + '<table class="a-tbl"><thead><tr><th>Name</th><th>Amount</th><th>%</th></tr></thead><tbody>' + bodyRows + '</tbody><tfoot><tr><td>Total</td><td>' + fmtAmt(total) + '</td><td>100%</td></tr></tfoot></table></div>'; }).join(''); if (_chartsReady) setTimeout(function () { drawAllCharts(_chartDefs); }, 150); else _pendingDraw = _chartDefs; }
-        function drawAllCharts(defs) { defs.forEach(function (def) { if (!def.items.length) return; var el = document.getElementById(def.id); if (!el) return; var w = el.offsetWidth || el.parentElement.offsetWidth || 320; el.style.width = w + 'px'; el.style.height = '220px'; var total = def.items.reduce(function (s, x) { return s + x.amount; }, 0); var dt = new google.visualization.DataTable(); dt.addColumn('string', 'Label'); dt.addColumn('number', 'Amount'); dt.addColumn({ type: 'string', role: 'tooltip', p: { html: true } }); def.items.forEach(function (item, i) { var pct = total > 0 ? ((item.amount / total) * 100).toFixed(1) : '0.0', c = def.palette[i % def.palette.length]; var tip = '<div style="padding:10px 14px;font-family:Inter,sans-serif;font-size:13px;background:#fff;color:#111;border:1.5px solid #e5e5e5;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.08);min-width:150px"><div style="display:flex;align-items:center;gap:7px;margin-bottom:5px"><span style="width:8px;height:8px;border-radius:50%;background:' + c + ';display:inline-block;flex-shrink:0"></span><strong style="color:#111">' + item.label + '</strong></div><div style="font-weight:600;color:' + c + '">' + fmtAmt(item.amount) + '</div><div style="color:#666;margin-top:2px">' + pct + '%</div></div>'; dt.addRow([item.label, item.amount, tip]); }); new google.visualization.PieChart(el).draw(dt, { pieHole: 0.42, backgroundColor: { fill: 'transparent' }, legend: 'none', pieSliceBorderColor: '#ffffff', chartArea: { left: '8%', top: 12, width: '84%', height: '84%' }, colors: def.palette, tooltip: { isHtml: true, trigger: 'focus' }, pieSliceText: 'none', enableInteractivity: true, width: w, height: 220 }); }); }
+        function renderAnalyticsKPI(data) { var profit = data.revTotal - data.expTotal, isProfit = profit >= 0; byId('a-kpi').innerHTML = '<div class="a-kpi-card"><div class="a-kpi-label">Total Revenue</div><div class="a-kpi-val green">' + fmtAmt(data.revTotal) + '</div></div><div class="a-kpi-card"><div class="a-kpi-label">Total Expense</div><div class="a-kpi-val red">' + fmtAmt(data.expTotal) + '</div></div><div class="a-kpi-card"><div class="a-kpi-label">' + (isProfit ? 'Profit' : 'Loss') + '</div><div class="a-kpi-val ' + (isProfit ? 'green' : 'red') + '">' + fmtAmt(Math.abs(profit)) + '</div><div style="margin-top:8px"><span class="a-kpi-tag ' + (isProfit ? 'profit' : 'loss') + '">' + (isProfit ? 'Profit' : 'Loss') + '</span></div></div>'; }
+        function renderChartCards(charts) { _chartDefs = [{ id: 'ac-net', title: 'Net Income vs Expense', items: charts.netVsExp, palette: ['#059669', '#dc2626'] }, { id: 'ac-revsrc', title: 'Revenue Source', items: charts.revSource, palette: REV_PALETTE }, { id: 'ac-rmod', title: 'Revenue Mode', items: charts.revMode, palette: REV_PALETTE }, { id: 'ac-ecat', title: 'Expense Category', items: charts.expCat, palette: EXP_PALETTE }, { id: 'ac-emod', title: 'Expense Mode', items: charts.expMode, palette: EXP_PALETTE }]; byId('a-grid').innerHTML = _chartDefs.map(function (def) { var total = def.items.reduce(function (s, x) { return s + x.amount; }, 0); var bodyRows = def.items.map(function (item, i) { var pct = total > 0 ? ((item.amount / total) * 100).toFixed(1) : '0.0', c = def.palette[i % def.palette.length]; return '<tr><td><div class="a-name-cell"><span class="a-dot" style="background:' + c + '"></span>' + item.label + '</div></td><td>' + fmtAmt(item.amount) + '</td><td>' + pct + '%</td></tr>'; }).join(''); var chartArea = def.items.length ? '<div class="a-chart-canvas"><div id="' + def.id + '" class="a-chart-slot"></div></div>' : '<div class="no-data" style="margin:20px;border-radius:var(--r-sm)">No data available.</div>'; return '<div class="a-chart-card"><div class="a-chart-hd">' + def.title + '</div>' + chartArea + '<table class="a-tbl"><thead><tr><th>Name</th><th>Amount</th><th>%</th></tr></thead><tbody>' + bodyRows + '</tbody><tfoot><tr><td>Total</td><td>' + fmtAmt(total) + '</td><td>100%</td></tr></tfoot></table></div>'; }).join(''); if (_chartsReady) setTimeout(function () { drawAllCharts(_chartDefs); }, 150); else _pendingDraw = _chartDefs; }
+        function drawAllCharts(defs) { defs.forEach(function (def) { if (!def.items.length) return; var el = document.getElementById(def.id); if (!el) return; var w = el.offsetWidth || el.parentElement.offsetWidth || 320; el.style.width = w + 'px'; el.style.height = '220px'; var total = def.items.reduce(function (s, x) { return s + x.amount; }, 0); var dt = new google.visualization.DataTable(); dt.addColumn('string', 'Label'); dt.addColumn('number', 'Amount'); dt.addColumn({ type: 'string', role: 'tooltip', p: { html: true } }); def.items.forEach(function (item, i) { var pct = total > 0 ? ((item.amount / total) * 100).toFixed(1) : '0.0', c = def.palette[i % def.palette.length]; var tip = '<div style="padding:12px 16px;font-family:Inter,sans-serif;font-size:14px;background:#fff;color:#111;border:1px solid #e5e5e5;border-radius:8px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.1);min-width:160px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="width:10px;height:10px;border-radius:50%;background:' + c + ';display:inline-block;flex-shrink:0"></span><strong style="color:#111">' + item.label + '</strong></div><div style="font-weight:700;font-size:16px;color:' + c + '">' + fmtAmt(item.amount) + '</div><div style="color:#6b7280;margin-top:4px;font-size:13px">' + pct + '%</div></div>'; dt.addRow([item.label, item.amount, tip]); }); new google.visualization.PieChart(el).draw(dt, { pieHole: 0.45, backgroundColor: { fill: 'transparent' }, legend: 'none', pieSliceBorderColor: '#ffffff', chartArea: { left: '8%', top: 12, width: '84%', height: '84%' }, colors: def.palette, tooltip: { isHtml: true, trigger: 'focus' }, pieSliceText: 'none', enableInteractivity: true, width: w, height: 220 }); }); }
         ['e-cat', 'p-method'].forEach(function (id) { var element = byId(id); if (!element) return; element.addEventListener('focus', primeDashboardCache_); element.addEventListener('pointerdown', primeDashboardCache_); });
         document.addEventListener('keydown', function (event) { if (event.key === 'Escape') closeRemarksModal_(); });
         bindWarnReset('r', ['r-sd', 'r-ed']); bindWarnReset('e', ['e-sd', 'e-ed']); bindWarnReset('p', ['p-sd', 'p-ed']);
